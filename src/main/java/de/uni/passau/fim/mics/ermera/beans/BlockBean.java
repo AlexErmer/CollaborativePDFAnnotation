@@ -9,6 +9,8 @@ public class BlockBean {
     String cssClass;
     TooltipBean tooltipBean;
     String text;
+    boolean selectedBlock;
+    int order;
 
     public String getId() {
         return id;
@@ -72,5 +74,21 @@ public class BlockBean {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public boolean isSelectedBlock() {
+        return selectedBlock;
+    }
+
+    public void setSelectedBlock(boolean selectedBlock) {
+        this.selectedBlock = selectedBlock;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }

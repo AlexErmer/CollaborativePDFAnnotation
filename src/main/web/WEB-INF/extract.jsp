@@ -1,9 +1,5 @@
 <jsp:include page="header.jsp"/>
 
-<c:if test="${errorMessage != null && !errorMessage.isEmpty()}">
-    <div class="alert alert-danger">${errorMessage}</div>
-</c:if>
-
 <div class="output">
 
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width:0px; height:0px">
@@ -33,9 +29,9 @@
                 </svg>
             </div>
 
-
+                <%--//TODO: do tooltips the bootstrap way!--%>
             <c:forEach items="${page.blocks}" var="block">
-                <div class="${block.cssClass}" title="label"
+                <div class="${block.cssClass}${block.selectedBlock?' selectedAnnotation':''}" title="label"
                      style="position:absolute;left:${block.left}px;top:${block.top}px;width:${block.width}px;height:${block.height}px;"
                      onmouseover="document.getElementById('tooltip_${block.id}').style.display='block'"
                      onmouseout="document.getElementById('tooltip_${block.id}').style.display='none'">
@@ -56,7 +52,11 @@
     </c:forEach>
 
 </div>
-<div id="text">text</div>
+
+
+<div id="text">
+
+</div>
 
 
 <script type="text/javascript">
@@ -76,7 +76,11 @@
         $('#text').empty();
 
         $(".selectedAnnotation").each(function() {
-            $('#text').append($(this).text());
+            $('#text')
+                    .append(
+                        $('<p>').append($('<input type="checkbox" />'))
+                                .append($(this).text().trim())
+                    );
         });
     }
 </script>

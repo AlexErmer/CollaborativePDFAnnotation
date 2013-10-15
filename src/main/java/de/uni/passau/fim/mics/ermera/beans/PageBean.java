@@ -1,17 +1,8 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
-import org.apache.commons.collections.map.HashedMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Alexander
- * Date: 13.10.13
- * Time: 11:01
- * To change this template use File | Settings | File Templates.
- */
 public class PageBean {
     List<BlockBean> blocks = new ArrayList<BlockBean>();
     int width;
@@ -24,7 +15,7 @@ public class PageBean {
         return blocks;
     }
 
-    public void appendBlock(BlockBean block) {
+    public void addBlock(BlockBean block) {
         blocks.add(block);
     }
 

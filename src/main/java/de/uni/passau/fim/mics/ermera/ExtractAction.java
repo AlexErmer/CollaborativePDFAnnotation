@@ -42,32 +42,47 @@ public class ExtractAction implements Action {
     }
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        byte[] pdfByteArray;
         String id = request.getParameter("id");
-        InputStream in = null;
-        try {
-            in = ExtractAction.class.getResourceAsStream("/" + id + ".pdf");
-            if (in == null) {
-                throw new FileNotFoundException("/" + id + ".pdf");
-            }
-            pdfByteArray = IOUtils.toByteArray(in);
-            DocumentBean documentBean = processPdfData(id, pdfByteArray);
-            request.setAttribute("documentBean", documentBean);
-        } catch (FileNotFoundException e) {
-            request.setAttribute("errorMessage", "File with id '" + id + "' not found.");
-        } catch (PdfParser.PdfParserException e) {
-            request.setAttribute("errorMessage", "Could not process file with id '" + id + "': " + e.getMessage());
-        } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not read input stream: " + e.getMessage());
-        } finally {
-            if (in != null) try {
-                in.close();
+        DocumentBean loadedDocumentBean = loadPDFFromStorage(request, id);
+
+        if (loadedDocumentBean != null) {
+            request.setAttribute("documentBean", loadedDocumentBean);
+        } else {
+            byte[] pdfByteArray;
+            InputStream in = null;
+            try {
+                in = ExtractAction.class.getResourceAsStream("/" + id + ".pdf");
+                if (in == null) {
+                    throw new FileNotFoundException("/" + id + ".pdf");
+                }
+                pdfByteArray = IOUtils.toByteArray(in);
+                DocumentBean documentBean = processPdfData(id, pdfByteArray);
+
+                storePDF(request, id, documentBean);
+                request.setAttribute("documentBean", documentBean);
+            } catch (FileNotFoundException e) {
+                request.setAttribute("errorMessage", "File with id '" + id + "' not found.");
+            } catch (PdfParser.PdfParserException e) {
+                request.setAttribute("errorMessage", "Could not process file with id '" + id + "': " + e.getMessage());
             } catch (IOException e) {
-                request.setAttribute("errorMessage", "Could not close the input stream: " + e.getMessage());
+                request.setAttribute("errorMessage", "Could not read input stream: " + e.getMessage());
+            } finally {
+                if (in != null) try {
+                    in.close();
+                } catch (IOException e) {
+                    request.setAttribute("errorMessage", "Could not close the input stream: " + e.getMessage());
+                }
             }
         }
-
         return "extract";
+    }
+
+    private DocumentBean loadPDFFromStorage(HttpServletRequest request, String id) {
+        return (DocumentBean) request.getSession().getAttribute("pdf_" + id);
+    }
+
+    private void storePDF(HttpServletRequest request, String id, DocumentBean documentBean) {
+        request.getSession().setAttribute("pdf_" + id, documentBean);
     }
 
     private synchronized DocumentBean processPdfData(String fileName, byte[] pdfByteArray) throws PdfParser.PdfParserException, IOException {
@@ -100,8 +115,14 @@ public class ExtractAction implements Action {
         List<Block> pageBlocks = result.pageBlocks;
         BlockLabeling labeling = result.labeling;
         Document document = result.doc;
+        List<Integer> orderList;
 
         DocumentBean documentBean = new DocumentBean();
+        /*// TODO: Refactor to this...
+        List<Page> pages = document.getPages();
+        for (Page page : pages ) {
+            int pageId = page.getNumber();*/
+
         for (int pageId = 0; pageId < pageBlocks.size(); pageId++) {
             PageBean pagebean = new PageBean();
             pagebean.setHeight((int) document.getPages().get(pageId).getHeight());
@@ -112,29 +133,22 @@ public class ExtractAction implements Action {
             createLineBean(result, pageId, pagebean);
 
             int blockId = 0;
-            int tokenId = 0;
+            orderList = result.postprocessedReadingOrder.getReadingOrder(pageId);
+
             SortedSet<Block> subBlocks = pageBlocks.get(pageId).getSubBlocks();
             for (Block block : subBlocks) {
                 blockId++;
 
-                BlockBean blockBean = createBlockBean(block, labeling.getLabel(block), pageId, blockId, "block", document);
-                pagebean.appendBlock(blockBean);
-
-                for (Block word : block.getWordBlocks()) {
-                    if (!labeling.hasLabelOrNull(word, BlockLabel.Word)) {
-                        tokenId++;
-                        blockBean = createBlockBean(word, labeling.getLabel(word), pageId, tokenId, "token", document);
-                        pagebean.appendBlock(blockBean);
-                    }
-                }
+                BlockBean blockBean = createBlockBean(block, labeling.getLabel(block), pageId, blockId, "block", document, orderList.indexOf(blockId));
+                pagebean.addBlock(blockBean);
             }
 
-            documentBean.appendPage(pagebean);
+            documentBean.addPage(pagebean);
         }
         return documentBean;
     }
 
-    private BlockBean createBlockBean(Block block, BlockLabel label, int pageId, int blockId, String cssClass, Document document) {
+    private BlockBean createBlockBean(Block block, BlockLabel label, int pageId, int blockId, String cssClass, Document document, int order) {
         BlockBean blockBean = new BlockBean();
         BoundingBox bbox = block.getBoundingBox();
 
@@ -143,8 +157,15 @@ public class ExtractAction implements Action {
         blockBean.setLeft((int) bbox.minx);
         blockBean.setTop((int) bbox.miny);
         blockBean.setCssClass(label == null ? cssClass : cssClass + " " + cssClass + "-" + label.getLabel().toLowerCase());
+        if (blockBean.getCssClass().contains("-title")
+                || blockBean.getCssClass().contains("-subtitle")
+                || blockBean.getCssClass().contains("-heading")
+                || blockBean.getCssClass().contains("-main")) {
+            blockBean.setSelectedBlock(true);
+        }
         blockBean.setText(StringEscapeUtils.escapeHtml(pipeline.clearHyphenations(block)));
         blockBean.setId(String.format("%s-%d-%d", cssClass, pageId, blockId));
+        blockBean.setOrder(order * 10);
 
         TooltipBean tooltipBean = new TooltipBean();
         tooltipBean.setLeft((int) (bbox.minx + (bbox.maxx - bbox.minx) + 10));
