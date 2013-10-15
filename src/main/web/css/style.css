@@ -1,0 +1,219 @@
+body {
+    padding-top: 50px;
+}
+
+.bodywrapper {
+    padding:  20px 15px;
+}
+
+.page {
+	border: 2px solid black;
+	margin: 20px;
+	float: left;
+}
+
+.block {
+	background: rgba(200, 200, 200, 0.3);
+	border: 1px solid rgba(200, 200, 200, 0.5);
+}
+.block:hover {
+	border: 2px solid rgba(0, 0, 0, 0.8);
+}
+
+.block-main {
+	background: rgba(0, 0, 255, 0.3);
+}
+.block-decoration {
+	background: rgba(255, 0, 0, 0.3);
+}
+.block-heading {
+	background: rgba(0, 255, 0, 0.3);
+}
+.block-caption {
+	background: rgba(0, 255, 255, 0.3);
+}
+.block-sparse {
+	background: rgba(255, 255, 0, 0.3);
+}
+.block-table {
+	background: rgba(255, 127, 0, 0.3);
+}
+.block-abstract {
+	background: rgba(0, 150, 150, 0.3);
+}
+.block-title {
+	background: rgba(200, 100, 255, 0.3);
+}
+.block-subtitle {
+	background: rgba(255, 0, 255, 0.3);
+}
+.block-journal {
+	background: rgba(0, 200, 100, 0.3);
+}
+.block-author {
+	background: rgba(30, 100, 30, 0.3);
+}
+.block-author-mixed {
+	background: rgba(30, 100, 30, 0.3);
+}
+.block-affiliation {
+	background: rgba(200, 255, 150, 0.3);
+}
+.block-email {
+	background: rgba(0, 200, 50, 0.3);
+}
+
+.token {
+	background: rgba(200, 200, 200, 0.3);
+	border: 1px solid rgba(200, 200, 200, 0.5);
+}
+.token:hover {
+	border: 2px solid rgba(0, 0, 0, 0.8);
+}
+
+.token-surname {
+  background: rgba(255, 0, 0, 0.25);
+}
+.token-given-name {
+  background: rgba(255, 100, 0, 0.25);
+}
+.token-middle-name {
+  background: rgba(255, 200, 0, 0.25);
+}
+.token-punctuation {
+  background: rgba(255, 200, 100, 0.25);
+}
+.token-separator {
+  background: rgba(100, 255, 100, 0.25);
+}
+.token-index {
+  background: rgba(100, 200, 255, 0.25);
+}
+.token-affiliation {
+  background: rgba(150, 255, 100, 0.25);
+}
+.token-affiliation-start {
+  background: rgba(150, 200, 100, 0.25);
+}
+.token-email {
+  background: rgba(150, 150, 255, 0.25);
+}
+.token-doi {
+	background: rgba(255, 50, 255, 0.3);
+}
+
+.entity {
+	background: rgba(200, 200, 200, 0.3);
+	border: 1px solid rgba(200, 200, 200, 0.5);
+}
+.entity:hover {
+	border: 2px solid rgba(0, 0, 0, 0.8);
+}
+
+.entity-ched {
+  background: rgba(255, 0, 255, 0.25);
+}
+.entity-diso {
+  background: rgba(128, 0, 255, 0.25);
+}
+.entity-livb {
+  background: rgba(255, 0, 128, 0.25);
+}
+.entity-prge {
+  background: rgba(255, 0, 0, 0.25);
+}
+
+.myTooltip {
+	border: 1px solid rgba(0, 0, 0, 1.0);
+	background: rgb(255, 255, 255);
+	font-size: 8pt;
+	display: none;
+}
+
+.table {
+	background: rgba(255, 255, 255, 0.0);
+}
+
+.block-text {
+	font-family: Verdana,Arial,sans-serif;
+	font-size: 8pt;
+	line-height: 1;
+	color: rgba(0, 0, 0, 0);
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.references {
+	position: relative;
+	float: left;
+}
+
+.ref-authorGivenName {
+	background: rgba(255, 100, 0, 1.0);
+}
+.ref-authorSurname {
+	background: rgba(255, 0, 0, 1.0);
+}
+.ref-authorOther {
+	background: rgba(255, 200, 0, 1.0)
+}
+.ref-editor {
+	background: rgba(221, 160, 221, 1.0);
+}
+.ref-title {
+	background: rgba(255, 255, 0, 1.0);
+}
+.ref-date {
+	background: rgba(0, 255, 255, 1.0);
+}
+.ref-publisher {
+	background: rgba(0, 255, 0, 1.0);
+}
+.ref-issueTitle {
+	background: rgba(255, 0, 0, 1.0);
+}
+.ref-bookTitle {
+	background: rgba(255, 0, 0, 1.0);
+}
+.ref-pages {
+	background: rgba(255, 192, 203, 1.0);
+}
+.ref-location {
+	background: rgba(127, 255, 0, 1.0);
+}
+.ref-conference {
+	background: rgba(255, 127, 0, 1.0);
+}
+.ref-source {
+	background: rgba(127, 127, 0, 1.0);
+}
+.ref-volume {
+	background: rgba(255, 0, 255, 1.0);
+}
+.ref-edition {
+	background: rgba(255, 100, 0, 1.0);
+}
+.ref-issue {
+	background: rgba(127, 127, 255, 1.0);
+}
+.ref-url {
+	background: rgba(127, 0, 255, 1.0);
+}
+.ref-note {
+	background: rgba(255, 255, 255, 1.0);
+}
+.ref-other {
+	background: rgba(127, 127, 127, 1.0);
+}
+
+.latex {
+	position: relative;
+	float: left;
+	width: 100%;
+}
+
+
+.selectedAnnotation {
+    border: 2px solid red;
+}

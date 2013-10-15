@@ -1,0 +1,64 @@
+{                      
+	"zipUrl" : "http:\\192.168.111.208/code-models.zip",
+	"blockModelFile": "X:/workspace/trunk/code/modules/webapp/data/pubmed-1k/block-type-classifier-model.bin",
+    "tokenModelFile": "X:/workspace/trunk/code/modules/webapp/data/pubmed-1k/token-classifier-model.bin",
+    "languageModelDir": "X:/workspace/trunk/code/modules/webapp/data/pubmed-1k/language-model",
+    "featuresFile": "X:/workspace/trunk/code/modules/webapp/data/pubmed-1k/block-features.arff",
+    "referencesModelFile": "X:/workspace/trunk/code/modules/webapp/data/pubmed-1k/references-classifier-model.bin",
+    "disambiguationServiceURL": "http:\\zaire.dimis.fim.uni-passau.de:8080/code-server/disambiguation/",
+	"domains" : 
+	[ 
+		{
+			"label" : "Biomedical Science",
+			"classifierFile" : "X:/workspace/trunk/code/modules/webapp/data/bio-domain.bin",
+			"entityModels" : [
+				{
+					"label" : "Chemical Compound",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/bio-entities/calbc-ched-model.bin"
+				},
+				{
+					"label" : "Disorder",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/bio-entities/calbc-diso-model.bin"
+				},
+				{
+					"label" : "Living Being",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/bio-entities/calbc-livb-model.bin"
+				},
+				{
+					"label" : "Protein/Gene",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/bio-entities/calbc-prge-model.bin"
+				}
+	    	]
+		},
+		{
+			"label" : "Computer Science",
+			"classifierFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-domain.bin",
+			"entityModels" : [ 
+				{
+					"label" : "Algorithm",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-entities/algorithms.txt"
+				},
+				{
+					"label" : "Algorithm",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-entities/algorithm.gaz"
+				},
+				{
+					"label" : "Corpus",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-entities/corpus.gaz"
+				},
+				{
+					"label" : "Domain",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-entities/domain.gaz"
+				},
+				{
+					"label" : "Domain",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-entities/domains.gaz"
+				},
+				{
+					"label" : "Metric",
+					"modelFile" : "X:/workspace/trunk/code/modules/webapp/data/cs-entities/performance.gaz"
+				}
+	    	]	    	
+		}
+	]  
+}
