@@ -12,7 +12,7 @@ public class ActionFactory {
 
     static {
         actions = new HashMap<String, Action>();
-        actions.put("GET/testentry", new TestentryAction());
+        actions.put("GET/contact", new ContactAction());
         actions.put("GET/extract", new ExtractAction());
         actions.put("GET/image", new ImageAction());
     }

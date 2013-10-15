@@ -1,18 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Code PDF Extraction Demo Webapp</title>
-</head>
-<body>
+<jsp:include page="WEB-INF/header.jsp" />
 
 <h1>PDF Extraction Demo</h1>
 
-<form action="/pages/extract" method="post" enctype="multipart/form-data">
+<%--<form action="/pages/extract" method="post" enctype="multipart/form-data">
     Choose a PDF to upload:
     <input name="pdfFile" type="file" accept="application/pdf;text/pdf"/><br/>
     <input type="submit"/>
-</form>
+</form>--%>
 
 <h3>Examples</h3>
 
@@ -40,5 +34,4 @@
     </a></li>
 </ul>
 
-</body>
-</html>
+<jsp:include page="WEB-INF/footer.jsp" />
