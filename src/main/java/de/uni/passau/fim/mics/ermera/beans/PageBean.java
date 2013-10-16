@@ -2,6 +2,7 @@ package de.uni.passau.fim.mics.ermera.beans;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class PageBean implements Comparable<PageBean> {
@@ -32,6 +33,7 @@ public class PageBean implements Comparable<PageBean> {
 
     /**
      * Sorts the {@code SortedSet} {@code blocks} by a simple String array filled with blockIds.
+     *
      * @param items String array filled with blockIds.
      */
     public void sort(String[] items) {
@@ -47,6 +49,7 @@ public class PageBean implements Comparable<PageBean> {
             }
         }
         Collections.sort(blocks);
+        createLines();
     }
 
     public List<BlockBean> getBlocks() {
@@ -56,6 +59,7 @@ public class PageBean implements Comparable<PageBean> {
     public void addBlock(BlockBean block) {
         blocks.add(block);
         Collections.sort(blocks);
+        createLines();
     }
 
     public int getWidth() {
@@ -94,7 +98,28 @@ public class PageBean implements Comparable<PageBean> {
         return lines;
     }
 
-    public void addLine(LineBean lineBean) {
-        this.lines.add(lineBean);
+    /**
+     * helper to create {@code LineBean}s from current blocks.
+     */
+    private void createLines() {
+        BlockBean block;
+        BlockBean prev = null;
+
+        lines = new ArrayList<>();
+        Iterator<BlockBean> itr = blocks.iterator();
+        while(itr.hasNext()) {
+            block = itr.next();
+            if (block.isSelectedBlock()) {
+                if (prev != null) {
+                    LineBean lineBean = new LineBean();
+                    lineBean.setX1(prev.getLeft() + prev.getWidth() / 2);
+                    lineBean.setY1(prev.getTop() + prev.getHeight() / 2);
+                    lineBean.setX2(block.getLeft() + block.getWidth() / 2);
+                    lineBean.setY2(block.getTop() + block.getHeight() / 2);
+                    lines.add(lineBean);
+                }
+                prev = block;
+            }
+        }
     }
 }

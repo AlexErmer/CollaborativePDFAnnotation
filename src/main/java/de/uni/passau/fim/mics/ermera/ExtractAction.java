@@ -152,8 +152,6 @@ public class ExtractAction implements Action {
             pagebean.setImagefilename(imageFileNames[pageId]);
             pagebean.setNumber(pageId + 1);
 
-            createLineBean(result, pageId, pagebean);
-
             int blockId = 0;
             SortedSet<Block> subBlocks = result.pageBlocks.get(pageId).getSubBlocks();
             for (Block block : subBlocks) {
@@ -205,25 +203,5 @@ public class ExtractAction implements Action {
         blockBean.setTooltipBean(tooltipBean);
 
         return blockBean;
-    }
-
-    //TODO: move to pagebean to generate lines from (custom) selected texts
-    private void createLineBean(PdfExtractionPipeline.PdfExtractionResult result, int pageId, PageBean pagebean) {
-        List<Block> pageBlocks = result.pageBlocks;
-        ReadingOrder readingOrder = result.postprocessedReadingOrder;
-        List<Integer> order = readingOrder.getReadingOrder(pageId);
-        Block[] blocksOnPage = pageBlocks.get(pageId).getSubBlocks().toArray(new Block[0]);
-        for (int i = 0; i < order.size() - 1; i++) {
-            int current = order.get(i);
-            int next = order.get(i + 1);
-            BoundingBox bbox1 = blocksOnPage[current].getBoundingBox();
-            BoundingBox bbox2 = blocksOnPage[next].getBoundingBox();
-            LineBean lineBean = new LineBean();
-            lineBean.setX1((int) ((bbox1.maxx + bbox1.minx) / 2));
-            lineBean.setY1((int) ((bbox1.maxy + bbox1.miny) / 2));
-            lineBean.setX2((int) ((bbox2.maxx + bbox2.minx) / 2));
-            lineBean.setY2((int) ((bbox2.maxy + bbox2.miny) / 2));
-            pagebean.addLine(lineBean);
-        }
     }
 }
