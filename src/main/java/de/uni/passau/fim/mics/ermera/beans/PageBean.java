@@ -1,24 +1,24 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 public class PageBean implements Comparable<PageBean> {
-    private SortedSet<BlockBean> blocks = new TreeSet<BlockBean>();
+    private List<BlockBean> blocks = new ArrayList<>();
     private int width;
     private int height;
     private String imagefilename;
     private int number;
-    private List<LineBean> lines = new ArrayList<LineBean>();
+    private List<LineBean> lines = new ArrayList<>();
 
     /**
      * Compare with other {@code PageBean} by page number
+     *
      * @param o other {@code PageBean}
      * @return 0, if page numbers are equal;
-     * 1, if this page numbers is higher then other;
-     * -1, else
+     *         1, if this page numbers is higher then other;
+     *         -1, else
      */
     public int compareTo(PageBean o) {
         if (this.number == o.number) {
@@ -30,12 +30,32 @@ public class PageBean implements Comparable<PageBean> {
         }
     }
 
-    public SortedSet<BlockBean> getBlocks() {
+    /**
+     * Sorts the {@code SortedSet} {@code blocks} by a simple String array filled with blockIds.
+     * @param items String array filled with blockIds.
+     */
+    public void sort(String[] items) {
+        int sortCounter = 10;
+        for (String item : items) {
+            for (BlockBean block : blocks) {
+
+                if (item.equals(block.getId())) {
+                    block.setOrder(sortCounter);
+                    sortCounter += 10;
+                    break;
+                }
+            }
+        }
+        Collections.sort(blocks);
+    }
+
+    public List<BlockBean> getBlocks() {
         return blocks;
     }
 
     public void addBlock(BlockBean block) {
         blocks.add(block);
+        Collections.sort(blocks);
     }
 
     public int getWidth() {

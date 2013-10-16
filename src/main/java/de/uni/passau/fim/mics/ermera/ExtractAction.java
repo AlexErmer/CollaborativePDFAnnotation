@@ -2,7 +2,6 @@ package de.uni.passau.fim.mics.ermera;
 
 import at.knowcenter.code.api.pdf.*;
 import at.knowcenter.code.pdf.PdfExtractionPipeline;
-import at.knowcenter.code.pdf.blockclassification.BlockLabeling;
 import at.knowcenter.code.pdf.utils.PdfExtractionUtils;
 import at.knowcenter.code.pdf.utils.rendering.PdfToImage;
 import at.knowcenter.code.workers.configuration.configs.ExtractionConfiguration;
@@ -43,46 +42,75 @@ public class ExtractAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String id = request.getParameter("id");
+
+        // get documentBean from storage
         DocumentBean loadedDocumentBean = loadPDFFromStorage(request, id);
 
-        if (loadedDocumentBean != null) {
-            request.setAttribute("documentBean", loadedDocumentBean);
-        } else {
-            byte[] pdfByteArray;
-            InputStream in = null;
-            try {
-                in = ExtractAction.class.getResourceAsStream("/" + id + ".pdf");
-                if (in == null) {
-                    throw new FileNotFoundException("/" + id + ".pdf");
-                }
-                pdfByteArray = IOUtils.toByteArray(in);
-                loadedDocumentBean = processPdfData(id, pdfByteArray);
+        // none in storage? then extract it from request
+        if (loadedDocumentBean == null) {
+            loadedDocumentBean = extract(request, id);
+        }
 
-                storePDF(request, id, loadedDocumentBean);
-                request.setAttribute("documentBean", loadedDocumentBean);
-            } catch (FileNotFoundException e) {
-                request.setAttribute("errorMessage", "File with id '" + id + "' not found.");
-            } catch (PdfParser.PdfParserException e) {
-                request.setAttribute("errorMessage", "Could not process file with id '" + id + "': " + e.getMessage());
-            } catch (IOException e) {
-                request.setAttribute("errorMessage", "Could not read input stream: " + e.getMessage());
-            } finally {
-                if (in != null) try {
-                    in.close();
-                } catch (IOException e) {
-                    request.setAttribute("errorMessage", "Could not close the input stream: " + e.getMessage());
-                }
+        // react on action?
+        String action = request.getParameter("action");
+        if (action != null) {
+            switch (action) {
+                case "sort":
+                    String[] items = request.getParameterValues("items[]");
+                    if (items != null) {
+                        loadedDocumentBean.sortBlocks(items);
+                    }
+                    break;
+                case "drop":
+                    break;
+                default:
+                    break;
             }
         }
+
+        // finished everything.. store bean and also attach it to the request
+        if (loadedDocumentBean != null) {
+            storePDF(request, id, loadedDocumentBean);
+            request.setAttribute("documentBean", loadedDocumentBean);
+        }
+
         return "extract";
     }
 
+    //TODO handle storage
     private DocumentBean loadPDFFromStorage(HttpServletRequest request, String id) {
         return (DocumentBean) request.getSession().getAttribute("pdf_" + id);
     }
 
     private void storePDF(HttpServletRequest request, String id, DocumentBean documentBean) {
         request.getSession().setAttribute("pdf_" + id, documentBean);
+    }
+
+    private DocumentBean extract(HttpServletRequest request, String id) {
+        DocumentBean loadedDocumentBean = null;
+        byte[] pdfByteArray;
+        InputStream in = null;
+        try {
+            in = ExtractAction.class.getResourceAsStream("/" + id + ".pdf");
+            if (in == null) {
+                throw new FileNotFoundException("/" + id + ".pdf");
+            }
+            pdfByteArray = IOUtils.toByteArray(in);
+            loadedDocumentBean = processPdfData(id, pdfByteArray);
+        } catch (FileNotFoundException e) {
+            request.setAttribute("errorMessage", "File with id '" + id + "' not found.");
+        } catch (PdfParser.PdfParserException e) {
+            request.setAttribute("errorMessage", "Could not process file with id '" + id + "': " + e.getMessage());
+        } catch (IOException e) {
+            request.setAttribute("errorMessage", "Could not read input stream: " + e.getMessage());
+        } finally {
+            if (in != null) try {
+                in.close();
+            } catch (IOException e) {
+                request.setAttribute("errorMessage", "Could not close the input stream: " + e.getMessage());
+            }
+        }
+        return loadedDocumentBean;
     }
 
     private synchronized DocumentBean processPdfData(String fileName, byte[] pdfByteArray) throws PdfParser.PdfParserException, IOException {
@@ -157,7 +185,7 @@ public class ExtractAction implements Action {
             blockBean.setSelectedBlock(true);
         }
         blockBean.setText(StringEscapeUtils.escapeHtml(pipeline.clearHyphenations(block)));
-        blockBean.setId(String.format("%s-%d-%d", cssClass, pageId, blockId));
+        blockBean.setId(String.format("%s_%d_%d", cssClass, pageId, blockId));
         blockBean.setOrder(result.postprocessedReadingOrder.getReadingOrder(pageId).indexOf(blockId) * 10);
 
         // tooltip for the box

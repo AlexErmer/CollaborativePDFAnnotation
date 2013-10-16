@@ -12,6 +12,7 @@
     </svg>
 
     <jsp:useBean id="documentBean" scope="request" class="de.uni.passau.fim.mics.ermera.beans.DocumentBean"/>
+    <%--//TODO show only page!--%>
     <c:forEach items="${documentBean.pages}" var="page">
         <div class="page" style="position:relative; width: ${page.width + 4}px; height: ${page.height + 4}px">
             <img src="image?file=${page.imagefilename}" width="${page.width}" height="${page.height}"
@@ -65,7 +66,7 @@
     <c:forEach items="${documentBean.pages}" var="page">
         <c:forEach items="${page.blocks}" var="block">
             <c:if test="${block.selectedBlock}">
-                <div class="textwrap">
+                <div data-id="${block.id}" class="textwrap">
                     <div id="t_${block.id}" data-id="${block.id}" class="text">
 
                         <div class="options ui-state-default ui-corner-all">
@@ -90,9 +91,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        //collectText();
-
-        // highlight corresponding texts
+        // highlight corresponding text
         // TODO add autoscroll to the highlightes text?
         $(".page div.block").hover(function() {
             $(this).addClass('highlightCorresponding');
@@ -115,7 +114,12 @@
             placeholder: "ui-state-highlight",
             handle: ".handle",
             update: function(event, ui) {
-                //alert("fertig")
+                $.ajax({
+                    url: '', // blank to submit to same page!
+                    async: false,
+                    cache: false,
+                    data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
+                })
             }
         });
         $("#sortedTextOutput").disableSelection();
