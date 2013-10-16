@@ -9,11 +9,13 @@
     <meta name="author" content="Alexander Ermer">
     <title>Code PDF Extraction Demo Webapp</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.css"/>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css"/>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/js/code.js"></script>
-    <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-ui-1.10.3.custom.js"></script>
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
+    <script type="text/javascript" src="<%=request.getContextPath()%>/js/code.js"></script>
 </head>
 <body>
 <a name="top"></a>
