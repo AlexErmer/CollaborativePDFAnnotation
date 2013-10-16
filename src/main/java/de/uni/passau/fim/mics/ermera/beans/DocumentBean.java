@@ -1,12 +1,12 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class DocumentBean {
-    List<PageBean> pages = new ArrayList<PageBean>();
+    SortedSet<PageBean> pages = new TreeSet<PageBean>();
 
-    public List<PageBean> getPages() {
+    public SortedSet<PageBean> getPages() {
         return pages;
     }
 

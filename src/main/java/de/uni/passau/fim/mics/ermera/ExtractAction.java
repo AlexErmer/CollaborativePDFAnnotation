@@ -112,35 +112,26 @@ public class ExtractAction implements Action {
     }
 
     private DocumentBean createDocumentBean(String[] imageFileNames, PdfExtractionPipeline.PdfExtractionResult result) {
-        List<Block> pageBlocks = result.pageBlocks;
-        BlockLabeling labeling = result.labeling;
-        Document document = result.doc;
-        List<Integer> orderList;
-
         DocumentBean documentBean = new DocumentBean();
-        /*// TODO: Refactor to this...
-        List<Page> pages = document.getPages();
-        for (Page page : pages ) {
-            int pageId = page.getNumber();*/
 
-        for (int pageId = 0; pageId < pageBlocks.size(); pageId++) {
+        List<Page> pages = result.doc.getPages();
+        for (Page page : pages) {
+            int pageId = page.getNumber() - 1;
+
             PageBean pagebean = new PageBean();
-            pagebean.setHeight((int) document.getPages().get(pageId).getHeight());
-            pagebean.setWidth((int) document.getPages().get(pageId).getWidth());
+            pagebean.setHeight((int) page.getHeight());
+            pagebean.setWidth((int) page.getWidth());
             pagebean.setImagefilename(imageFileNames[pageId]);
             pagebean.setNumber(pageId + 1);
 
             createLineBean(result, pageId, pagebean);
 
             int blockId = 0;
-            orderList = result.postprocessedReadingOrder.getReadingOrder(pageId);
-
-            SortedSet<Block> subBlocks = pageBlocks.get(pageId).getSubBlocks();
+            SortedSet<Block> subBlocks = result.pageBlocks.get(pageId).getSubBlocks();
             for (Block block : subBlocks) {
-                blockId++;
-
-                BlockBean blockBean = createBlockBean(block, labeling.getLabel(block), pageId, blockId, "block", document, orderList.indexOf(blockId));
+                BlockBean blockBean = createBlockBean(block, pageId, blockId, "block", result);
                 pagebean.addBlock(blockBean);
+                blockId++;
             }
 
             documentBean.addPage(pagebean);
@@ -148,10 +139,12 @@ public class ExtractAction implements Action {
         return documentBean;
     }
 
-    private BlockBean createBlockBean(Block block, BlockLabel label, int pageId, int blockId, String cssClass, Document document, int order) {
+    private BlockBean createBlockBean(Block block, int pageId, int blockId, String cssClass, PdfExtractionPipeline.PdfExtractionResult result) {
+        Document document = result.doc;
+        BlockLabel label = result.labeling.getLabel(block);
+
         BlockBean blockBean = new BlockBean();
         BoundingBox bbox = block.getBoundingBox();
-
         blockBean.setHeight((int) (bbox.maxy - bbox.miny));
         blockBean.setWidth((int) (bbox.maxx - bbox.minx));
         blockBean.setLeft((int) bbox.minx);
@@ -165,8 +158,9 @@ public class ExtractAction implements Action {
         }
         blockBean.setText(StringEscapeUtils.escapeHtml(pipeline.clearHyphenations(block)));
         blockBean.setId(String.format("%s-%d-%d", cssClass, pageId, blockId));
-        blockBean.setOrder(order * 10);
+        blockBean.setOrder(result.postprocessedReadingOrder.getReadingOrder(pageId).indexOf(blockId) * 10);
 
+        // tooltip for the box
         TooltipBean tooltipBean = new TooltipBean();
         tooltipBean.setLeft((int) (bbox.minx + (bbox.maxx - bbox.minx) + 10));
         tooltipBean.setTop((int) (bbox.miny));
@@ -181,9 +175,11 @@ public class ExtractAction implements Action {
         tooltipBean.setBold(font.getIsBold().toString());
         tooltipBean.setItalic(font.getIsItalic().toString());
         blockBean.setTooltipBean(tooltipBean);
+
         return blockBean;
     }
 
+    //TODO: move to pagebean to generate lines out of selected texts
     private void createLineBean(PdfExtractionPipeline.PdfExtractionResult result, int pageId, PageBean pagebean) {
         List<Block> pageBlocks = result.pageBlocks;
         ReadingOrder readingOrder = result.postprocessedReadingOrder;

@@ -1,16 +1,31 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
-public class BlockBean {
-    String id;
-    int left;
-    int top;
-    int width;
-    int height;
-    String cssClass;
-    TooltipBean tooltipBean;
-    String text;
-    boolean selectedBlock;
-    int order;
+public class BlockBean implements Comparable<BlockBean> {
+    private String id;
+    private int left;
+    private int top;
+    private int width;
+    private int height;
+    private String cssClass;
+    private TooltipBean tooltipBean;
+    private String text;
+    private boolean selectedBlock;
+    private int order;
+
+    /**
+     * Compare with other {@code BlockBean} by order number.
+     * @param o other {@code BlockBean}
+     * @return 0, if orders are equal;
+     * 1, if this order is lower then other;
+     * -1, else
+     */
+    public int compareTo(BlockBean o) {
+        if (this.order < o.order) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 
     public String getId() {
         return id;

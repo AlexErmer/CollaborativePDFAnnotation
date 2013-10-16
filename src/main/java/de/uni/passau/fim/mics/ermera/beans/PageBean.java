@@ -2,16 +2,35 @@ package de.uni.passau.fim.mics.ermera.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-public class PageBean {
-    List<BlockBean> blocks = new ArrayList<BlockBean>();
-    int width;
-    int height;
-    String imagefilename;
-    int number;
-    List<LineBean> lines = new ArrayList<LineBean>();
+public class PageBean implements Comparable<PageBean> {
+    private SortedSet<BlockBean> blocks = new TreeSet<BlockBean>();
+    private int width;
+    private int height;
+    private String imagefilename;
+    private int number;
+    private List<LineBean> lines = new ArrayList<LineBean>();
 
-    public List<BlockBean> getBlocks() {
+    /**
+     * Compare with other {@code PageBean} by page number
+     * @param o other {@code PageBean}
+     * @return 0, if page numbers are equal;
+     * 1, if this page numbers is higher then other;
+     * -1, else
+     */
+    public int compareTo(PageBean o) {
+        if (this.number == o.number) {
+            return 0;
+        } else if (this.number > o.number) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public SortedSet<BlockBean> getBlocks() {
         return blocks;
     }
 
