@@ -1,6 +1,6 @@
 <jsp:include page="header.jsp"/>
 
-<div class="output">
+<div id="PDFoutput">
 
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width:0px; height:0px">
         <defs>
@@ -59,37 +59,66 @@
 </div>
 
 
-<div id="text">
+<div id="sortedTextOutput">
+    <div class="droppable"></div>
 
+    <c:forEach items="${documentBean.pages}" var="page">
+        <c:forEach items="${page.blocks}" var="block">
+            <c:if test="${block.selectedBlock}">
+                <div class="textwrap">
+                    <div id="t_${block.id}" data-id="${block.id}" class="text">
+
+                        <div class="options ui-state-default ui-corner-all">
+                            <div class="option ui-state-default ui-corner-all">
+                                <span class="handle ui-icon ui-icon-arrowthick-2-n-s"/>
+                            </div>
+                            <div class="option ui-state-default ui-corner-all">
+                                <span class="delete ui-icon ui-icon-trash"/>
+                            </div>
+                        </div>
+
+                        <span>${block.text}</span>
+                    </div>
+
+                    <div class="droppable"></div>
+                </div>
+            </c:if>
+        </c:forEach>
+    </c:forEach>
 </div>
 
 
 <script type="text/javascript">
     $(document).ready(function() {
-        collectText();
+        //collectText();
 
         // highlight corresponding texts
         // TODO add autoscroll to the highlightes text?
         $(".page div.block").hover(function() {
-            $('#t_' + $(this).data('id')).addClass('highlight');
+            $(this).addClass('highlightCorresponding');
+            $('#t_' + $(this).data('id')).addClass('highlightCorresponding');
         }, function() {
-            $('#t_' + $(this).data('id')).removeClass('highlight');
+            $(this).removeClass('highlightCorresponding');
+            $('#t_' + $(this).data('id')).removeClass('highlightCorresponding');
         });
-        $("#text p").hover(function() {
-            $('#' + $(this).data('id')).addClass('highlight');
+        $("#sortedTextOutput div.text").hover(function() {
+            $(this).addClass('highlightCorresponding');
+            $('#' + $(this).data('id')).addClass('highlightCorresponding');
         }, function() {
-            $('#' + $(this).data('id')).removeClass('highlight');
+            $(this).removeClass('highlightCorresponding');
+            $('#' + $(this).data('id')).removeClass('highlightCorresponding');
         });
 
         // make the right list sortable
-        $("#text").sortable({
-            items: "> p",
+        $("#sortedTextOutput").sortable({
+            items: "> div.textwrap",
             placeholder: "ui-state-highlight",
             handle: ".handle",
             update: function(event, ui) {
                 //alert("fertig")
             }
         });
+        $("#sortedTextOutput").disableSelection();
 
         // make the pdf text divs draggable
         $(".page div.block.draggable").draggable({
@@ -98,39 +127,20 @@
             helper: "clone",
             cursor: "move"
         });
+        $(".block-text").disableSelection();
 
         // enable the dropzones in the right list
         //TODO: droppable je seite ineiner schleife.. über accept eine eigene css klasse
-        $("#text div.droppable").droppable({
+        $("#sortedTextOutput div.droppable").droppable({
             accept: ".page > div.block",
 
-            activeClass: "showavailable",
-            hoverClass: "hover",
+            activeClass: "droppableActive",
+            hoverClass: "droppableHover",
             drop: function(event, ui) {
                 //deleteImage(ui.draggable);
             }
         });
     });
-
-    function collectText() {
-        $('#text').empty();
-
-        $(".selectedAnnotation").each(function() {
-            $('#text')
-                    .append(
-                    $('<p id="t_' + $(this).data('id') + '" data-id="' + $(this).data('id') + '">')
-                            .append($('<div class="options ui-state-default ui-corner-all" />')
-                                .append($('<div class="option ui-state-default ui-corner-all">')
-                                    .append($('<span class="handle ui-icon ui-icon-arrowthick-2-n-s"/>')))
-                                .append($('<div class="option ui-state-default ui-corner-all">')
-                                    .append($('<span class="delete ui-icon ui-icon-trash"></span>'))))
-
-                            //.append($('<input type="checkbox" />'))
-                            .append($(this).text().trim())
-                            .append($('<div class="droppable" />'))
-            );
-        });
-    }
 </script>
 
 <jsp:include page="footer.jsp"/>

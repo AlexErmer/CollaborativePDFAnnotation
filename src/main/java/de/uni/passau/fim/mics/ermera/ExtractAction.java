@@ -179,7 +179,7 @@ public class ExtractAction implements Action {
         return blockBean;
     }
 
-    //TODO: move to pagebean to generate lines out of selected texts
+    //TODO: move to pagebean to generate lines from (custom) selected texts
     private void createLineBean(PdfExtractionPipeline.PdfExtractionResult result, int pageId, PageBean pagebean) {
         List<Block> pageBlocks = result.pageBlocks;
         ReadingOrder readingOrder = result.postprocessedReadingOrder;

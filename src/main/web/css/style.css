@@ -3,7 +3,7 @@ body {
 }
 
 .bodywrapper {
-    padding:  20px 15px;
+    padding:  20px 5px;
 }
 
 .page {
@@ -89,52 +89,56 @@ body {
 
 
 
-.output {
+#PDFoutput {
     width: 620px;
     float: left;
 }
-#text {
-    float: left;
-    width: 480px;
-}
-.selectedAnnotation {
+#PDFoutput .selectedAnnotation {
     border: 2px solid red;
 }
 
-.droppable {
-    height: 15px;
+#sortedTextOutput {
+    float: left;
+    width: 510px;
+    height: 796px;
+    overflow: scroll;
 }
-.droppable.showavailable {
+
+
+#sortedTextOutput .droppable {
+    height: 25px;
+}
+#sortedTextOutput .droppable.droppableActive {
     background-color: #ffff66;
 }
-.droppable.hover {
+#sortedTextOutput .droppable.droppableHover {
     background-color: #ff6666;
 }
 
-.highlight {
-    background-color: rgba(219,197,158,0.5);
+.highlightCorresponding {
+    background-color: rgba(204,0,158,0.5);
 }
 
 
-#text p {
+#sortedTextOutput div.text {
     position: relative;
 }
-.options {
+#sortedTextOutput div.text:hover .options {
+    display: block;
+}
+#sortedTextOutput div.text .options {
     display: none;
     position: absolute;
     right: 0;
     padding: 3px;
 }
-.options .option {
+#sortedTextOutput div.text .options .option {
     float: right;
     margin: 0 5px;
 }
-.options .option .handle {
+#sortedTextOutput div.text .options .option .handle {
     cursor: move;
 }
-.options .option .delete {
+#sortedTextOutput div.text .options .option .delete {
     cursor: pointer;
-}
-#text p:hover .options {
-    display: block;
 }
