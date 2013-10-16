@@ -56,10 +56,10 @@ public class ExtractAction implements Action {
                     throw new FileNotFoundException("/" + id + ".pdf");
                 }
                 pdfByteArray = IOUtils.toByteArray(in);
-                DocumentBean documentBean = processPdfData(id, pdfByteArray);
+                loadedDocumentBean = processPdfData(id, pdfByteArray);
 
-                storePDF(request, id, documentBean);
-                request.setAttribute("documentBean", documentBean);
+                storePDF(request, id, loadedDocumentBean);
+                request.setAttribute("documentBean", loadedDocumentBean);
             } catch (FileNotFoundException e) {
                 request.setAttribute("errorMessage", "File with id '" + id + "' not found.");
             } catch (PdfParser.PdfParserException e) {

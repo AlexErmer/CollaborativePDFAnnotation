@@ -2,11 +2,11 @@
 
 <div id="PDFoutput">
 
-    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width:0px; height:0px">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width:0; height:0">
         <defs>
             <marker id="arrowMarker" viewBox="0 0 10 10" refX="1" refY="5"
                     markerUnits="strokeWidth" orient="auto" markerWidth="8" markerHeight="6">
-                <polyline points="0,0 10,5 0,10 1,5" fill="black"/>
+                <polyline points="0,0 10,5 0,10 1,5" fill="black"></polyline>
             </marker>
         </defs>
     </svg>
@@ -19,12 +19,12 @@
 
 
             <div class="svg"
-                 style="position:absolute;left:0px;top:0px;width:${page.width}px;height:${page.height}px;">
+                 style="position:absolute;left:0;top:0;width:${page.width}px;height:${page.height}px;">
                 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="${page.width}"
                      height="${page.height}">
                     <c:forEach items="${page.lines}" var="line">
                         <line x1="${line.x1}" y1="${line.y1}" x2="${line.x2}" y2="${line.y2}" stroke="black"
-                              stroke-width="2" marker-end="url(#arrowMarker)"/>
+                              stroke-width="2" marker-end="url(#arrowMarker)"></line>
                     </c:forEach>
                 </svg>
             </div>
@@ -70,10 +70,10 @@
 
                         <div class="options ui-state-default ui-corner-all">
                             <div class="option ui-state-default ui-corner-all">
-                                <span class="handle ui-icon ui-icon-arrowthick-2-n-s"/>
+                                <span class="handle ui-icon ui-icon-arrowthick-2-n-s"></span>
                             </div>
                             <div class="option ui-state-default ui-corner-all">
-                                <span class="delete ui-icon ui-icon-trash"/>
+                                <span class="delete ui-icon ui-icon-trash"></span>
                             </div>
                         </div>
 

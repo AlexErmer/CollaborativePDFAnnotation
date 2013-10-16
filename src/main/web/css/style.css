@@ -87,8 +87,6 @@ body {
 }
 
 
-
-
 #PDFoutput {
     width: 620px;
     float: left;
@@ -103,7 +101,6 @@ body {
     height: 796px;
     overflow: scroll;
 }
-
 
 #sortedTextOutput .droppable {
     height: 25px;
