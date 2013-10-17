@@ -2,7 +2,6 @@ package de.uni.passau.fim.mics.ermera.beans;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class PageBean implements Comparable<PageBean> {
@@ -77,13 +76,10 @@ public class PageBean implements Comparable<PageBean> {
      * helper to create {@code LineBean}s from current blocks.
      */
     private void createLines() {
-        BlockBean block;
         BlockBean prev = null;
 
         lines = new ArrayList<>();
-        Iterator<BlockBean> itr = blocks.iterator();
-        while (itr.hasNext()) {
-            block = itr.next();
+        for (BlockBean block : blocks) {
             if (block.isSelectedBlock()) {
                 if (prev != null) {
                     LineBean lineBean = new LineBean();

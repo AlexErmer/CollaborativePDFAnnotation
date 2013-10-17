@@ -20,7 +20,7 @@ public class BlockBean implements Comparable<BlockBean> {
      * -1, else
      */
     public int compareTo(BlockBean o) {
-        if (this.order < o.order) {
+        if (this.order < o.getOrder()) {
             return -1;
         } else {
             return 1;

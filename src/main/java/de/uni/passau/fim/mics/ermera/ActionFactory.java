@@ -8,10 +8,11 @@ public class ActionFactory {
 
     private static Map<String, Action> actions;
 
-    private ActionFactory(){};
+    // private constructor to make class not instancable
+    private ActionFactory(){}
 
     static {
-        actions = new HashMap<String, Action>();
+        actions = new HashMap<>();
         actions.put("GET/contact", new ContactAction());
         actions.put("GET/extract", new ExtractAction());
         actions.put("GET/image", new ImageAction());
