@@ -45,6 +45,7 @@ public class DocumentBean {
     /**
      * Delegates blockid to correct {@code PageBean}s, which is found by parameter {@code pageNumber}, to remove this block.
      *
+     * @param pageNumber the pagenumber
      * @param item the blockid to remove.
      */
     public void unselectBlock(int pageNumber, String item) {

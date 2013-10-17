@@ -56,11 +56,19 @@
         <c:forEach items="${page.blocks}" var="block">
             <div id="${block.id}"
                  data-id="${block.id}"
-                 class="${block.cssClass} ${block.selectedBlock?'selectedAnnotation':'draggable text'}"
+                 class="${block.cssClass} ${block.selectedBlock?'selectedAnnotation':'draggable'} text"
                  title="label"
                  style="position:absolute;left:${block.left}px;top:${block.top}px;width:${block.width}px;height:${block.height}px;"
                  onmouseover="document.getElementById('tooltip_${block.id}').style.display='block'"
                  onmouseout="document.getElementById('tooltip_${block.id}').style.display='none'">
+
+                <c:if test="${block.selectedBlock}">
+                    <div class="options ui-state-default ui-corner-all">
+                        <div class="option ui-state-default ui-corner-all">
+                            <span class="delete ui-icon ui-icon-trash" onclick="removeItem($('#t_${block.id}'))"></span>
+                        </div>
+                    </div>
+                </c:if>
                 <div class="block-text">
                         ${block.text}
                 </div>

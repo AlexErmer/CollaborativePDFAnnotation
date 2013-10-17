@@ -97,6 +97,7 @@ body {
     border: 0px;
     padding: 0px;
     margin: 0px;
+    overflow: hidden;
 }
 
 #PDFoutput {
@@ -106,6 +107,10 @@ body {
 
 #PDFoutput .selectedAnnotation {
     border: 2px solid red;
+}
+
+.draggable {
+    cursor: move;
 }
 
 #sortedTextOutput {
@@ -151,27 +156,24 @@ body {
         background-image: -o-linear-gradient(top, transparent, white);
 }
 
-#sortedTextOutput div.text:hover .options {
+div.text:hover .options {
     display: block;
 }
 
-#sortedTextOutput div.text .options {
+div.text .options {
     display: none;
     position: absolute;
     right: 0;
     padding: 3px;
 }
-
-#sortedTextOutput div.text .options .option {
+div.text .options .option {
     float: right;
     margin: 0 5px;
 }
-
-#sortedTextOutput div.text .options .option .handle {
+div.text .options .option .handle {
     cursor: move;
 }
-
-#sortedTextOutput div.text .options .option .delete {
+div.text .options .option .delete {
     cursor: pointer;
 }
 
