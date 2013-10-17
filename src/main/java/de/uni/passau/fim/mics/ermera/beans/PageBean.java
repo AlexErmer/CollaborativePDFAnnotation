@@ -6,11 +6,13 @@ import java.util.Iterator;
 import java.util.List;
 
 public class PageBean implements Comparable<PageBean> {
-    private List<BlockBean> blocks = new ArrayList<>();
+    private final int NOT_SORTED = -10;
+
+    private int number;
     private int width;
     private int height;
     private String imagefilename;
-    private int number;
+    private List<BlockBean> blocks = new ArrayList<>();
     private List<LineBean> lines = new ArrayList<>();
 
     /**
@@ -37,13 +39,16 @@ public class PageBean implements Comparable<PageBean> {
      * @param items String array filled with blockIds.
      */
     public void sort(String[] items) {
-        int sortCounter = 10;
-        for (String item : items) {
-            for (BlockBean block : blocks) {
+        for (BlockBean block : blocks) {
+            block.setSelectedBlock(false);
+            block.setOrder(NOT_SORTED);
 
+            int sortCount = 0;
+            for (String item : items) {
+                sortCount++;
                 if (item.equals(block.getId())) {
-                    block.setOrder(sortCounter);
-                    sortCounter += 10;
+                    block.setSelectedBlock(true);
+                    block.setOrder(sortCount);
                     break;
                 }
             }
@@ -52,15 +57,48 @@ public class PageBean implements Comparable<PageBean> {
         createLines();
     }
 
-    public List<BlockBean> getBlocks() {
-        return blocks;
-    }
-
     public void addBlock(BlockBean block) {
         blocks.add(block);
         Collections.sort(blocks);
         createLines();
     }
+
+    public void removeBlock(String item) {
+        for (BlockBean block : blocks) {
+            if (item.equals(block.getId())) {
+                block.setSelectedBlock(false);
+                block.setOrder(NOT_SORTED);
+            }
+        }
+        createLines();
+    }
+
+    /**
+     * helper to create {@code LineBean}s from current blocks.
+     */
+    private void createLines() {
+        BlockBean block;
+        BlockBean prev = null;
+
+        lines = new ArrayList<>();
+        Iterator<BlockBean> itr = blocks.iterator();
+        while (itr.hasNext()) {
+            block = itr.next();
+            if (block.isSelectedBlock()) {
+                if (prev != null) {
+                    LineBean lineBean = new LineBean();
+                    lineBean.setX1(prev.getLeft() + prev.getWidth() / 2);
+                    lineBean.setY1(prev.getTop() + prev.getHeight() / 2);
+                    lineBean.setX2(block.getLeft() + block.getWidth() / 2);
+                    lineBean.setY2(block.getTop() + block.getHeight() / 2);
+                    lines.add(lineBean);
+                }
+                prev = block;
+            }
+        }
+    }
+
+    // Getter & Setter
 
     public int getWidth() {
         return width;
@@ -94,32 +132,11 @@ public class PageBean implements Comparable<PageBean> {
         this.number = number;
     }
 
-    public List<LineBean> getLines() {
-        return lines;
+    public List<BlockBean> getBlocks() {
+        return blocks;
     }
 
-    /**
-     * helper to create {@code LineBean}s from current blocks.
-     */
-    private void createLines() {
-        BlockBean block;
-        BlockBean prev = null;
-
-        lines = new ArrayList<>();
-        Iterator<BlockBean> itr = blocks.iterator();
-        while(itr.hasNext()) {
-            block = itr.next();
-            if (block.isSelectedBlock()) {
-                if (prev != null) {
-                    LineBean lineBean = new LineBean();
-                    lineBean.setX1(prev.getLeft() + prev.getWidth() / 2);
-                    lineBean.setY1(prev.getTop() + prev.getHeight() / 2);
-                    lineBean.setX2(block.getLeft() + block.getWidth() / 2);
-                    lineBean.setY2(block.getTop() + block.getHeight() / 2);
-                    lines.add(lineBean);
-                }
-                prev = block;
-            }
-        }
+    public List<LineBean> getLines() {
+        return lines;
     }
 }

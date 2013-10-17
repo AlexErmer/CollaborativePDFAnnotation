@@ -61,6 +61,9 @@ public class ExtractAction implements Action {
                         loadedDocumentBean.sortBlocks(items);
                     }
                     break;
+                case "remove":
+                    loadedDocumentBean.removeBlock(request.getParameter("item"));
+                    break;
                 case "drop":
                     break;
                 default:

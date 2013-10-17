@@ -34,7 +34,7 @@
             <c:forEach items="${page.blocks}" var="block">
                 <div id="${block.id}"
                      data-id="${block.id}"
-                     class="${block.cssClass} ${block.selectedBlock?'selectedAnnotation':'draggable'}"
+                     class="${block.cssClass} ${block.selectedBlock?'selectedAnnotation':'draggable text'}"
                      title="label"
                      style="position:absolute;left:${block.left}px;top:${block.top}px;width:${block.width}px;height:${block.height}px;"
                      onmouseover="document.getElementById('tooltip_${block.id}').style.display='block'"
@@ -61,27 +61,21 @@
 
 
 <div id="sortedTextOutput">
-    <div class="droppable"></div>
 
     <c:forEach items="${documentBean.pages}" var="page">
         <c:forEach items="${page.blocks}" var="block">
             <c:if test="${block.selectedBlock}">
-                <div data-id="${block.id}" class="textwrap">
-                    <div id="t_${block.id}" data-id="${block.id}" class="text">
-
-                        <div class="options ui-state-default ui-corner-all">
-                            <div class="option ui-state-default ui-corner-all">
-                                <span class="handle ui-icon ui-icon-arrowthick-2-n-s"></span>
-                            </div>
-                            <div class="option ui-state-default ui-corner-all">
-                                <span class="delete ui-icon ui-icon-trash"></span>
-                            </div>
+                <div id="t_${block.id}" data-id="${block.id}" class="text">
+                    <div class="options ui-state-default ui-corner-all">
+                        <div class="option ui-state-default ui-corner-all">
+                            <span class="handle ui-icon ui-icon-arrowthick-2-n-s"></span>
                         </div>
-
-                        <span>${block.text}</span>
+                        <div class="option ui-state-default ui-corner-all">
+                            <span class="delete ui-icon ui-icon-trash" onclick="removeItem($('#t_${block.id}'))"></span>
+                        </div>
                     </div>
 
-                    <div class="droppable"></div>
+                    <span>${block.text}</span>
                 </div>
             </c:if>
         </c:forEach>
@@ -110,41 +104,58 @@
 
         // make the right list sortable
         $("#sortedTextOutput").sortable({
-            items: "> div.textwrap",
+            items: "> div.text",
             placeholder: "ui-state-highlight",
             handle: ".handle",
+            //revert: "invalid",
+            receive: function(event, ui) {
+                console.log('recieve');
+                $.ajax({
+                    url: '', // blank to submit to same page!
+                    async: false,
+                    cache: false,
+                    data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
+                });
+                location.reload();
+            },
+            remove: function(event, ui) {
+                console.log('remove');
+            },
+            out: function(event, ui) {
+                console.log('out');
+            },
             update: function(event, ui) {
                 $.ajax({
                     url: '', // blank to submit to same page!
                     async: false,
                     cache: false,
                     data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
-                })
+                });
+                location.reload();
             }
         });
         $("#sortedTextOutput").disableSelection();
 
         // make the pdf text divs draggable
         $(".page div.block.draggable").draggable({
-            revert: "invalid",
+            connectToSortable: "#sortedTextOutput",
+            //revert: "valid",
             containment: "document",
             helper: "clone",
             cursor: "move"
         });
         $(".block-text").disableSelection();
-
-        // enable the dropzones in the right list
-        //TODO: droppable je seite ineiner schleife.. über accept eine eigene css klasse
-        $("#sortedTextOutput div.droppable").droppable({
-            accept: ".page > div.block",
-
-            activeClass: "droppableActive",
-            hoverClass: "droppableHover",
-            drop: function(event, ui) {
-                //deleteImage(ui.draggable);
-            }
-        });
     });
+
+    function removeItem(item) {
+        $.ajax({
+            url: '', // blank to submit to same page!
+            async: false,
+            cache: false,
+            data: {action: 'remove', item: item.data('id')}
+        });
+        location.reload();
+    }
 </script>
 
 <jsp:include page="footer.jsp"/>

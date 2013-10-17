@@ -6,10 +6,6 @@ import java.util.TreeSet;
 public class DocumentBean {
     SortedSet<PageBean> pages = new TreeSet<>();
 
-    public SortedSet<PageBean> getPages() {
-        return pages;
-    }
-
     public void addPage(PageBean page) {
         pages.add(page);
     }
@@ -18,5 +14,17 @@ public class DocumentBean {
         for (PageBean page : pages) {
             page.sort(items);
         }
+    }
+
+    public void removeBlock(String item) {
+        for (PageBean page : pages) {
+            page.removeBlock(item);
+        }
+    }
+
+    // Getter & Setter
+
+    public SortedSet<PageBean> getPages() {
+        return pages;
     }
 }

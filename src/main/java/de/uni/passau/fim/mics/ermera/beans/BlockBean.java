@@ -27,6 +27,8 @@ public class BlockBean implements Comparable<BlockBean> {
         }
     }
 
+    // Getter & Setter
+
     public String getId() {
         return id;
     }

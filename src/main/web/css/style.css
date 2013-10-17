@@ -3,94 +3,107 @@ body {
 }
 
 .bodywrapper {
-    padding:  20px 5px;
+    padding: 20px 5px;
 }
 
 .page {
-	border: 2px solid black;
-	float: left;
+    border: 2px solid black;
+    float: left;
     margin-bottom: 15px;
 }
 
 .block {
-	background: rgba(200, 200, 200, 0.3);
-	border: 1px solid rgba(200, 200, 200, 0.5);
+    background: rgba(200, 200, 200, 0.3);
+    border: 1px solid rgba(200, 200, 200, 0.5);
     overflow: hidden;
 }
+
 .block:hover {
-	border: 2px solid rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(0, 0, 0, 0.8);
 }
 
 .block-main {
-	background: rgba(0, 0, 255, 0.3);
+    background: rgba(0, 0, 255, 0.3);
 }
+
 .block-decoration {
-	background: rgba(255, 0, 0, 0.3);
+    background: rgba(255, 0, 0, 0.3);
 }
+
 .block-heading {
-	background: rgba(0, 255, 0, 0.3);
+    background: rgba(0, 255, 0, 0.3);
 }
+
 .block-caption {
-	background: rgba(0, 255, 255, 0.3);
+    background: rgba(0, 255, 255, 0.3);
 }
+
 .block-sparse {
-	background: rgba(255, 255, 0, 0.3);
+    background: rgba(255, 255, 0, 0.3);
 }
+
 .block-table {
 	background: rgba(255, 127, 0, 0.3);
 }
+
 .block-abstract {
-	background: rgba(0, 150, 150, 0.3);
-}
-.block-title {
-	background: rgba(200, 100, 255, 0.3);
-}
-.block-subtitle {
-	background: rgba(255, 0, 255, 0.3);
-}
-.block-journal {
-	background: rgba(0, 200, 100, 0.3);
-}
-.block-author {
-	background: rgba(30, 100, 30, 0.3);
-}
-.block-author-mixed {
-	background: rgba(30, 100, 30, 0.3);
-}
-.block-affiliation {
-	background: rgba(200, 255, 150, 0.3);
-}
-.block-email {
-	background: rgba(0, 200, 50, 0.3);
+    background: rgba(0, 150, 150, 0.3);
 }
 
+.block-title {
+    background: rgba(200, 100, 255, 0.3);
+}
+
+.block-subtitle {
+    background: rgba(255, 0, 255, 0.3);
+}
+
+.block-journal {
+    background: rgba(0, 200, 100, 0.3);
+}
+
+.block-author {
+    background: rgba(30, 100, 30, 0.3);
+}
+
+.block-author-mixed {
+    background: rgba(30, 100, 30, 0.3);
+}
+
+.block-affiliation {
+    background: rgba(200, 255, 150, 0.3);
+}
+
+.block-email {
+    background: rgba(0, 200, 50, 0.3);
+}
 
 .myTooltip {
-	border: 1px solid rgba(0, 0, 0, 1.0);
-	background: rgb(255, 255, 255);
-	font-size: 8pt;
-	display: none;
+    border: 1px solid rgba(0, 0, 0, 1.0);
+    background: rgb(255, 255, 255);
+    font-size: 8pt;
+    display: none;
 }
 
 .table {
-	background: rgba(255, 255, 255, 0.0);
+    background: rgba(255, 255, 255, 0.0);
 }
 
 .block-text {
-	font-family: Verdana,Arial,sans-serif;
-	font-size: 8pt;
-	line-height: 1;
-	color: rgba(0, 0, 0, 0);
-	border: 0px;
-	padding: 0px;
-	margin: 0px;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 8pt;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0);
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
 }
-
 
 #PDFoutput {
     width: 620px;
     float: left;
 }
+
 #PDFoutput .selectedAnnotation {
     border: 2px solid red;
 }
@@ -105,37 +118,59 @@ body {
 #sortedTextOutput .droppable {
     height: 25px;
 }
+
 #sortedTextOutput .droppable.droppableActive {
     background-color: #ffff66;
 }
+
 #sortedTextOutput .droppable.droppableHover {
     background-color: #ff6666;
 }
 
 .highlightCorresponding {
-    background-color: rgba(204,0,158,0.5);
+    background-color: rgba(204, 0, 158, 0.5);
 }
-
 
 #sortedTextOutput div.text {
     position: relative;
+    height: 45px;
+    overflow: hidden;
+    margin-bottom: 5px;
 }
+#sortedTextOutput div.text:after {
+    content: "";
+	pointer-events: none;
+	position: absolute;
+	width: 100%;
+	height: 15px;
+	left: 0; bottom: 0;
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, transparent),color-stop(1, white));
+        background-image: -webkit-linear-gradient(top, transparent, white);
+        background-image: -moz-linear-gradient(top, transparent, white);
+        background-image: -ms-linear-gradient(top, transparent, white);
+        background-image: -o-linear-gradient(top, transparent, white);
+}
+
 #sortedTextOutput div.text:hover .options {
     display: block;
 }
+
 #sortedTextOutput div.text .options {
     display: none;
     position: absolute;
     right: 0;
     padding: 3px;
 }
+
 #sortedTextOutput div.text .options .option {
     float: right;
     margin: 0 5px;
 }
+
 #sortedTextOutput div.text .options .option .handle {
     cursor: move;
 }
+
 #sortedTextOutput div.text .options .option .delete {
     cursor: pointer;
 }
