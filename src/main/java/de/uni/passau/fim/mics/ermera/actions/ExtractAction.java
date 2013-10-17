@@ -27,20 +27,19 @@ public class ExtractAction implements Action {
             }
         }
 
-        int pageNumber = Integer.valueOf(request.getParameter("pageNumber")) - 1;
-
         // react on action?
         String action = request.getParameter("action");
         if (action != null) {
+            int pageNumber = Integer.valueOf(request.getParameter("pageNumber")) - 1;
             switch (action) {
                 case "sort":
                     String[] items = request.getParameterValues("items[]");
                     if (items != null) {
-                        loadedDocumentBean.sortBlocks(pageNumber, items);
+                        loadedDocumentBean.reorderPageBean(pageNumber, items);
                     }
                     break;
-                case "remove":
-                    loadedDocumentBean.removeBlock(pageNumber, request.getParameter("item"));
+                case "unselect":
+                    loadedDocumentBean.unselectBlock(pageNumber, request.getParameter("item"));
                     break;
                 default:
                     break;

@@ -41,9 +41,6 @@ public class knowminerPDFExtractor implements PDFExtractor {
         System.out.println("Loading models done");
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public DocumentBean extract(String id) throws ExtractException {
         DocumentBean loadedDocumentBean = null;
         byte[] pdfByteArray;

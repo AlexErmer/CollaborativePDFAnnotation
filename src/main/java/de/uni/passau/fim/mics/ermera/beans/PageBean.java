@@ -33,11 +33,11 @@ public class PageBean implements Comparable<PageBean> {
     }
 
     /**
-     * Sorts the {@code SortedSet} {@code blocks} by a simple String array filled with blockIds.
+     * Reorders the blocks by a simple String array filled with blockIds.
      *
      * @param items String array filled with blockIds.
      */
-    public void sort(String[] items) {
+    public void reorder(String[] items) {
         for (BlockBean block : blocks) {
             block.setSelectedBlock(false);
             block.setOrder(NOT_SORTED);
@@ -62,7 +62,7 @@ public class PageBean implements Comparable<PageBean> {
         createLines();
     }
 
-    public void removeBlock(String item) {
+    public void unselectBlock(String item) {
         for (BlockBean block : blocks) {
             if (item.equals(block.getId())) {
                 block.setSelectedBlock(false);

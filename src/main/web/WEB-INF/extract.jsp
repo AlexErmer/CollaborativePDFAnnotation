@@ -162,7 +162,7 @@
             url: '', // blank to submit to same page!
             async: false,
             cache: false,
-            data: {action: 'remove', item: item.data('id')}
+            data: {action: 'unselect', item: item.data('id')}
         });
         location.reload();
     }
