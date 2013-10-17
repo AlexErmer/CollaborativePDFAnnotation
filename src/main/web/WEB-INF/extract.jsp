@@ -24,6 +24,8 @@
 
 <c:set var="page" value="${documentBean.pages[pageNumber-1]}"/>
 
+<button type="button" class="btn" onclick="saveForBrat()">save for Brat</button>
+
 
 <div id="PDFoutput">
 
@@ -140,7 +142,7 @@
                     cache: false,
                     data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
                 });
-                location.reload();
+                location.reload(); //TODO: do real ajax without reloading!
             },
             update: function(event, ui) {
                 $.ajax({
@@ -149,7 +151,7 @@
                     cache: false,
                     data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
                 });
-                location.reload();
+                location.reload(); //TODO: do real ajax without reloading!
             }
         });
         $("#sortedTextOutput").disableSelection();
@@ -173,6 +175,15 @@
             data: {action: 'unselect', item: item.data('id')}
         });
         location.reload();
+    }
+
+    function saveForBrat() {
+        $.ajax({
+            url: '', // blank to submit to same page!
+            async: false,
+            cache: false,
+            data: {action: 'saveForBrat'}
+        });
     }
 </script>
 

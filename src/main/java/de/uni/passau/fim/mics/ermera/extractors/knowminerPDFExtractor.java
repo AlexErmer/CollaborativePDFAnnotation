@@ -131,6 +131,7 @@ public class knowminerPDFExtractor implements PDFExtractor {
         blockBean.setWidth((int) (bbox.maxx - bbox.minx));
         blockBean.setLeft((int) bbox.minx);
         blockBean.setTop((int) bbox.miny);
+        blockBean.setLabel(label == null ? "" : label.getLabel().toLowerCase());
         blockBean.setCssClass(label == null ? cssClass : cssClass + " " + cssClass + "-" + label.getLabel().toLowerCase());
         if (blockBean.getCssClass().contains("-title")
                 || blockBean.getCssClass().contains("-subtitle")

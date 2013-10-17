@@ -5,9 +5,12 @@ import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
 import de.uni.passau.fim.mics.ermera.exceptions.ExtractException;
 import de.uni.passau.fim.mics.ermera.extractors.PDFExtractor;
 import de.uni.passau.fim.mics.ermera.extractors.knowminerPDFExtractor;
+import org.apache.commons.io.FileUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 
 public class ExtractAction implements Action {
 
@@ -30,6 +33,7 @@ public class ExtractAction implements Action {
         // react on action?
         String action = request.getParameter("action");
         if (action != null) {
+            System.out.println("handling action: " + action);
             int pageNumber = Integer.valueOf(request.getParameter("pageNumber")) - 1;
             switch (action) {
                 case "sort":
@@ -40,6 +44,9 @@ public class ExtractAction implements Action {
                     break;
                 case "unselect":
                     loadedDocumentBean.unselectBlock(pageNumber, request.getParameter("item"));
+                    break;
+                case "saveForBrat":
+                    saveForBrat(request, loadedDocumentBean);
                     break;
                 default:
                     break;
@@ -53,5 +60,15 @@ public class ExtractAction implements Action {
         }
 
         return "extract";
+    }
+
+    private void saveForBrat(HttpServletRequest request, DocumentBean loadedDocumentBean) {
+        try {
+            //TODO dont just create a tempfile as it is needed in brat permanently
+            FileUtils.writeStringToFile(File.createTempFile("text", ".txt"), loadedDocumentBean.saveForBrat());
+        } catch (IOException e) {
+            request.setAttribute("errorMessage", "Could not save Text for Brat: " + e.getMessage());
+        }
+        request.setAttribute("errorMessage", "saved it ");
     }
 }

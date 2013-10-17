@@ -6,6 +6,7 @@ public class BlockBean implements Comparable<BlockBean> {
     private int top;
     private int width;
     private int height;
+    private String label;
     private String cssClass;
     private TooltipBean tooltipBean;
     private String text;
@@ -67,6 +68,14 @@ public class BlockBean implements Comparable<BlockBean> {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getCssClass() {

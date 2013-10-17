@@ -52,6 +52,14 @@ public class DocumentBean {
         pages.get(pageNumber).unselectBlock(item);
     }
 
+    public String saveForBrat() {
+        StringBuilder sb = new StringBuilder();
+        for(PageBean page: pages) {
+            sb.append(page.saveForBrat());
+        }
+        return sb.toString();
+    }
+
     // Getter & Setter
 
     public List<PageBean> getPages() {

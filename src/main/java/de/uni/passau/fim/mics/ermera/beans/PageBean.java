@@ -94,6 +94,26 @@ public class PageBean implements Comparable<PageBean> {
         }
     }
 
+    /**
+     * Converts the blocklist into a String for brat.
+     * @return converted string.
+     */
+    public String saveForBrat() {
+        StringBuilder sb = new StringBuilder();
+        for(BlockBean block: blocks) {
+            if (block.isSelectedBlock()) {
+                if(sb.length() != 0 && block.getLabel().equals("title") || block.getLabel().equals("heading")) {
+                    sb.append("\r\n\r\n");
+                }
+                sb.append(block.getText());
+                if(block.getLabel().equals("title") || block.getLabel().equals("heading")) {
+                    sb.append("\r\n");
+                }
+            }
+        }
+        return sb.toString();
+    }
+
     // Getter & Setter
 
     public int getWidth() {
