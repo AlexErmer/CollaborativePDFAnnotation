@@ -128,7 +128,7 @@ body {
 }
 
 .highlightCorresponding {
-    background-color: rgba(204, 0, 158, 0.5);
+    background-color: rgba(255, 100, 0, 0.5);
 }
 
 #sortedTextOutput div.text {
@@ -173,4 +173,9 @@ body {
 
 #sortedTextOutput div.text .options .option .delete {
     cursor: pointer;
+}
+
+/* override bootstrap styles */
+#paginator .pagination {
+    margin: 5px 0px;
 }
