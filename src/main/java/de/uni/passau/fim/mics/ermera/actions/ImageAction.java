@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera;
+package de.uni.passau.fim.mics.ermera.actions;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;

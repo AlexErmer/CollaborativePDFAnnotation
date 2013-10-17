@@ -1,35 +1,36 @@
-package de.uni.passau.fim.mics.ermera;
+package de.uni.passau.fim.mics.ermera.extractors;
 
 import at.knowcenter.code.api.pdf.*;
 import at.knowcenter.code.pdf.PdfExtractionPipeline;
 import at.knowcenter.code.pdf.utils.PdfExtractionUtils;
 import at.knowcenter.code.pdf.utils.rendering.PdfToImage;
 import at.knowcenter.code.workers.configuration.configs.ExtractionConfiguration;
-import de.uni.passau.fim.mics.ermera.beans.*;
+import de.uni.passau.fim.mics.ermera.beans.BlockBean;
+import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
+import de.uni.passau.fim.mics.ermera.beans.PageBean;
+import de.uni.passau.fim.mics.ermera.beans.TooltipBean;
+import de.uni.passau.fim.mics.ermera.exceptions.ExtractException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.List;
 import java.util.SortedSet;
 
-public class ExtractAction implements Action {
+public class knowminerPDFExtractor implements PDFExtractor {
 
     private final static int TOOLTIP_TEXT_LENGTH = 80;
     private final static PdfToImage.RendererType RENDERER_TYPE = PdfToImage.RendererType.Sun;
     private PdfExtractionPipeline pipeline;
 
-    public ExtractAction() {
+    public knowminerPDFExtractor() {
         System.out.println("Loading models");
         ObjectMapper mapper = new ObjectMapper();
         try {
-            ExtractionConfiguration config = mapper.readValue(ExtractAction.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
+            ExtractionConfiguration config = mapper.readValue(knowminerPDFExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
 
             // load Pdf extractor pipeline
             pipeline = new PdfExtractionPipeline(config.blockModelFile, config.featuresFile,
@@ -40,75 +41,32 @@ public class ExtractAction implements Action {
         System.out.println("Loading models done");
     }
 
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String id = request.getParameter("id");
-
-        // get documentBean from storage
-        DocumentBean loadedDocumentBean = loadPDFFromStorage(request, id);
-
-        // none in storage? then extract it from request
-        if (loadedDocumentBean == null) {
-            loadedDocumentBean = extract(request, id);
-        }
-
-        // react on action?
-        String action = request.getParameter("action");
-        if (action != null) {
-            switch (action) {
-                case "sort":
-                    String[] items = request.getParameterValues("items[]");
-                    if (items != null) {
-                        loadedDocumentBean.sortBlocks(items);
-                    }
-                    break;
-                case "remove":
-                    loadedDocumentBean.removeBlock(request.getParameter("item"));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        // finished everything.. store bean and also attach it to the request
-        if (loadedDocumentBean != null) {
-            storePDF(request, id, loadedDocumentBean);
-            request.setAttribute("documentBean", loadedDocumentBean);
-        }
-
-        return "extract";
-    }
-
-    //TODO handle storage
-    private DocumentBean loadPDFFromStorage(HttpServletRequest request, String id) {
-        return (DocumentBean) request.getSession().getAttribute("pdf_" + id);
-    }
-
-    private void storePDF(HttpServletRequest request, String id, DocumentBean documentBean) {
-        request.getSession().setAttribute("pdf_" + id, documentBean);
-    }
-
-    private DocumentBean extract(HttpServletRequest request, String id) {
+    /**
+     * {@inheritDoc}
+     */
+    public DocumentBean extract(String id) throws ExtractException {
         DocumentBean loadedDocumentBean = null;
         byte[] pdfByteArray;
         InputStream in = null;
         try {
-            in = ExtractAction.class.getResourceAsStream("/" + id + ".pdf");
+            in = knowminerPDFExtractor.class.getResourceAsStream("/" + id + ".pdf");
             if (in == null) {
                 throw new FileNotFoundException("/" + id + ".pdf");
             }
             pdfByteArray = IOUtils.toByteArray(in);
             loadedDocumentBean = processPdfData(id, pdfByteArray);
         } catch (FileNotFoundException e) {
-            request.setAttribute("errorMessage", "File with id '" + id + "' not found.");
+            throw new ExtractException("File with id '" + id + "' not found.", e);
         } catch (PdfParser.PdfParserException e) {
-            request.setAttribute("errorMessage", "Could not process file with id '" + id + "': " + e.getMessage());
+            throw new ExtractException("Could not process file with id '" + id + "': " + e.getMessage(), e);
         } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not read input stream: " + e.getMessage());
+            throw new ExtractException("Could not read input stream: " + e.getMessage(), e);
         } finally {
             if (in != null) try {
                 in.close();
             } catch (IOException e) {
-                request.setAttribute("errorMessage", "Could not close the input stream: " + e.getMessage());
+                //noinspection ThrowFromFinallyBlock
+                throw new ExtractException("Could not close the input stream: " + e.getMessage(), e);
             }
         }
         return loadedDocumentBean;
@@ -143,7 +101,7 @@ public class ExtractAction implements Action {
     private DocumentBean createDocumentBean(String[] imageFileNames, PdfExtractionPipeline.PdfExtractionResult result) {
         DocumentBean documentBean = new DocumentBean();
 
-        List<Page> pages = result.doc.getPages();
+        java.util.List<Page> pages = result.doc.getPages();
         for (Page page : pages) {
             int pageId = page.getNumber() - 1;
 

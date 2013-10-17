@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera;
+package de.uni.passau.fim.mics.ermera.actions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
