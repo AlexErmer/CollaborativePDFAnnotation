@@ -2,11 +2,11 @@
 
 <h1>PDF Extraction Demo</h1>
 
-<%--<form action="/pages/extract" method="post" enctype="multipart/form-data">
+<form action="/pages/upload" method="post" enctype="multipart/form-data">
     Choose a PDF to upload:
     <input name="pdfFile" type="file" accept="application/pdf;text/pdf"/><br/>
     <input type="submit"/>
-</form>--%>
+</form>
 
 <h3>Examples</h3>
 
