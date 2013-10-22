@@ -15,6 +15,7 @@ public class ActionFactory {
         actions.put("GET/contact", new ContactAction());
         actions.put("GET/extract", new ExtractAction());
         actions.put("GET/image", new ImageAction());
+        actions.put("GET/export", new ExportAction());
 
         actions.put("POST/upload", new UploadAction());
     }

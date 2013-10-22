@@ -1,11 +1,10 @@
 package de.uni.passau.fim.mics.ermera.controller.actions;
 
-import de.uni.passau.fim.mics.ermera.controller.exporters.BratConnector;
-import de.uni.passau.fim.mics.ermera.dao.Storage;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
-import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
 import de.uni.passau.fim.mics.ermera.controller.extractors.knowminerPDFExtractor;
+import de.uni.passau.fim.mics.ermera.dao.Storage;
+import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,11 +17,11 @@ public class ExtractAction implements Action {
         String id = request.getParameter("id");
         int pageNumber = 0;
         Storage storage = new Storage();
-        DocumentBean loadedDocumentBean = null;
+        DocumentBean documentBean = null;
 
         // get documentBean from storage, if none found extract it from file
         try {
-            loadedDocumentBean = storage.load(id);
+            documentBean = storage.load(id);
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {
@@ -31,10 +30,10 @@ public class ExtractAction implements Action {
             request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
         }
 
-        if (loadedDocumentBean == null) {
+        if (documentBean == null) {
             try {
-                Extractor pdfExtractor = new knowminerPDFExtractor();
-                loadedDocumentBean = pdfExtractor.extract(id);
+                Extractor extractor = new knowminerPDFExtractor();
+                documentBean = extractor.extract(id);
             } catch (ExtractException e) {
                 request.setAttribute("errorMessage", e.getMessage());
                 return "extract";
@@ -55,26 +54,17 @@ public class ExtractAction implements Action {
                 case "sort":
                     String[] items = request.getParameterValues("items[]");
                     if (items != null) {
-                        loadedDocumentBean.reorderPageBean(pageNumber, items);
+                        documentBean.reorderPageBean(pageNumber, items);
                     }
                     break;
                 case "unselect":
-                    loadedDocumentBean.unselectBlock(pageNumber, request.getParameter("item"));
+                    documentBean.unselectBlock(pageNumber, request.getParameter("item"));
                     break;
                 case "toggleHeadline":
-                    loadedDocumentBean.toggleHeadline(pageNumber, request.getParameter("item"));
+                    documentBean.toggleHeadline(pageNumber, request.getParameter("item"));
                     break;
                 case "toggleNewParagraph":
-                    loadedDocumentBean.toggleNewParagraph(pageNumber, request.getParameter("item"));
-                    break;
-                case "saveForBrat":
-                    try {
-                        if (BratConnector.saveForBrat(loadedDocumentBean)) {
-                            request.setAttribute("successMessage", "Saved for brat");
-                        }
-                    } catch (IOException e) {
-                        request.setAttribute("errorMessage", "Could not save Text for Brat: " + e.getMessage());
-                    }
+                    documentBean.toggleNewParagraph(pageNumber, request.getParameter("item"));
                     break;
                 default:
                     break;
@@ -82,13 +72,13 @@ public class ExtractAction implements Action {
         }
 
         // finished everything.. store bean and also attach it to the request
-        if (loadedDocumentBean != null) {
+        if (documentBean != null) {
             try {
-                storage.store(loadedDocumentBean);
+                storage.store(documentBean);
             } catch (IOException e) {
                 request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
             }
-            request.setAttribute("documentBean", loadedDocumentBean);
+            request.setAttribute("documentBean", documentBean);
         }
 
         return "extract";

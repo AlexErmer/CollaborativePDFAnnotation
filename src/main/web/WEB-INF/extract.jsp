@@ -26,7 +26,7 @@
 
 <div id="PDFoutput">
     <div class="buttonLine">
-        <button type="button" class="btn btn-xs" onclick="$('.svg').toggle()">toggle Lines</button>
+        <button type="button" class="btn btn-default" onclick="$('.svg').toggle()">toggle Lines</button>
     </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width:0; height:0">
@@ -95,12 +95,10 @@
 
 <div id="sortedTextOutputWrapper">
     <div class="buttonLine">
-        <button type="button" class="btn btn-xs" onclick="saveForBrat()">save for Brat</button>
-        <a class="btn btn-xs" href="/brat/index.xhtml#/${documentBean.id}">weiter zu brat</a>
+        <a class="btn btn-primary" href="export?id=${documentBean.id}">Export zu brat</a>
     </div>
 
     <div id="sortedTextOutput">
-
         <c:forEach items="${page.blocks}" var="block">
             <c:if test="${block.selectedBlock}">
                 <div id="t_${block.id}" data-id="${block.id}" class="text ${block.headline?' headline':''} ${block.newParagraph?' newParagraph':''}">
@@ -118,7 +116,7 @@
                             </button>
                         </div>
                         <div class="option">
-                            <button class="btn btn-sm btn-warning handle" title="Verschieben" onclick="return false;">
+                            <button class="btn btn-sm btn-warning handle" title="Verschieben">
                                 <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
                             </button>
                         </div>
@@ -205,15 +203,6 @@
             data: {action: 'unselect', item: item.data('id')}
         });
         location.reload(); //TODO: do real ajax without reloading!
-    }
-
-    function saveForBrat() {
-        $.ajax({
-            url: '', // blank to submit to same page!
-            async: false,
-            cache: false,
-            data: {action: 'saveForBrat'}
-        });
     }
     function toggleHeadline(item) {
         $('#t_' + item.data('id')).toggleClass('headline');

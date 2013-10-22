@@ -125,6 +125,8 @@ body {
     width: 510px;
     height: 796px;
     overflow: scroll;
+    border: 2px solid black;
+    padding: 3px;
 }
 
 #sortedTextOutput .droppable {
@@ -149,9 +151,11 @@ body {
     overflow: hidden;
     margin-bottom: 5px;
 }
+
 #sortedTextOutput div.text.headline span {
     font-weight: bold;
 }
+
 #sortedTextOutput div.text:after {
     content: "";
     pointer-events: none;
@@ -201,12 +205,12 @@ div.text .options .option .delete {
     margin-bottom: 5px;
 }
 
-
 span.newParagraphIcon {
     width: 20px;
     float: left;
     display: none;
 }
+
 div.newParagraph span.newParagraphIcon {
     display: block;
 }
