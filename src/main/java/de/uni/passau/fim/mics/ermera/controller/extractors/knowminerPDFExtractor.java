@@ -1,15 +1,14 @@
-package de.uni.passau.fim.mics.ermera.extractors;
+package de.uni.passau.fim.mics.ermera.controller.extractors;
 
 import at.knowcenter.code.api.pdf.*;
 import at.knowcenter.code.pdf.PdfExtractionPipeline;
 import at.knowcenter.code.pdf.utils.PdfExtractionUtils;
 import at.knowcenter.code.pdf.utils.rendering.PdfToImage;
 import at.knowcenter.code.workers.configuration.configs.ExtractionConfiguration;
-import de.uni.passau.fim.mics.ermera.beans.BlockBean;
-import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
-import de.uni.passau.fim.mics.ermera.beans.PageBean;
-import de.uni.passau.fim.mics.ermera.beans.TooltipBean;
-import de.uni.passau.fim.mics.ermera.exceptions.ExtractException;
+import de.uni.passau.fim.mics.ermera.model.BlockBean;
+import de.uni.passau.fim.mics.ermera.model.DocumentBean;
+import de.uni.passau.fim.mics.ermera.model.PageBean;
+import de.uni.passau.fim.mics.ermera.model.TooltipBean;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -20,7 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.SortedSet;
 
-public class knowminerPDFExtractor implements PDFExtractor {
+public class knowminerPDFExtractor implements Extractor {
 
     private final static int TOOLTIP_TEXT_LENGTH = 80;
     private final static PdfToImage.RendererType RENDERER_TYPE = PdfToImage.RendererType.Sun;

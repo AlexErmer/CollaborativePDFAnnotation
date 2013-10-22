@@ -1,6 +1,7 @@
-package de.uni.passau.fim.mics.ermera;
+package de.uni.passau.fim.mics.ermera.dao;
 
-import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
+import de.uni.passau.fim.mics.ermera.common.PropertyReader;
+import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import java.io.*;
 

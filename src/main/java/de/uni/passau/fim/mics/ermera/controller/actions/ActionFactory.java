@@ -1,11 +1,10 @@
-package de.uni.passau.fim.mics.ermera.actions;
+package de.uni.passau.fim.mics.ermera.controller.actions;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActionFactory {
-
     private static Map<String, Action> actions;
 
     // private constructor to make class not instancable

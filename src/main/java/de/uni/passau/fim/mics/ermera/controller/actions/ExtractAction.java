@@ -1,11 +1,11 @@
-package de.uni.passau.fim.mics.ermera.actions;
+package de.uni.passau.fim.mics.ermera.controller.actions;
 
-import de.uni.passau.fim.mics.ermera.BratConnector;
-import de.uni.passau.fim.mics.ermera.Storage;
-import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
-import de.uni.passau.fim.mics.ermera.exceptions.ExtractException;
-import de.uni.passau.fim.mics.ermera.extractors.PDFExtractor;
-import de.uni.passau.fim.mics.ermera.extractors.knowminerPDFExtractor;
+import de.uni.passau.fim.mics.ermera.controller.exporters.BratConnector;
+import de.uni.passau.fim.mics.ermera.dao.Storage;
+import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
+import de.uni.passau.fim.mics.ermera.model.DocumentBean;
+import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
+import de.uni.passau.fim.mics.ermera.controller.extractors.knowminerPDFExtractor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +33,7 @@ public class ExtractAction implements Action {
 
         if (loadedDocumentBean == null) {
             try {
-                PDFExtractor pdfExtractor = new knowminerPDFExtractor();
+                Extractor pdfExtractor = new knowminerPDFExtractor();
                 loadedDocumentBean = pdfExtractor.extract(id);
             } catch (ExtractException e) {
                 request.setAttribute("errorMessage", e.getMessage());

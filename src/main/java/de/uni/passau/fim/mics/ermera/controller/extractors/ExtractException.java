@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera.exceptions;
+package de.uni.passau.fim.mics.ermera.controller.extractors;
 
 public class ExtractException extends Exception {
 

@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera;
+package de.uni.passau.fim.mics.ermera.common;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -10,8 +10,7 @@ public class PropertyReader {
     public static final String BRAT_WORKING_PATH;
 
     // private constructor to prevent instanciation
-    private PropertyReader() {
-    }
+    private PropertyReader() {}
 
     static {
         Properties p = new Properties();

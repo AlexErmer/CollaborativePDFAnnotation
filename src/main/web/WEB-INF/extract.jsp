@@ -1,6 +1,6 @@
 <jsp:include page="header.jsp"/>
 
-<jsp:useBean id="documentBean" scope="request" class="de.uni.passau.fim.mics.ermera.beans.DocumentBean"/>
+<jsp:useBean id="documentBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.DocumentBean"/>
 
 <c:choose>
     <c:when test="${param.pageNumber == null}">

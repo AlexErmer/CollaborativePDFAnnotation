@@ -1,6 +1,7 @@
-package de.uni.passau.fim.mics.ermera;
+package de.uni.passau.fim.mics.ermera.controller.exporters;
 
-import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
+import de.uni.passau.fim.mics.ermera.common.PropertyReader;
+import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,8 +9,8 @@ import java.io.IOException;
 
 public class BratConnector {
 
-    private BratConnector() {
-    }
+    // private constructor to make class not instancable
+    private BratConnector() {}
 
     public static boolean saveForBrat(DocumentBean loadedDocumentBean) throws IOException {
         String path = PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH;

@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera.beans;
+package de.uni.passau.fim.mics.ermera.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
