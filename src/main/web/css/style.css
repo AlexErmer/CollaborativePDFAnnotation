@@ -200,3 +200,13 @@ div.text .options .option .delete {
     height: 45px;
     margin-bottom: 5px;
 }
+
+
+span.newParagraphIcon {
+    width: 20px;
+    float: left;
+    display: none;
+}
+div.newParagraph span.newParagraphIcon {
+    display: block;
+}

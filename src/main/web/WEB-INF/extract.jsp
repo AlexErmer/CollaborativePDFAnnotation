@@ -67,7 +67,8 @@
                 <c:if test="${block.selectedBlock}">
                     <div class="options ui-widget-header ui-corner-all">
                         <div class="option">
-                            <button class="btn btn-sm btn-danger" title="L&ouml;schen" onclick="removeItem($('#t_${block.id}'))">
+                            <button class="btn btn-sm btn-danger" title="L&ouml;schen"
+                                    onclick="removeItem($('#t_${block.id}'))">
                                 <span class="delete ui-icon ui-icon-trash"></span>
                             </button>
                         </div>
@@ -102,11 +103,18 @@
 
         <c:forEach items="${page.blocks}" var="block">
             <c:if test="${block.selectedBlock}">
-                <div id="t_${block.id}" data-id="${block.id}" class="text ${block.headline?' headline':''}">
+                <div id="t_${block.id}" data-id="${block.id}" class="text ${block.headline?' headline':''} ${block.newParagraph?' newParagraph':''}">
                     <div class="options ui-widget-header ui-corner-all">
                         <div class="option">
-                            <button class="btn btn-sm btn-info" title="ist &Uuml;berschrift?" onclick="toggleHeadline($('#t_${block.id}'))">
+                            <button class="btn btn-sm btn-info" title="ist &Uuml;berschrift?"
+                                    onclick="toggleHeadline($('#t_${block.id}'))">
                                 <span class="ui-icon ui-icon-star"></span>
+                            </button>
+                        </div>
+                        <div class="option">
+                            <button class="btn btn-sm btn-info" title="leitet neuen Paragraphen ein?"
+                                    onclick="toggleNewParagraph($('#t_${block.id}'))">
+                                <span class="ui-icon ui-icon-arrowreturnthick-1-e"></span>
                             </button>
                         </div>
                         <div class="option">
@@ -115,12 +123,14 @@
                             </button>
                         </div>
                         <div class="option">
-                            <button class="btn btn-sm btn-danger" title="L&ouml;schen" onclick="removeItem($('#t_${block.id}'))">
+                            <button class="btn btn-sm btn-danger" title="L&ouml;schen"
+                                    onclick="removeItem($('#t_${block.id}'))">
                                 <span class="delete ui-icon ui-icon-trash"></span>
                             </button>
                         </div>
                     </div>
 
+                    <span class="newParagraphIcon ui-icon ui-icon-arrowreturnthick-1-e"></span>
                     <span>${block.text}</span>
                 </div>
             </c:if>
@@ -194,7 +204,7 @@
             cache: false,
             data: {action: 'unselect', item: item.data('id')}
         });
-        location.reload();
+        location.reload(); //TODO: do real ajax without reloading!
     }
 
     function saveForBrat() {
@@ -206,12 +216,21 @@
         });
     }
     function toggleHeadline(item) {
-        item.toggleClass('active');
+        $('#t_' + item.data('id')).toggleClass('headline');
         $.ajax({
             url: '', // blank to submit to same page!
             async: false,
             cache: false,
             data: {action: 'toggleHeadline', item: item.data('id')}
+        });
+    }
+    function toggleNewParagraph(item) {
+        $('#t_' + item.data('id')).toggleClass('newParagraph');
+        $.ajax({
+            url: '', // blank to submit to same page!
+            async: false,
+            cache: false,
+            data: {action: 'toggleNewParagraph', item: item.data('id')}
         });
     }
 </script>

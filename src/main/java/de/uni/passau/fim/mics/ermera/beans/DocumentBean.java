@@ -54,6 +54,27 @@ public class DocumentBean implements Serializable {
         pages.get(pageNumber).unselectBlock(item);
     }
 
+    /**
+     * Delegates blockid to correct {@code PageBean}s, which is found by parameter {@code pageNumber}, to toggle this block as headline.
+     *
+     * @param pageNumber the pagenumber
+     * @param item the blockid to remove.
+     */
+    public void toggleHeadline(int pageNumber, String item) {
+        pages.get(pageNumber).toggleHeadline(item);
+    }
+
+        /**
+     * Delegates blockid to correct {@code PageBean}s, which is found by parameter {@code pageNumber}, to toggle this block as begin of new paragraph.
+     *
+     * @param pageNumber the pagenumber
+     * @param item the blockid to remove.
+     */
+    public void toggleNewParagraph(int pageNumber, String item) {
+        pages.get(pageNumber).toggleNewParagraph(item);
+    }
+
+    //TODO move this method into BratConnector!
     public String saveForBrat() {
         StringBuilder sb = new StringBuilder();
         for(PageBean page: pages) {

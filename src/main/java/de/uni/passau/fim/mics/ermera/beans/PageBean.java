@@ -73,6 +73,22 @@ public class PageBean implements Comparable<PageBean>, Serializable {
         createLines();
     }
 
+    public void toggleHeadline(String item) {
+        for (BlockBean block : blocks) {
+            if (item.equals(block.getId())) {
+                block.setHeadline(!block.isHeadline());
+            }
+        }
+    }
+
+    public void toggleNewParagraph(String item) {
+        for (BlockBean block : blocks) {
+            if (item.equals(block.getId())) {
+                block.setNewParagraph(!block.isNewParagraph());
+            }
+        }
+    }
+
     /**
      * helper to create {@code LineBean}s from current blocks.
      */
@@ -97,17 +113,20 @@ public class PageBean implements Comparable<PageBean>, Serializable {
 
     /**
      * Converts the blocklist into a String for brat.
+     *
      * @return converted string.
      */
     public String saveForBrat() {
         StringBuilder sb = new StringBuilder();
-        for(BlockBean block: blocks) {
+        for (BlockBean block : blocks) {
             if (block.isSelectedBlock()) {
-                if(sb.length() != 0 && block.isHeadline()) {
+                if (sb.length() != 0 && block.isHeadline()) {
                     sb.append("\r\n\r\n");
+                } else if (block.isNewParagraph()) {
+                    sb.append("\r\n");
                 }
                 sb.append(block.getText());
-                if(block.isHeadline() || block.isNewParagraph()) {
+                if (block.isHeadline()) {
                     sb.append("\r\n");
                 }
             }

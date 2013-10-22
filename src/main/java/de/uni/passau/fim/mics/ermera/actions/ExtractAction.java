@@ -47,6 +47,7 @@ public class ExtractAction implements Action {
         }
 
         // react on action?
+        //TODO errormessage handling after ajax?!
         String action = request.getParameter("action");
         if (action != null) {
             System.out.println("handling action: " + action);
@@ -61,7 +62,10 @@ public class ExtractAction implements Action {
                     loadedDocumentBean.unselectBlock(pageNumber, request.getParameter("item"));
                     break;
                 case "toggleHeadline":
-                    //TODO implement
+                    loadedDocumentBean.toggleHeadline(pageNumber, request.getParameter("item"));
+                    break;
+                case "toggleNewParagraph":
+                    loadedDocumentBean.toggleNewParagraph(pageNumber, request.getParameter("item"));
                     break;
                 case "saveForBrat":
                     try {
