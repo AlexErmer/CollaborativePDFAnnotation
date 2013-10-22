@@ -181,3 +181,8 @@ div.text .options .option .delete {
 #paginator .pagination {
     margin: 5px 0px;
 }
+
+.ui-state-highlight {
+    height: 45px;
+    margin-bottom: 5px;
+}

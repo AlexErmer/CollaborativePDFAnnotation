@@ -2,21 +2,23 @@ package de.uni.passau.fim.mics.ermera;
 
 import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
 
-import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 
 public class Storage {
-    private HttpServletRequest request;
+    public DocumentBean load(String id) throws IOException, ClassNotFoundException {
+        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + PropertyReader.STORAGE_PATH + "document_" + id);
+        ObjectInputStream o = new ObjectInputStream(fis);
+        DocumentBean documentBean = (DocumentBean) o.readObject();
+        fis.close();
 
-    //TODO append real storage without request dependency
-    public Storage(HttpServletRequest request) {
-        this.request = request;
+        documentBean.createLines(); // create lines, because they are not serialized
+        return documentBean;
     }
 
-    public DocumentBean load(String id) {
-        return (DocumentBean) request.getSession().getAttribute("pdf_" + id);
-    }
-
-    public void store(String id, DocumentBean documentBean) {
-        request.getSession().setAttribute("pdf_" + id, documentBean);
+    public void store(DocumentBean documentBean) throws IOException {
+        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + PropertyReader.STORAGE_PATH + "document_" + documentBean.getId());
+        ObjectOutputStream o = new ObjectOutputStream(fos);
+        o.writeObject(documentBean);
+        fos.close();
     }
 }

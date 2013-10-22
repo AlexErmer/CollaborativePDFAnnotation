@@ -92,11 +92,13 @@ public class knowminerPDFExtractor implements PDFExtractor {
         if (!file.delete()) {
             System.out.println("Could not delete temporary file: " + file.getName());
         }
-        return createDocumentBean(imageFileNames, result);
+
+        return createDocumentBean(fileName, imageFileNames, result);
     }
 
-    private DocumentBean createDocumentBean(String[] imageFileNames, PdfExtractionPipeline.PdfExtractionResult result) {
+    private DocumentBean createDocumentBean(String id, String[] imageFileNames, PdfExtractionPipeline.PdfExtractionResult result) {
         DocumentBean documentBean = new DocumentBean();
+        documentBean.setId(id);
 
         java.util.List<Page> pages = result.doc.getPages();
         for (Page page : pages) {
@@ -155,8 +157,12 @@ public class knowminerPDFExtractor implements PDFExtractor {
         at.knowcenter.code.api.pdf.Font font = document.getFonts().get(PdfExtractionUtils.getMajorityFontId(block));
         tooltipBean.setFont(font.getFontName());
         tooltipBean.setSize(PdfExtractionUtils.getMajorityFontSize(block));
-        tooltipBean.setBold(font.getIsBold().toString());
-        tooltipBean.setItalic(font.getIsItalic().toString());
+        if (font.getIsBold() != null) {
+            tooltipBean.setBold(font.getIsBold().toString());
+        }
+        if (font.getIsItalic() != null) {
+            tooltipBean.setItalic(font.getIsItalic().toString());
+        }
         blockBean.setTooltipBean(tooltipBean);
 
         return blockBean;

@@ -9,7 +9,8 @@
     <meta name="author" content="Alexander Ermer">
     <title>Code PDF Extraction Demo Webapp</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css"/>
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%=request.getContextPath()%>/css/ui-lightness/jquery-ui-1.10.3.custom.css"/>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css"/>
 
     <script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-1.10.2.js"></script>
@@ -40,8 +41,14 @@
 </div>
 
 <div class="container">
-    <div class="bodywrapper">
+<div class="bodywrapper">
 
+<c:if test="${successMessage != null && !successMessage.isEmpty()}">
+    <div class="alert alert-success">${successMessage}</div>
+</c:if>
 <c:if test="${errorMessage != null && !errorMessage.isEmpty()}">
-        <div class="alert alert-danger">${errorMessage}</div>
+    <div class="alert alert-danger">${errorMessage}</div>
+</c:if>
+<c:if test="${infoMessage != null && !infoMessage.isEmpty()}">
+    <div class="alert alert-warn">${infoMessage}</div>
 </c:if>

@@ -1,10 +1,11 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PageBean implements Comparable<PageBean> {
+public class PageBean implements Comparable<PageBean>, Serializable {
     private final int NOT_SORTED = -10;
 
     private int number;
@@ -12,7 +13,7 @@ public class PageBean implements Comparable<PageBean> {
     private int height;
     private String imagefilename;
     private List<BlockBean> blocks = new ArrayList<>();
-    private List<LineBean> lines = new ArrayList<>();
+    transient private List<LineBean> lines = new ArrayList<>();
 
     /**
      * Compare with other {@code PageBean} by page number
@@ -75,7 +76,7 @@ public class PageBean implements Comparable<PageBean> {
     /**
      * helper to create {@code LineBean}s from current blocks.
      */
-    private void createLines() {
+    public void createLines() {
         BlockBean prev = null;
 
         lines = new ArrayList<>();

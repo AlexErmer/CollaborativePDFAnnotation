@@ -25,6 +25,7 @@
 <c:set var="page" value="${documentBean.pages[pageNumber-1]}"/>
 
 <button type="button" class="btn" onclick="saveForBrat()">save for Brat</button>
+<a class="btn" href="/brat/index.xhtml#/${documentBean.id}">weiter zu brat</a>
 
 
 <div id="PDFoutput">

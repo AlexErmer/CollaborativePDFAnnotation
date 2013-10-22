@@ -157,7 +157,7 @@ var Visualizer = (function($, window, undefined) {
       // this.row = undefined;
       // this.textX = undefined;
       // this.translation = undefined;
-    }
+    };
 
     var Arc = function(eventDesc, role, dist, eventNo) {
       this.origin = eventDesc.id;
@@ -262,7 +262,7 @@ var Visualizer = (function($, window, undefined) {
           'modifications',
           'normalizations',
           'relations',
-          'triggers',
+          'triggers'
           ], function(attrNo, attr) {
         if (sourceData[attr] === undefined) {
           sourceData[attr] = [];
@@ -289,7 +289,7 @@ var Visualizer = (function($, window, undefined) {
           'event_types',
           'relation_attribute_types',
           'relation_types',
-          'unconfigured_types',
+          'unconfigured_types'
           ], function(attrNo, attr) {
         if (collectionData[attr] === undefined) {
           collectionData[attr] = [];
@@ -387,7 +387,7 @@ var Visualizer = (function($, window, undefined) {
         if (!$.browser.chrome) return; // not needed
         $svg.css('margin-bottom', 1);
         setTimeout(function() { $svg.css('margin-bottom', 0); }, 0);
-      }
+      };
 
       var rowBBox = function(span) {
         var box = $.extend({}, span.rectBox); // clone
@@ -634,7 +634,7 @@ var Visualizer = (function($, window, undefined) {
           var t1, t2;
           if (argsDesc) {
             // sort the arguments according to the config
-            var args = {}
+            var args = {};
             args[rel[2][0][0]] = rel[2][0][1];
             args[rel[2][1][0]] = rel[2][1][1];
             t1 = args[argsDesc[0].role];
@@ -1130,7 +1130,7 @@ var Visualizer = (function($, window, undefined) {
       var resetData = function() {
         setData(sourceData);
         renderData();
-      }
+      };
 
       var translate = function(element, x, y) {
         $(element.group).attr('transform', 'translate(' + x + ', ' + y + ')');
@@ -1155,7 +1155,7 @@ var Visualizer = (function($, window, undefined) {
         var $blurFilter = $('<filter id="Gaussian_Blur"><feGaussianBlur in="SourceGraphic" stdDeviation="2" /></filter>');
         svg.add(defs, $blurFilter);
         return defs;
-      }
+      };
 
       var getTextMeasurements = function(textsHash, options, callback) {
         // make some text elements, find out the dimensions
@@ -1191,7 +1191,7 @@ var Visualizer = (function($, window, undefined) {
         var chunkTexts = {}; // set of span texts
         $.each(data.chunks, function(chunkNo, chunk) {
           chunk.row = undefined; // reset
-          if (!(chunk.text in chunkTexts)) chunkTexts[chunk.text] = []
+          if (!(chunk.text in chunkTexts)) chunkTexts[chunk.text] = [];
           var chunkText = chunkTexts[chunk.text];
 
           // here we also need all the spans that are contained in
@@ -1329,12 +1329,12 @@ var Visualizer = (function($, window, undefined) {
             width, height / 2, width, height, 'auto',
             {
               markerUnits: 'strokeWidth',
-              'fill': color,
+              'fill': color
             });
           svg.polyline(arrow, [[0, 0], [width, height / 2], [0, height], [width / 12, height / 2]]);
         }
         return arrowId;
-      }
+      };
 
 
       var drawing = false;
@@ -1385,7 +1385,7 @@ Util.profileStart('measures');
         var maxTextWidth = 0;
         for (var text in sizes.texts.widths) {
           if (sizes.texts.widths.hasOwnProperty(text)) {
-            var width = sizes.texts.widths[text]
+            var width = sizes.texts.widths[text];
             if (width > maxTextWidth) maxTextWidth = width;
           }
         }
@@ -1505,7 +1505,7 @@ Util.profileStart('chunks');
               }
             }
             return floorNo;
-          }
+          };
           var ceiling = carpet + height;
           var ceilingNo = makeNewFloorIfNeeded(ceiling);
           var carpetNo = makeNewFloorIfNeeded(carpet);
@@ -1578,7 +1578,7 @@ Util.profileStart('chunks');
             }
 
             fragment.group = svg.group(chunk.group, {
-              'class': 'span',
+              'class': 'span'
             });
 
             var fragmentHeight = 0;
@@ -1621,7 +1621,7 @@ Util.profileStart('chunks');
                   // filter: 'url(#Gaussian_Blur)',
                   'class': "shadow_EditHighlight",
                   rx: markedSpanSize,
-                  ry: markedSpanSize,
+                  ry: markedSpanSize
               });
               svg.other(markedRect, 'animate', {
                 'data-type': span.marked,
@@ -1647,7 +1647,7 @@ Util.profileStart('chunks');
                   'class': 'shadow_' + span.shadowClass,
                   filter: 'url(#Gaussian_Blur)',
                   rx: rectShadowRounding,
-                  ry: rectShadowRounding,
+                  ry: rectShadowRounding
               });
               chunkFrom = Math.min(bx - rectShadowSize, chunkFrom);
               chunkTo = Math.max(bx + bw + rectShadowSize, chunkTo);
@@ -1728,7 +1728,7 @@ Util.profileStart('chunks');
                     fragment.curly.to, bottom + Configuration.visual.curlyHeight),
                 {
                   'class': 'curly',
-                  'stroke': curlyColor,
+                  'stroke': curlyColor
                 });
               chunkFrom = Math.min(fragment.curly.from, chunkFrom);
               chunkTo = Math.max(fragment.curly.to, chunkTo);
@@ -2027,14 +2027,14 @@ Util.profileStart('arcsPrep');
           5, 2.5, 5, 5, 'auto',
           {
             markerUnits: 'strokeWidth',
-            'class': 'drag_fill',
+            'class': 'drag_fill'
           });
         svg.polyline(arrowhead, [[0, 0], [5, 2.5], [0, 5], [0.2, 2.5]]);
         var arcDragArc = svg.path(svg.createPath(), {
           markerEnd: 'url(#drag_arrow)',
           'class': 'drag_stroke',
           fill: 'none',
-          visibility: 'hidden',
+          visibility: 'hidden'
         });
         dispatcher.post('arcDragArcDrawn', [arcDragArc]);
 
@@ -2231,7 +2231,7 @@ Util.profileStart('arcs');
                 'data-arc-target': arc.target,
                 // TODO: confirm this is unused and remove.
                 //'data-arc-id': arc.id,
-                'data-arc-ed': arc.eventDescId,
+                'data-arc-ed': arc.eventDescId
               };
 
               // construct SVG text, showing possible trailing index
@@ -2275,7 +2275,7 @@ Util.profileStart('arcs');
                 x: (from + to - width) / 2,
                 width: width,
                 y: -height - sizes.arcs.height / 2,
-                height: sizes.arcs.height,
+                height: sizes.arcs.height
               }
               if (arc.marked) {
                 var markedRect = svg.rect(shadowGroup,
@@ -2284,7 +2284,7 @@ Util.profileStart('arcs');
                       // filter: 'url(#Gaussian_Blur)',
                       'class': "shadow_EditHighlight",
                       rx: markedArcSize,
-                      ry: markedArcSize,
+                      ry: markedArcSize
                 });
                 svg.other(markedRect, 'animate', {
                   'data-type': arc.marked,
@@ -2305,7 +2305,7 @@ Util.profileStart('arcs');
                       'class': 'shadow_' + arc.shadowClass,
                       filter: 'url(#Gaussian_Blur)',
                       rx: arcLabelShadowRounding,
-                      ry: arcLabelShadowRounding,
+                      ry: arcLabelShadowRounding
                 });
               }
               var textStart = textBox.x;
@@ -2455,20 +2455,20 @@ Util.profileStart('arcs');
                   markerEnd: arrowDecl,
                   markerStart: labelArrowDecl,
                   style: 'stroke: ' + color,
-                  'strokeDashArray': dashArray,
+                  'strokeDashArray': dashArray
               });
               if (arc.marked) {
                 svg.path(shadowGroup, path, {
                     'class': 'shadow_EditHighlight_arc',
                     strokeWidth: markedArcStroke,
-                    'strokeDashArray': dashArray,
+                    'strokeDashArray': dashArray
                 });
               }
               if (shadowGroup) {
                 svg.path(shadowGroup, path, {
                     'class': 'shadow_' + arc.shadowClass,
                     strokeWidth: shadowStroke,
-                    'strokeDashArray': dashArray,
+                    'strokeDashArray': dashArray
                 });
               }
             }
@@ -2598,7 +2598,7 @@ Util.profileStart('rows');
                   filter: 'url(#Gaussian_Blur)',
                   rx: rectShadowRounding,
                   ry: rectShadowRounding,
-                  'data-sent': row.sentence,
+                  'data-sent': row.sentence
               });
               var text = svg.text(sentNumGroup, sentNumMargin - Configuration.visual.margin.x, y - rowPadding,
                   '' + row.sentence, { 'data-sent': row.sentence });
@@ -2624,16 +2624,16 @@ Util.profileStart('chunkFinish');
         var currentChunk;
         var lrChunkComp = function(a,b) {
           var ac = currentChunk.fragments[a];
-          var bc = currentChunk.fragments[b]
+          var bc = currentChunk.fragments[b];
           var startDiff = Util.cmp(ac.from, bc.from);
           return startDiff != 0 ? startDiff : Util.cmp(bc.to-bc.from, ac.to-ac.from);
-        }
+        };
         var rlChunkComp = function(a,b) {
           var ac = currentChunk.fragments[a];
-          var bc = currentChunk.fragments[b]
+          var bc = currentChunk.fragments[b];
           var endDiff = Util.cmp(bc.to, ac.to);
           return endDiff != 0 ? endDiff : Util.cmp(bc.to-bc.from, ac.to-ac.from);
-        }
+        };
 
         var sentenceText = null;
         $.each(data.chunks, function(chunkNo, chunk) {
@@ -2759,7 +2759,7 @@ Util.profileStart('chunkFinish');
                   fragment.highlightPos.w, fragment.highlightPos.h,
                   { fill: lightBgColor, //opacity:1,
                     rx: highlightRounding.x,
-                    ry: highlightRounding.y,
+                    ry: highlightRounding.y
                   });
             }
           }
@@ -2866,7 +2866,7 @@ Util.profileReport();
         dispatcher.post('ajax', [{
             action: 'getDocument',
             collection: coll,
-            'document': doc,
+            'document': doc
           }, 'renderData', {
             collection: coll,
             'document': doc
@@ -2942,7 +2942,7 @@ Util.profileStart('before render');
                                  fragment.highlightPos.w, fragment.highlightPos.h,
                                  { 'fill': bgColor, opacity:0.75,
                                    rx: highlightRounding.x,
-                                   ry: highlightRounding.y,
+                                   ry: highlightRounding.y
                                  }));
           });
 
@@ -2964,7 +2964,7 @@ Util.profileStart('before render');
               } else {
                 spans[arc.origin] = true;
               }
-            }
+            };
             $.each(span.incoming, function(arcNo, arc) {
                 addArcAndSpan(arc, arc.origin);
             });
@@ -3065,12 +3065,12 @@ Util.profileStart('before render');
         // TODO: this is a slightly weird place to tweak the configuration
         Configuration.abbrevsOn = _abbrevsOn;
         dispatcher.post('configurationChanged');
-      }
+      };
 
       var setTextBackgrounds = function(_textBackgrounds) {
         Configuration.textBackgrounds = _textBackgrounds;
         dispatcher.post('configurationChanged');
-      }
+      };
 
       var setLayoutDensity = function(_density) {
         //dispatcher.post('messages', [[['Setting layout density ' + _density, 'comment']]]);
@@ -3099,7 +3099,7 @@ Util.profileStart('before render');
           Configuration.visual.arcStartHeight = 19;
         }
         dispatcher.post('configurationChanged');
-      }
+      };
 
       var setSvgWidth = function(_width) {
         $svgDiv.width(_width);
@@ -3107,7 +3107,7 @@ Util.profileStart('before render');
           Configuration.svgWidth = _width;
           dispatcher.post('configurationChanged');
         }
-      }
+      };
 
       $svgDiv = $($svgDiv).hide();
 
@@ -3178,7 +3178,7 @@ Util.profileStart('before render');
             }
           }
         });
-      }
+      };
 
       var loadAttributeTypes = function(response_types) {
         var processed = {};
@@ -3196,7 +3196,7 @@ Util.profileStart('before render');
           }
         });
         return processed;
-      }
+      };
 
       var loadRelationTypes = function(relation_types) {
         $.each(relation_types, function(relTypeNo, relType) {
@@ -3208,7 +3208,7 @@ Util.profileStart('before render');
             }
           }
         });
-      }
+      };
 
       var collectionLoaded = function(response) {
         if (!response.exception) {
@@ -3261,7 +3261,7 @@ Util.profileStart('before render');
               'fonts/Astloch-Bold.ttf',
               'fonts/PT_Sans-Caption-Web-Regular.ttf',
               'fonts/Liberation_Sans-Regular.ttf'
-            ],
+            ]
           },
           active: proceedWithFonts,
           inactive: proceedWithFonts,
@@ -3272,7 +3272,7 @@ Util.profileStart('before render');
           fontloading: function(fontFamily, fontDescription) {
             // Note: Enable for font debugging
             //console.log("font loading:", fontFamily, fontDescription);
-          },
+          }
         };
         WebFont.load(webFontConfig);
         setTimeout(function() {

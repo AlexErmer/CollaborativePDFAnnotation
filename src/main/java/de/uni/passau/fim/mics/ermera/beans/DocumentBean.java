@@ -1,9 +1,11 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DocumentBean {
+public class DocumentBean implements Serializable {
+    String id;
     List<PageBean> pages = new ArrayList<>();
 
     public void addPage(PageBean page) {
@@ -60,9 +62,26 @@ public class DocumentBean {
         return sb.toString();
     }
 
+    /**
+     * Creates lines on every page
+     */
+    public void createLines() {
+       for(PageBean page: pages) {
+           page.createLines();
+       }
+    }
+
     // Getter & Setter
 
     public List<PageBean> getPages() {
         return pages;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

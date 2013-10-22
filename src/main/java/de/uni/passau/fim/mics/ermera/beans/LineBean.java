@@ -1,12 +1,5 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Alexander
- * Date: 15.10.13
- * Time: 01:00
- * To change this template use File | Settings | File Templates.
- */
 public class LineBean {
     private int x1;
     private int x2;

@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
-public class BlockBean implements Comparable<BlockBean> {
+import java.io.Serializable;
+
+public class BlockBean implements Comparable<BlockBean>, Serializable {
     private String id;
     private int left;
     private int top;

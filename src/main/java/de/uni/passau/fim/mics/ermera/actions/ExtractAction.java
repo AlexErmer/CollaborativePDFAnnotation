@@ -1,25 +1,38 @@
 package de.uni.passau.fim.mics.ermera.actions;
 
+import de.uni.passau.fim.mics.ermera.BratConnector;
 import de.uni.passau.fim.mics.ermera.Storage;
 import de.uni.passau.fim.mics.ermera.beans.DocumentBean;
 import de.uni.passau.fim.mics.ermera.exceptions.ExtractException;
 import de.uni.passau.fim.mics.ermera.extractors.PDFExtractor;
 import de.uni.passau.fim.mics.ermera.extractors.knowminerPDFExtractor;
-import org.apache.commons.io.FileUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ExtractAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String id = request.getParameter("id");
-        Storage storage = new Storage(request);
+        int pageNumber = 0;
+        Storage storage = new Storage();
+        DocumentBean loadedDocumentBean = null;
 
         // get documentBean from storage, if none found extract it from file
-        DocumentBean loadedDocumentBean = storage.load(id);
+        try {
+            loadedDocumentBean = storage.load(id);
+        } catch (FileNotFoundException e) {
+            // do nothing if only the file was not found..
+        } catch (IOException e) {
+            request.setAttribute("errorMessage", "Could not load saved file: " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
+        }
+
         if (loadedDocumentBean == null) {
             try {
                 PDFExtractor pdfExtractor = new knowminerPDFExtractor();
@@ -30,11 +43,15 @@ public class ExtractAction implements Action {
             }
         }
 
+        // get pageNumber Paramater
+        if (request.getParameter("pageNumber") != null) {
+            pageNumber = Integer.valueOf(request.getParameter("pageNumber")) - 1;
+        }
+
         // react on action?
         String action = request.getParameter("action");
         if (action != null) {
             System.out.println("handling action: " + action);
-            int pageNumber = Integer.valueOf(request.getParameter("pageNumber")) - 1;
             switch (action) {
                 case "sort":
                     String[] items = request.getParameterValues("items[]");
@@ -46,7 +63,13 @@ public class ExtractAction implements Action {
                     loadedDocumentBean.unselectBlock(pageNumber, request.getParameter("item"));
                     break;
                 case "saveForBrat":
-                    saveForBrat(request, loadedDocumentBean);
+                    try {
+                        if (BratConnector.saveForBrat(loadedDocumentBean)) {
+                            request.setAttribute("successMessage", "Saved for brat");
+                        }
+                    } catch (IOException e) {
+                        request.setAttribute("errorMessage", "Could not save Text for Brat: " + e.getMessage());
+                    }
                     break;
                 default:
                     break;
@@ -55,20 +78,14 @@ public class ExtractAction implements Action {
 
         // finished everything.. store bean and also attach it to the request
         if (loadedDocumentBean != null) {
-            storage.store(id, loadedDocumentBean);
+            try {
+                storage.store(loadedDocumentBean);
+            } catch (IOException e) {
+                request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
+            }
             request.setAttribute("documentBean", loadedDocumentBean);
         }
 
         return "extract";
-    }
-
-    private void saveForBrat(HttpServletRequest request, DocumentBean loadedDocumentBean) {
-        try {
-            //TODO dont just create a tempfile as it is needed in brat permanently
-            FileUtils.writeStringToFile(File.createTempFile("text", ".txt"), loadedDocumentBean.saveForBrat());
-        } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not save Text for Brat: " + e.getMessage());
-        }
-        request.setAttribute("errorMessage", "saved it ");
     }
 }

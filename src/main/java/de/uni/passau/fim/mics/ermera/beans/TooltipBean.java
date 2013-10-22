@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.beans;
 
-public class TooltipBean {
+import java.io.Serializable;
+
+public class TooltipBean implements Serializable {
     int left;
     int top;
     String label;
