@@ -29,8 +29,6 @@ public class ExtractAction implements Action {
             request.setAttribute("errorMessage", "Could not load saved file: " + e.getMessage());
         } catch (ClassNotFoundException e) {
             request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
-        } catch (Exception e) {
-            request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
         }
 
         if (loadedDocumentBean == null) {
@@ -61,6 +59,9 @@ public class ExtractAction implements Action {
                     break;
                 case "unselect":
                     loadedDocumentBean.unselectBlock(pageNumber, request.getParameter("item"));
+                    break;
+                case "toggleHeadline":
+                    //TODO implement
                     break;
                 case "saveForBrat":
                     try {

@@ -43,7 +43,7 @@ body {
 }
 
 .block-table {
-	background: rgba(255, 127, 0, 0.3);
+    background: rgba(255, 127, 0, 0.3);
 }
 
 .block-abstract {
@@ -106,15 +106,22 @@ body {
 }
 
 #PDFoutput .selectedAnnotation {
-    border: 2px solid red;
+    border: 1px solid red;
 }
 
 .draggable {
     cursor: move;
 }
 
-#sortedTextOutput {
+.buttonLine {
+    margin-bottom: 3px;
+}
+
+#sortedTextOutputWrapper {
     float: left;
+}
+
+#sortedTextOutput {
     width: 510px;
     height: 796px;
     overflow: scroll;
@@ -142,18 +149,22 @@ body {
     overflow: hidden;
     margin-bottom: 5px;
 }
+#sortedTextOutput div.text.headline span {
+    font-weight: bold;
+}
 #sortedTextOutput div.text:after {
     content: "";
-	pointer-events: none;
-	position: absolute;
-	width: 100%;
-	height: 15px;
-	left: 0; bottom: 0;
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, transparent),color-stop(1, white));
-        background-image: -webkit-linear-gradient(top, transparent, white);
-        background-image: -moz-linear-gradient(top, transparent, white);
-        background-image: -ms-linear-gradient(top, transparent, white);
-        background-image: -o-linear-gradient(top, transparent, white);
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 15px;
+    left: 0;
+    bottom: 0;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, transparent), color-stop(1, white));
+    background-image: -webkit-linear-gradient(top, transparent, white);
+    background-image: -moz-linear-gradient(top, transparent, white);
+    background-image: -ms-linear-gradient(top, transparent, white);
+    background-image: -o-linear-gradient(top, transparent, white);
 }
 
 div.text:hover .options {
@@ -166,13 +177,16 @@ div.text .options {
     right: 0;
     padding: 3px;
 }
+
 div.text .options .option {
     float: right;
     margin: 0 5px;
 }
+
 div.text .options .option .handle {
     cursor: move;
 }
+
 div.text .options .option .delete {
     cursor: pointer;
 }

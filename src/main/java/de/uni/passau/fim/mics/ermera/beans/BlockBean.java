@@ -8,8 +8,9 @@ public class BlockBean implements Comparable<BlockBean>, Serializable {
     private int top;
     private int width;
     private int height;
-    private String label;
     private String cssClass;
+    private boolean headline;
+    private boolean newParagraph;
     private TooltipBean tooltipBean;
     private String text;
     private boolean selectedBlock;
@@ -72,12 +73,20 @@ public class BlockBean implements Comparable<BlockBean>, Serializable {
         this.height = height;
     }
 
-    public String getLabel() {
-        return label;
+    public boolean isHeadline() {
+        return headline;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setHeadline(boolean headline) {
+        this.headline = headline;
+    }
+
+    public boolean isNewParagraph() {
+        return newParagraph;
+    }
+
+    public void setNewParagraph(boolean newParagraph) {
+        this.newParagraph = newParagraph;
     }
 
     public String getCssClass() {

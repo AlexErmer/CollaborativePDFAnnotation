@@ -133,19 +133,22 @@ public class knowminerPDFExtractor implements PDFExtractor {
         blockBean.setWidth((int) (bbox.maxx - bbox.minx));
         blockBean.setLeft((int) bbox.minx);
         blockBean.setTop((int) bbox.miny);
-        blockBean.setLabel(label == null ? "" : label.getLabel().toLowerCase());
         blockBean.setCssClass(label == null ? cssClass : cssClass + " " + cssClass + "-" + label.getLabel().toLowerCase());
         if (blockBean.getCssClass().contains("-title")
                 || blockBean.getCssClass().contains("-subtitle")
                 || blockBean.getCssClass().contains("-heading")
                 || blockBean.getCssClass().contains("-main")) {
             blockBean.setSelectedBlock(true);
+            if (!blockBean.getCssClass().contains("-main")) {
+                blockBean.setHeadline(true);
+            }
         }
         blockBean.setText(StringEscapeUtils.escapeHtml(pipeline.clearHyphenations(block)));
         blockBean.setId(String.format("%s_%d_%d", cssClass, pageId, blockId));
         blockBean.setOrder(result.postprocessedReadingOrder.getReadingOrder(pageId).indexOf(blockId) * 10);
 
         // tooltip for the box
+        //TODO: refactor so tooltips are created on the fly (like lines)
         TooltipBean tooltipBean = new TooltipBean();
         tooltipBean.setLeft((int) (bbox.minx + (bbox.maxx - bbox.minx) + 10));
         tooltipBean.setTop((int) (bbox.miny));

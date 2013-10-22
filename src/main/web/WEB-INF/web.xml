@@ -37,7 +37,12 @@
         <url-pattern>*.ico</url-pattern>
         <url-pattern>*.js</url-pattern>
         <url-pattern>*.png</url-pattern>
+
+        <!-- fonts -->
+        <url-pattern>*.eot</url-pattern>
         <url-pattern>*.ttf</url-pattern>
+        <url-pattern>*.woff</url-pattern>
+        <url-pattern>*.svg</url-pattern>
     </servlet-mapping>
     <!-- But serve CGI as, well, CGI. -->
     <servlet-mapping>

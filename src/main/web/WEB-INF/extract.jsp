@@ -24,11 +24,10 @@
 
 <c:set var="page" value="${documentBean.pages[pageNumber-1]}"/>
 
-<button type="button" class="btn" onclick="saveForBrat()">save for Brat</button>
-<a class="btn" href="/brat/index.xhtml#/${documentBean.id}">weiter zu brat</a>
-
-
 <div id="PDFoutput">
+    <div class="buttonLine">
+        <button type="button" class="btn btn-xs" onclick="$('.svg').toggle()">toggle Lines</button>
+    </div>
 
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="width:0; height:0">
         <defs>
@@ -66,9 +65,11 @@
                  onmouseout="document.getElementById('tooltip_${block.id}').style.display='none'">
 
                 <c:if test="${block.selectedBlock}">
-                    <div class="options ui-state-default ui-corner-all">
-                        <div class="option ui-state-default ui-corner-all">
-                            <span class="delete ui-icon ui-icon-trash" onclick="removeItem($('#t_${block.id}'))"></span>
+                    <div class="options ui-widget-header ui-corner-all">
+                        <div class="option">
+                            <button class="btn btn-sm btn-danger" title="L&ouml;schen" onclick="removeItem($('#t_${block.id}'))">
+                                <span class="delete ui-icon ui-icon-trash"></span>
+                            </button>
                         </div>
                     </div>
                 </c:if>
@@ -91,23 +92,40 @@
 </div>
 
 
-<div id="sortedTextOutput">
-    <c:forEach items="${page.blocks}" var="block">
-        <c:if test="${block.selectedBlock}">
-            <div id="t_${block.id}" data-id="${block.id}" class="text">
-                <div class="options ui-state-default ui-corner-all">
-                    <div class="option ui-state-default ui-corner-all">
-                        <span class="handle ui-icon ui-icon-arrowthick-2-n-s"></span>
-                    </div>
-                    <div class="option ui-state-default ui-corner-all">
-                        <span class="delete ui-icon ui-icon-trash" onclick="removeItem($('#t_${block.id}'))"></span>
-                    </div>
-                </div>
+<div id="sortedTextOutputWrapper">
+    <div class="buttonLine">
+        <button type="button" class="btn btn-xs" onclick="saveForBrat()">save for Brat</button>
+        <a class="btn btn-xs" href="/brat/index.xhtml#/${documentBean.id}">weiter zu brat</a>
+    </div>
 
-                <span>${block.text}</span>
-            </div>
-        </c:if>
-    </c:forEach>
+    <div id="sortedTextOutput">
+
+        <c:forEach items="${page.blocks}" var="block">
+            <c:if test="${block.selectedBlock}">
+                <div id="t_${block.id}" data-id="${block.id}" class="text ${block.headline?' headline':''}">
+                    <div class="options ui-widget-header ui-corner-all">
+                        <div class="option">
+                            <button class="btn btn-sm btn-info" title="ist &Uuml;berschrift?" onclick="toggleHeadline($('#t_${block.id}'))">
+                                <span class="ui-icon ui-icon-star"></span>
+                            </button>
+                        </div>
+                        <div class="option">
+                            <button class="btn btn-sm btn-warning handle" title="Verschieben" onclick="return false;">
+                                <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                            </button>
+                        </div>
+                        <div class="option">
+                            <button class="btn btn-sm btn-danger" title="L&ouml;schen" onclick="removeItem($('#t_${block.id}'))">
+                                <span class="delete ui-icon ui-icon-trash"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <span>${block.text}</span>
+                </div>
+            </c:if>
+        </c:forEach>
+    </div>
 </div>
 
 
@@ -135,6 +153,7 @@
             items: "> div.text",
             placeholder: "ui-state-highlight",
             handle: ".handle",
+            cancel: "", // needed to user <button> as handle!
             //revert: "invalid",
             receive: function(event, ui) {
                 $.ajax({
@@ -184,6 +203,15 @@
             async: false,
             cache: false,
             data: {action: 'saveForBrat'}
+        });
+    }
+    function toggleHeadline(item) {
+        item.toggleClass('active');
+        $.ajax({
+            url: '', // blank to submit to same page!
+            async: false,
+            cache: false,
+            data: {action: 'toggleHeadline', item: item.data('id')}
         });
     }
 </script>

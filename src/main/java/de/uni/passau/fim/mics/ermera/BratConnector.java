@@ -18,6 +18,7 @@ public class BratConnector {
         f2.write(loadedDocumentBean.saveForBrat());
         f2.close();
 
+        // create seperate annotation file
         File annFile = new File(path + "/" + loadedDocumentBean.getId() + ".ann");
         annFile.createNewFile();
 

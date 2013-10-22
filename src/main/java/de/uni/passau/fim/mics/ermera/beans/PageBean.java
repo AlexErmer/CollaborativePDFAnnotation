@@ -103,11 +103,11 @@ public class PageBean implements Comparable<PageBean>, Serializable {
         StringBuilder sb = new StringBuilder();
         for(BlockBean block: blocks) {
             if (block.isSelectedBlock()) {
-                if(sb.length() != 0 && block.getLabel().equals("title") || block.getLabel().equals("heading")) {
+                if(sb.length() != 0 && block.isHeadline()) {
                     sb.append("\r\n\r\n");
                 }
                 sb.append(block.getText());
-                if(block.getLabel().equals("title") || block.getLabel().equals("heading")) {
+                if(block.isHeadline() || block.isNewParagraph()) {
                     sb.append("\r\n");
                 }
             }
