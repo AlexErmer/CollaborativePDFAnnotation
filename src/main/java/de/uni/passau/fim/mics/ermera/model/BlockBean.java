@@ -11,7 +11,6 @@ public class BlockBean implements Comparable<BlockBean>, Serializable {
     private String cssClass;
     private boolean headline;
     private boolean newParagraph;
-    private TooltipBean tooltipBean;
     private String text;
     private boolean selectedBlock;
     private int order;
@@ -95,14 +94,6 @@ public class BlockBean implements Comparable<BlockBean>, Serializable {
 
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
-    }
-
-    public TooltipBean getTooltipBean() {
-        return tooltipBean;
-    }
-
-    public void setTooltipBean(TooltipBean tooltipBean) {
-        this.tooltipBean = tooltipBean;
     }
 
     public String getText() {

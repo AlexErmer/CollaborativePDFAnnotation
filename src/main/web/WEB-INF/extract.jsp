@@ -60,9 +60,7 @@
                  data-id="${block.id}"
                  class="${block.cssClass} ${block.selectedBlock?'selectedAnnotation':'draggable'} text"
                  title="label"
-                 style="position:absolute;left:${block.left}px;top:${block.top}px;width:${block.width}px;height:${block.height}px;"
-                 onmouseover="document.getElementById('tooltip_${block.id}').style.display='block'"
-                 onmouseout="document.getElementById('tooltip_${block.id}').style.display='none'">
+                 style="position:absolute;left:${block.left}px;top:${block.top}px;width:${block.width}px;height:${block.height}px;">
 
                 <c:if test="${block.selectedBlock}">
                     <div class="options ui-widget-header ui-corner-all">
@@ -77,16 +75,6 @@
                 <div class="block-text">
                         ${block.text}
                 </div>
-            </div>
-
-            <%--//TODO: do tooltips the bootstrap way!--%>
-            <div id="tooltip_${block.id}" class="myTooltip"
-                 style="position:absolute;left:${block.tooltipBean.left}px;top:${block.tooltipBean.top}px;width:200px;z-index:100;">
-                <b>Label:</b> ${block.tooltipBean.label}<br/>
-                <b>BBox:</b> ${block.tooltipBean.bbox}<br/>
-                <b>Text:</b> ${block.tooltipBean.text}<br/>
-                <b>Maj. Font:</b> ${block.tooltipBean.font}; size=${block.tooltipBean.size};
-                bold=${block.tooltipBean.bold}; italic=${block.tooltipBean.italic};
             </div>
         </c:forEach>
     </div>

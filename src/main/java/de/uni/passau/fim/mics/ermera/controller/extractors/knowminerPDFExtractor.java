@@ -2,13 +2,11 @@ package de.uni.passau.fim.mics.ermera.controller.extractors;
 
 import at.knowcenter.code.api.pdf.*;
 import at.knowcenter.code.pdf.PdfExtractionPipeline;
-import at.knowcenter.code.pdf.utils.PdfExtractionUtils;
 import at.knowcenter.code.pdf.utils.rendering.PdfToImage;
 import at.knowcenter.code.workers.configuration.configs.ExtractionConfiguration;
 import de.uni.passau.fim.mics.ermera.model.BlockBean;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.model.PageBean;
-import de.uni.passau.fim.mics.ermera.model.TooltipBean;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -145,27 +143,6 @@ public class knowminerPDFExtractor implements Extractor {
         blockBean.setText(StringEscapeUtils.escapeHtml(pipeline.clearHyphenations(block)));
         blockBean.setId(String.format("%s_%d_%d", cssClass, pageId, blockId));
         blockBean.setOrder(result.postprocessedReadingOrder.getReadingOrder(pageId).indexOf(blockId) * 10);
-
-        // tooltip for the box
-        //TODO: refactor so tooltips are created on the fly (like lines)
-        TooltipBean tooltipBean = new TooltipBean();
-        tooltipBean.setLeft((int) (bbox.minx + (bbox.maxx - bbox.minx) + 10));
-        tooltipBean.setTop((int) (bbox.miny));
-        tooltipBean.setLabel(label == null ? "null" : label.getLabel());
-        tooltipBean.setBbox(bbox.toString());
-        String text = block.getText();
-        text = (text.length() > TOOLTIP_TEXT_LENGTH) ? text.substring(0, TOOLTIP_TEXT_LENGTH) + "..." : text;
-        tooltipBean.setText(StringEscapeUtils.escapeHtml(text));
-        at.knowcenter.code.api.pdf.Font font = document.getFonts().get(PdfExtractionUtils.getMajorityFontId(block));
-        tooltipBean.setFont(font.getFontName());
-        tooltipBean.setSize(PdfExtractionUtils.getMajorityFontSize(block));
-        if (font.getIsBold() != null) {
-            tooltipBean.setBold(font.getIsBold().toString());
-        }
-        if (font.getIsItalic() != null) {
-            tooltipBean.setItalic(font.getIsItalic().toString());
-        }
-        blockBean.setTooltipBean(tooltipBean);
 
         return blockBean;
     }
