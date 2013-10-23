@@ -5,10 +5,13 @@ import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
 import de.uni.passau.fim.mics.ermera.controller.extractors.knowminerPDFExtractor;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.FileDao;
+import de.uni.passau.fim.mics.ermera.dao.FileDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -20,7 +23,7 @@ public class ExtractAction implements Action {
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean = null;
 
-        // get documentBean from documentDaoImpl, if none found extract it from file
+        // get document model from dao
         try {
             documentBean = documentDao.load(id);
         } catch (FileNotFoundException e) {
@@ -31,10 +34,14 @@ public class ExtractAction implements Action {
             request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
         }
 
+        // if no model found extract it from file
         if (documentBean == null) {
+            FileDao fileDao = new FileDaoImpl();
+            File file = fileDao.load(id);
+
             try {
                 Extractor extractor = new knowminerPDFExtractor();
-                documentBean = extractor.extract(id);
+                documentBean = extractor.extract(id, file);
             } catch (ExtractException e) {
                 request.setAttribute("errorMessage", e.getMessage());
                 return "extract";

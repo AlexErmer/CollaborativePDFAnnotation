@@ -7,19 +7,20 @@ import at.knowcenter.code.workers.configuration.configs.ExtractionConfiguration;
 import de.uni.passau.fim.mics.ermera.model.BlockBean;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.model.PageBean;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.SortedSet;
 
 public class knowminerPDFExtractor implements Extractor {
 
-    private final static int TOOLTIP_TEXT_LENGTH = 80;
     private final static PdfToImage.RendererType RENDERER_TYPE = PdfToImage.RendererType.Sun;
     private PdfExtractionPipeline pipeline;
 
@@ -38,59 +39,28 @@ public class knowminerPDFExtractor implements Extractor {
         System.out.println("Loading models done");
     }
 
-    public DocumentBean extract(String id) throws ExtractException {
-        DocumentBean loadedDocumentBean = null;
-        byte[] pdfByteArray;
-        InputStream in = null;
+    public DocumentBean extract(String id, File file) throws ExtractException {
         try {
-            in = knowminerPDFExtractor.class.getResourceAsStream("/" + id + ".pdf");
-            if (in == null) {
-                throw new FileNotFoundException("/" + id + ".pdf");
+            InputStream in = new FileInputStream(file);
+            Image[] images = new PdfToImage(RENDERER_TYPE).toImages(in);
+
+            String[] imageFileNames = new String[images.length];
+            for (int pageId = 0; pageId < images.length; pageId++) {
+                File f = File.createTempFile(id + "_" + pageId, ".png");
+                BufferedImage image = (BufferedImage) images[pageId];
+                ImageIO.write(image, "png", f);
+                imageFileNames[pageId] = f.getCanonicalPath();
             }
-            pdfByteArray = IOUtils.toByteArray(in);
-            loadedDocumentBean = processPdfData(id, pdfByteArray);
-        } catch (FileNotFoundException e) {
-            throw new ExtractException("File with id '" + id + "' not found.", e);
+
+            PdfExtractionPipeline.PdfExtractionResult result = pipeline.runPipeline(id, file);
+            in.close();
+
+            return createDocumentBean(id, imageFileNames, result);
         } catch (PdfParser.PdfParserException e) {
             throw new ExtractException("Could not process file with id '" + id + "': " + e.getMessage(), e);
         } catch (IOException e) {
             throw new ExtractException("Could not read input stream: " + e.getMessage(), e);
-        } finally {
-            if (in != null) try {
-                in.close();
-            } catch (IOException e) {
-                //noinspection ThrowFromFinallyBlock
-                throw new ExtractException("Could not close the input stream: " + e.getMessage(), e);
-            }
         }
-        return loadedDocumentBean;
-    }
-
-    private synchronized DocumentBean processPdfData(String fileName, byte[] pdfByteArray) throws PdfParser.PdfParserException, IOException {
-        InputStream in = new ByteArrayInputStream(pdfByteArray);
-        Image[] images = new PdfToImage(RENDERER_TYPE).toImages(in);
-        in.close();
-
-        String[] imageFileNames = new String[images.length];
-        for (int pageId = 0; pageId < images.length; pageId++) {
-            File f = File.createTempFile(fileName + "_" + pageId, ".png");
-            BufferedImage image = (BufferedImage) images[pageId];
-            ImageIO.write(image, "png", f);
-            imageFileNames[pageId] = f.getCanonicalPath();
-        }
-
-        in = new ByteArrayInputStream(pdfByteArray);
-        File file = File.createTempFile("demoserver", ".pdf");
-        FileOutputStream fos = new FileOutputStream(file);
-        IOUtils.copy(in, fos);
-        IOUtils.closeQuietly(fos);
-        PdfExtractionPipeline.PdfExtractionResult result = pipeline.runPipeline(fileName, file);
-        in.close();
-        if (!file.delete()) {
-            System.out.println("Could not delete temporary file: " + file.getName());
-        }
-
-        return createDocumentBean(fileName, imageFileNames, result);
     }
 
     private DocumentBean createDocumentBean(String id, String[] imageFileNames, PdfExtractionPipeline.PdfExtractionResult result) {
@@ -121,7 +91,6 @@ public class knowminerPDFExtractor implements Extractor {
     }
 
     private BlockBean createBlockBean(Block block, int pageId, int blockId, String cssClass, PdfExtractionPipeline.PdfExtractionResult result) {
-        Document document = result.doc;
         BlockLabel label = result.labeling.getLabel(block);
 
         BlockBean blockBean = new BlockBean();
