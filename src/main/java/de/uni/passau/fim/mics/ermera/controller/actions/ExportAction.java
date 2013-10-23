@@ -1,7 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions;
 
 import de.uni.passau.fim.mics.ermera.controller.exporters.BratConnector;
-import de.uni.passau.fim.mics.ermera.dao.Storage;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +14,12 @@ public class ExportAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String id = request.getParameter("id");
-        Storage storage = new Storage();
+        DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean loadedDocumentBean = null;
 
-        // get documentBean from storage, if none found extract it from file
+        // get documentBean from documentDaoImpl, if none found extract it from file
         try {
-            loadedDocumentBean = storage.load(id);
+            loadedDocumentBean = documentDao.load(id);
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {

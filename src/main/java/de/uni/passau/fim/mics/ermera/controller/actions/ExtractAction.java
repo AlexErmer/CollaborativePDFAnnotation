@@ -3,7 +3,8 @@ package de.uni.passau.fim.mics.ermera.controller.actions;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
 import de.uni.passau.fim.mics.ermera.controller.extractors.knowminerPDFExtractor;
-import de.uni.passau.fim.mics.ermera.dao.Storage;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +17,12 @@ public class ExtractAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String id = request.getParameter("id");
         int pageNumber = 0;
-        Storage storage = new Storage();
+        DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean = null;
 
-        // get documentBean from storage, if none found extract it from file
+        // get documentBean from documentDaoImpl, if none found extract it from file
         try {
-            documentBean = storage.load(id);
+            documentBean = documentDao.load(id);
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {
@@ -74,7 +75,7 @@ public class ExtractAction implements Action {
         // finished everything.. store bean and also attach it to the request
         if (documentBean != null) {
             try {
-                storage.store(documentBean);
+                documentDao.store(documentBean);
             } catch (IOException e) {
                 request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
             }

@@ -5,7 +5,8 @@ import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import java.io.*;
 
-public class Storage {
+public class DocumentDaoImpl implements DocumentDao {
+    @Override
     public DocumentBean load(String id) throws IOException, ClassNotFoundException {
         InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + PropertyReader.STORAGE_PATH + "document_" + id);
         ObjectInputStream o = new ObjectInputStream(fis);
@@ -16,6 +17,7 @@ public class Storage {
         return documentBean;
     }
 
+    @Override
     public void store(DocumentBean documentBean) throws IOException {
         OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + PropertyReader.STORAGE_PATH + "document_" + documentBean.getId());
         ObjectOutputStream o = new ObjectOutputStream(fos);
