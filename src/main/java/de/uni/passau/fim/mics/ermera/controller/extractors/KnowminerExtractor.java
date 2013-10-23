@@ -19,16 +19,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.SortedSet;
 
-public class knowminerPDFExtractor implements Extractor {
+public class KnowminerExtractor implements Extractor {
 
     private final static PdfToImage.RendererType RENDERER_TYPE = PdfToImage.RendererType.Sun;
     private PdfExtractionPipeline pipeline;
 
-    public knowminerPDFExtractor() {
+    public KnowminerExtractor() {
         System.out.println("Loading models");
         ObjectMapper mapper = new ObjectMapper();
         try {
-            ExtractionConfiguration config = mapper.readValue(knowminerPDFExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
+            ExtractionConfiguration config = mapper.readValue(KnowminerExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
 
             // load Pdf extractor pipeline
             pipeline = new PdfExtractionPipeline(config.blockModelFile, config.featuresFile,

@@ -2,7 +2,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions;
 
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
-import de.uni.passau.fim.mics.ermera.controller.extractors.knowminerPDFExtractor;
+import de.uni.passau.fim.mics.ermera.controller.extractors.KnowminerExtractor;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.FileDao;
@@ -40,7 +40,7 @@ public class ExtractAction implements Action {
             File file = fileDao.load(id);
 
             try {
-                Extractor extractor = new knowminerPDFExtractor();
+                Extractor extractor = new KnowminerExtractor();
                 documentBean = extractor.extract(id, file);
             } catch (ExtractException e) {
                 request.setAttribute("errorMessage", e.getMessage());
