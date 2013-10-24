@@ -19,7 +19,7 @@
 <jsp:include page="paginator.jsp">
     <jsp:param name="pageNumber" value="${pageNumber}"/>
     <jsp:param name="pages" value="${fn:length(documentBean.pages)}"/>
-    <jsp:param name="link" value="display?id=${param.id}&pageNumber="/>
+    <jsp:param name="link" value="display?pageNumber="/>
 </jsp:include>
 
 <c:set var="page" value="${documentBean.pages[pageNumber-1]}"/>
@@ -59,7 +59,7 @@
             <div id="${block.id}"
                  data-id="${block.id}"
                  class="${block.cssClass} ${block.selectedBlock?'selectedAnnotation':'draggable'} text"
-                 title="label"
+                 title="${block.cssClass}"
                  style="position:absolute;left:${block.left}px;top:${block.top}px;width:${block.width}px;height:${block.height}px;">
 
                 <c:if test="${block.selectedBlock}">
@@ -153,11 +153,21 @@
             cancel: "", // needed to user <button> as handle!
             //revert: "invalid",
             receive: function(event, ui) {
-                $.get('document_sort', {items: $(this).sortable("toArray", {attribute: "data-id"})});
+                $.ajax({
+                    url: 'document_sort',
+                    async: false,
+                    cache: false,
+                    data: {items: $(this).sortable("toArray", {attribute: "data-id"}), pageNumber: ${pageNumber}}
+                });
                 location.reload();
             },
             update: function(event, ui) {
-                $.get('document_sort', {items: $(this).sortable("toArray", {attribute: "data-id"})});
+                $.ajax({
+                    url: 'document_sort',
+                    async: false,
+                    cache: false,
+                    data: {items: $(this).sortable("toArray", {attribute: "data-id"}), pageNumber: ${pageNumber}}
+                });
                 location.reload();
             }
         });
@@ -175,7 +185,12 @@
     });
 
     function removeBlock(item) {
-        $.get('document_removeBlock', {item: item.data('id')});
+        $.ajax({
+            url: 'document_removeBlock',
+            async: false,
+            cache: false,
+            data: {item: item.data('id'), pageNumber: ${pageNumber}}
+        });
         location.reload();
     }
     function toggleHeadline(item) {

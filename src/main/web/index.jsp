@@ -1,3 +1,6 @@
+<% response.sendRedirect("pages/homepage"); %>
+
+<!--
 <jsp:include page="WEB-INF/header.jsp" />
 
 <h1>PDF Extraction Demo</h1>
@@ -35,3 +38,4 @@
 </ul>
 
 <jsp:include page="WEB-INF/footer.jsp" />
+-->

@@ -68,6 +68,7 @@ public class PageBean implements Comparable<PageBean>, Serializable {
             if (item.equals(block.getId())) {
                 block.setSelectedBlock(false);
                 block.setOrder(NOT_SORTED);
+                break;
             }
         }
         createLines();
@@ -77,6 +78,7 @@ public class PageBean implements Comparable<PageBean>, Serializable {
         for (BlockBean block : blocks) {
             if (item.equals(block.getId())) {
                 block.setHeadline(!block.isHeadline());
+                break;
             }
         }
     }
@@ -85,6 +87,7 @@ public class PageBean implements Comparable<PageBean>, Serializable {
         for (BlockBean block : blocks) {
             if (item.equals(block.getId())) {
                 block.setNewParagraph(!block.isNewParagraph());
+                break;
             }
         }
     }

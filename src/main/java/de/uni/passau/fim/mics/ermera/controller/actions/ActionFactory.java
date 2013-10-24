@@ -13,6 +13,7 @@ public class ActionFactory {
 
     static {
         actions = new HashMap<>();
+        actions.put("GET/homepage", new HomepageAction());
         actions.put("GET/contact", new ContactAction());
         actions.put("GET/extract", new ExtractAction());
         actions.put("GET/display", new DisplayAction());
