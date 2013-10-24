@@ -1,6 +1,6 @@
 <jsp:include page="header.jsp"/>
 
-<jsp:useBean id="documentBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.DocumentBean"/>
+<jsp:useBean id="documentBean" scope="session" class="de.uni.passau.fim.mics.ermera.model.DocumentBean"/>
 
 <c:choose>
     <c:when test="${param.pageNumber == null}">
@@ -19,7 +19,7 @@
 <jsp:include page="paginator.jsp">
     <jsp:param name="pageNumber" value="${pageNumber}"/>
     <jsp:param name="pages" value="${fn:length(documentBean.pages)}"/>
-    <jsp:param name="link" value="extract?id=${param.id}&pageNumber="/>
+    <jsp:param name="link" value="display?id=${param.id}&pageNumber="/>
 </jsp:include>
 
 <c:set var="page" value="${documentBean.pages[pageNumber-1]}"/>
@@ -66,7 +66,7 @@
                     <div class="options ui-widget-header ui-corner-all">
                         <div class="option">
                             <button class="btn btn-sm btn-danger" title="L&ouml;schen"
-                                    onclick="removeItem($('#t_${block.id}'))">
+                                    onclick="removeBlock($('#t_${block.id}'))">
                                 <span class="delete ui-icon ui-icon-trash"></span>
                             </button>
                         </div>
@@ -89,7 +89,8 @@
     <div id="sortedTextOutput">
         <c:forEach items="${page.blocks}" var="block">
             <c:if test="${block.selectedBlock}">
-                <div id="t_${block.id}" data-id="${block.id}" class="text ${block.headline?' headline':''} ${block.newParagraph?' newParagraph':''}">
+                <div id="t_${block.id}" data-id="${block.id}"
+                     class="text ${block.headline?' headline':''} ${block.newParagraph?' newParagraph':''}">
                     <div class="options ui-widget-header ui-corner-all">
                         <div class="option">
                             <button class="btn btn-sm btn-info" title="ist &Uuml;berschrift?"
@@ -110,7 +111,7 @@
                         </div>
                         <div class="option">
                             <button class="btn btn-sm btn-danger" title="L&ouml;schen"
-                                    onclick="removeItem($('#t_${block.id}'))">
+                                    onclick="removeBlock($('#t_${block.id}'))">
                                 <span class="delete ui-icon ui-icon-trash"></span>
                             </button>
                         </div>
@@ -152,22 +153,12 @@
             cancel: "", // needed to user <button> as handle!
             //revert: "invalid",
             receive: function(event, ui) {
-                $.ajax({
-                    url: '', // blank to submit to same page!
-                    async: false,
-                    cache: false,
-                    data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
-                });
-                location.reload(); //TODO: do real ajax without reloading!
+                $.get('document_sort', {items: $(this).sortable("toArray", {attribute: "data-id"})});
+                location.reload();
             },
             update: function(event, ui) {
-                $.ajax({
-                    url: '', // blank to submit to same page!
-                    async: false,
-                    cache: false,
-                    data: {action: 'sort', items: $(this).sortable("toArray", {attribute: "data-id"})}
-                });
-                location.reload(); //TODO: do real ajax without reloading!
+                $.get('document_sort', {items: $(this).sortable("toArray", {attribute: "data-id"})});
+                location.reload();
             }
         });
         $("#sortedTextOutput").disableSelection();
@@ -183,31 +174,26 @@
         $(".block-text").disableSelection();
     });
 
-    function removeItem(item) {
-        $.ajax({
-            url: '', // blank to submit to same page!
-            async: false,
-            cache: false,
-            data: {action: 'unselect', item: item.data('id')}
-        });
-        location.reload(); //TODO: do real ajax without reloading!
+    function removeBlock(item) {
+        $.get('document_removeBlock', {item: item.data('id')});
+        location.reload();
     }
     function toggleHeadline(item) {
         $('#t_' + item.data('id')).toggleClass('headline');
         $.ajax({
-            url: '', // blank to submit to same page!
+            url: 'document_toggleBlockHeadline',
             async: false,
             cache: false,
-            data: {action: 'toggleHeadline', item: item.data('id')}
+            data: {item: item.data('id')}
         });
     }
     function toggleNewParagraph(item) {
         $('#t_' + item.data('id')).toggleClass('newParagraph');
         $.ajax({
-            url: '', // blank to submit to same page!
+            url: 'document_toggleBlockNewParagraph',
             async: false,
             cache: false,
-            data: {action: 'toggleNewParagraph', item: item.data('id')}
+            data: {item: item.data('id')}
         });
     }
 </script>

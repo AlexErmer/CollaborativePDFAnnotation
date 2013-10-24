@@ -4,6 +4,7 @@ import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import java.io.IOException;
 
 
 @WebServlet(name = "Dispatcher", urlPatterns = "/pages/*")
+@MultipartConfig(maxFileSize = 10485760L) // 10MB.
 public class DispatcherServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,7 +26,7 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String view = "";
+        String view = null;
         try {
             Action action = ActionFactory.getAction(request);
             if (action != null) {

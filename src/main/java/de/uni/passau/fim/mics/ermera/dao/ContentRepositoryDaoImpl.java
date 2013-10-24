@@ -4,7 +4,7 @@ import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 
 import java.io.File;
 
-public class FileDaoImpl implements FileDao {
+public class ContentRepositoryDaoImpl implements ContentRepositoryDao {
 
     @Override
     public File load(String id) {
