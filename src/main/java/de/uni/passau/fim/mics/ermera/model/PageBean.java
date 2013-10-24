@@ -116,18 +116,19 @@ public class PageBean implements Comparable<PageBean>, Serializable {
      *
      * @return converted string.
      */
-    public String saveForBrat() {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         for (BlockBean block : blocks) {
             if (block.isSelectedBlock()) {
                 if (sb.length() != 0 && block.isHeadline()) {
-                    sb.append("\r\n\r\n");
+                    sb.append(System.getProperty("line.separator"));
+                    sb.append(System.getProperty("line.separator"));
                 } else if (block.isNewParagraph()) {
-                    sb.append("\r\n");
+                    sb.append(System.getProperty("line.separator"));
                 }
                 sb.append(block.getText());
                 if (block.isHeadline()) {
-                    sb.append("\r\n");
+                    sb.append(System.getProperty("line.separator"));
                 }
             }
         }

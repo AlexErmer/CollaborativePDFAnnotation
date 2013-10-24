@@ -74,11 +74,10 @@ public class DocumentBean implements Serializable {
         pages.get(pageNumber).toggleNewParagraph(item);
     }
 
-    //TODO move this method into BratConnector!
-    public String saveForBrat() {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         for(PageBean page: pages) {
-            sb.append(page.saveForBrat());
+            sb.append(page.toString());
         }
         return sb.toString();
     }

@@ -7,29 +7,22 @@ import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ExportAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String id = request.getParameter("id");
-        DocumentDao documentDao = new DocumentDaoImpl();
-        DocumentBean loadedDocumentBean = null;
-
-        // get documentBean from documentDaoImpl, if none found extract it from file
-        try {
-            loadedDocumentBean = documentDao.load(id);
-        } catch (FileNotFoundException e) {
-            // do nothing if only the file was not found..
-        } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not load saved file: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
+        HttpSession session = request.getSession();
+        DocumentBean documentBean = (DocumentBean) session.getAttribute("documentBean");
+        if (documentBean == null) {
+            request.setAttribute("errorMessage", "No loaded document");
+            return "";
         }
 
         try {
-            if (BratConnector.saveForBrat(loadedDocumentBean)) {
+            if (BratConnector.saveForBrat(documentBean)) {
                 request.setAttribute("successMessage", "Saved for brat");
             }
         } catch (IOException e) {
@@ -37,6 +30,6 @@ public class ExportAction implements Action {
         }
 
         // redirect to brat
-        return "../brat/index.xhtml#/" + id;
+        return "../brat/index.xhtml#/" + documentBean.getId();
     }
 }
