@@ -1,14 +1,11 @@
 package de.uni.passau.fim.mics.ermera.controller.actions;
 
 import de.uni.passau.fim.mics.ermera.controller.exporters.BratConnector;
-import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
-import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ExportAction implements Action {

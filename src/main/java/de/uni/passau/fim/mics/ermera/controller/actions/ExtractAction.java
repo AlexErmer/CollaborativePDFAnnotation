@@ -3,10 +3,10 @@ package de.uni.passau.fim.mics.ermera.controller.actions;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
 import de.uni.passau.fim.mics.ermera.controller.extractors.KnowminerExtractor;
-import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
-import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.ContentRepositoryDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
