@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.uni.passau.fim.mics.ermera</groupId>
-    <artifactId>MyPDFExtractor</artifactId>
+    <artifactId>CollaborativePDFAnnotation</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>MyPDFExtractor</name>
+    <name>CollaborativePDFAnnotation</name>
     <description>
         Master thesis application for PDF extraction and annotation
     </description>
