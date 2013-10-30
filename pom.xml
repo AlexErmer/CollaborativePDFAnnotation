@@ -12,6 +12,11 @@
         Master thesis application for PDF extraction and annotation
     </description>
 
+    <scm>
+        <connection>scm:git:git://github.com/AlexErmer/CollaborativePDFAnnotation.git</connection>
+        <url>https://github.com/AlexErmer/CollaborativePDFAnnotation</url>
+    </scm>
+
     <build>
         <directory>target</directory>
         <finalName>${project.artifactId}-${project.version}</finalName>
