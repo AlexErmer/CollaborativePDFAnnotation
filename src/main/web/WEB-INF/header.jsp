@@ -34,21 +34,26 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <li><a href="/pages/contact">About/Contact</a></li>
+                <li><a href="/contact.jsp">About/Contact</a></li>
             </ul>
+            <c:if test="${not empty sessionScope.profile}">
+                <div class="navbar-form navbar-right">
+                    <a href="/pages/logout" class="btn btn-default">Logout</a>
+                </div>
+            </c:if>
         </div>
     </div>
 </div>
 
 <div class="container">
-<div class="bodywrapper">
+    <div class="bodywrapper">
 
-<c:if test="${successMessage != null && !successMessage.isEmpty()}">
-    <div class="alert alert-success">${successMessage}</div>
-</c:if>
-<c:if test="${errorMessage != null && !errorMessage.isEmpty()}">
-    <div class="alert alert-danger">${errorMessage}</div>
-</c:if>
-<c:if test="${infoMessage != null && !infoMessage.isEmpty()}">
-    <div class="alert alert-warn">${infoMessage}</div>
-</c:if>
+        <c:if test="${successMessage != null && !successMessage.isEmpty()}">
+            <div class="alert alert-success">${successMessage}</div>
+        </c:if>
+        <c:if test="${errorMessage != null && !errorMessage.isEmpty()}">
+            <div class="alert alert-danger">${errorMessage}</div>
+        </c:if>
+        <c:if test="${infoMessage != null && !infoMessage.isEmpty()}">
+            <div class="alert alert-warn">${infoMessage}</div>
+        </c:if>
