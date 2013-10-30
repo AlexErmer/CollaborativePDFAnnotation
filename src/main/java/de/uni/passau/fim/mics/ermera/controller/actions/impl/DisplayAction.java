@@ -1,5 +1,6 @@
-package de.uni.passau.fim.mics.ermera.controller.actions;
+package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
+import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;

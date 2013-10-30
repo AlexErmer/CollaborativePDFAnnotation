@@ -1,7 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller;
 
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
-import de.uni.passau.fim.mics.ermera.controller.actions.ActionFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;

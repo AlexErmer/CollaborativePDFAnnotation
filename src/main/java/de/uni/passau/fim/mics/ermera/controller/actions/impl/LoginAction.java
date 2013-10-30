@@ -1,8 +1,9 @@
-package de.uni.passau.fim.mics.ermera.controller.actions;
+package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.google.gson.*;
 import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
+import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.MendeleyApi;

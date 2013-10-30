@@ -1,13 +1,17 @@
-package de.uni.passau.fim.mics.ermera.controller.actions;
+package de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions;
 
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ToggleNewParagraphAction extends DocumentModificationAction {
+public class SortBlocksAction extends DocumentModificationAction {
+
     @Override
     protected void doCustomAction(HttpServletRequest request, HttpServletResponse response, DocumentBean documentBean, int pageNumber) {
-        documentBean.toggleNewParagraph(pageNumber, request.getParameter("item"));
+        String[] items = request.getParameterValues("items[]");
+        if (items != null) {
+            documentBean.reorderPageBean(pageNumber, items);
+        }
     }
 }

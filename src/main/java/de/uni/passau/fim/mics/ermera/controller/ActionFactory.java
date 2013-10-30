@@ -1,4 +1,11 @@
-package de.uni.passau.fim.mics.ermera.controller.actions;
+package de.uni.passau.fim.mics.ermera.controller;
+
+import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.controller.actions.impl.*;
+import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.RemoveBlockAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.SortBlocksAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.ToggleHeadlineAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.ToggleNewParagraphAction;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;

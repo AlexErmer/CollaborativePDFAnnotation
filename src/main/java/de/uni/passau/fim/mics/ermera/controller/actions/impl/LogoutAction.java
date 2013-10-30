@@ -1,11 +1,6 @@
-package de.uni.passau.fim.mics.ermera.controller.actions;
+package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import de.uni.passau.fim.mics.ermera.common.PropertyReader;
-import de.uni.passau.fim.mics.ermera.model.LoginBean;
-import org.scribe.builder.ServiceBuilder;
-import org.scribe.builder.api.MendeleyApi;
-import org.scribe.model.*;
-import org.scribe.oauth.OAuthService;
+import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
