@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera.dao;
+package de.uni.passau.fim.mics.ermera.dao.content;
 
 import java.io.File;
 import java.io.InputStream;

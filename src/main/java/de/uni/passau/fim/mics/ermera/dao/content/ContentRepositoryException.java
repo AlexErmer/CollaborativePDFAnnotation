@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera.dao;
+package de.uni.passau.fim.mics.ermera.dao.content;
 
 public class ContentRepositoryException extends Exception {
 

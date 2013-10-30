@@ -1,9 +1,9 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
-import de.uni.passau.fim.mics.ermera.dao.ContentRepositoryDao;
-import de.uni.passau.fim.mics.ermera.dao.ContentRepositoryDaoImpl;
-import de.uni.passau.fim.mics.ermera.dao.ContentRepositoryException;
+import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
+import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
