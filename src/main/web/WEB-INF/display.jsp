@@ -70,6 +70,12 @@
                                 <span class="delete ui-icon ui-icon-trash"></span>
                             </button>
                         </div>
+                        <div class="option">
+                            <button class="btn btn-sm btn-info" title="leitet neuen Paragraphen ein?"
+                                    onclick="toggleNewParagraph($('#t_${block.id}'))">
+                                <span class="ui-icon ui-icon-arrowreturnthick-1-e"></span>
+                            </button>
+                        </div>
                     </div>
                 </c:if>
                 <div class="block-text">
@@ -199,7 +205,7 @@
             url: 'document_toggleBlockHeadline',
             async: false,
             cache: false,
-            data: {item: item.data('id')}
+            data: {item: item.data('id'), pageNumber: ${pageNumber}}
         });
     }
     function toggleNewParagraph(item) {
@@ -208,7 +214,7 @@
             url: 'document_toggleBlockNewParagraph',
             async: false,
             cache: false,
-            data: {item: item.data('id')}
+            data: {item: item.data('id'), pageNumber: ${pageNumber}}
         });
     }
 </script>
