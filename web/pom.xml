@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>CollaborativePDFAnnotation</artifactId>
+        <groupId>de.uni.passau.fim.mics.ermera</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>web</artifactId>
+    <name>CollaborativePDFAnnotation-web</name>
+    <description>Web Schicht</description>
+
+    <packaging>war</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.uni.passau.fim.mics.ermera</groupId>
+            <artifactId>OpenNLP</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>at.know-center.ie</groupId>
+            <artifactId>ie-pipelines</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>at.know-center.code</groupId>
+            <artifactId>code-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>at.know-center.code</groupId>
+            <artifactId>code-pdf-extraction</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>at.know-center.code</groupId>
+            <artifactId>code-ner</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>at.know-center.code</groupId>
+            <artifactId>code-workers</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scribe</groupId>
+            <artifactId>scribe</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <directory>target</directory>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/web</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
