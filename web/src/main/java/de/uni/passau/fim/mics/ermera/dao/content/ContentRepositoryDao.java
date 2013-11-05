@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ContentRepositoryDao {
 
-    List<String> getAllFileIDs();
+    List<String> getAllFileIDs(String userid);
 
-    File load(String id);
+    File load(String userid, String id);
 
-    void store(String id, InputStream file) throws ContentRepositoryException;
+    void store(String userid, String id, InputStream file) throws ContentRepositoryException;
 }

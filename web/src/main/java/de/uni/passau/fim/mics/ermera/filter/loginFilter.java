@@ -20,7 +20,7 @@ public class loginFilter implements Filter {
         String path = httpRequest.getRequestURI();
 
         if (!path.equals("/pages/login")) {
-            if (session.getAttribute("accessToken") == null) {
+            if (session.getAttribute("profile") == null) {
                 ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL("/pages/login"));
                 return;
             }

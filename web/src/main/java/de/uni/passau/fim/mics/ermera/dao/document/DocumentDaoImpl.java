@@ -7,8 +7,8 @@ import java.io.*;
 
 public class DocumentDaoImpl implements DocumentDao {
     @Override
-    public DocumentBean load(String id) throws IOException, ClassNotFoundException {
-        InputStream fis = new FileInputStream(PropertyReader.STORAGE_PATH + "document_" + id);
+    public DocumentBean load(String userid, String id) throws IOException, ClassNotFoundException {
+        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" +PropertyReader.STORAGE_PATH + "document_" + id);
         ObjectInputStream o = new ObjectInputStream(fis);
         DocumentBean documentBean = (DocumentBean) o.readObject();
         fis.close();
@@ -18,8 +18,8 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public void store(DocumentBean documentBean) throws IOException {
-        OutputStream fos = new FileOutputStream(PropertyReader.STORAGE_PATH + "document_" + documentBean.getId());
+    public void store(String userid, DocumentBean documentBean) throws IOException {
+        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" +PropertyReader.STORAGE_PATH + "document_" + documentBean.getId());
         ObjectOutputStream o = new ObjectOutputStream(fos);
         o.writeObject(documentBean);
         fos.close();

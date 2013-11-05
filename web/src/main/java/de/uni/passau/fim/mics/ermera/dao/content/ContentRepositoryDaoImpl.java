@@ -9,10 +9,10 @@ import java.util.List;
 public class ContentRepositoryDaoImpl implements ContentRepositoryDao {
 
     @Override
-    public List<String> getAllFileIDs() {
+    public List<String> getAllFileIDs(String userid) {
         List<String> ret = new ArrayList<>();
 
-        File dir = new File(PropertyReader.UPLOAD_PATH);
+        File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOAD_PATH);
         File[] files = dir.listFiles();
         if (files != null) {
             for (File f : files) {
@@ -26,19 +26,19 @@ public class ContentRepositoryDaoImpl implements ContentRepositoryDao {
     }
 
     @Override
-    public File load(String id) {
-        return new File(PropertyReader.UPLOAD_PATH + id);
+    public File load(String userid,String id) {
+        return new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOAD_PATH + id);
     }
 
     @Override
-    public void store(String id, InputStream filecontent) throws ContentRepositoryException {
+    public void store(String userid, String id, InputStream filecontent) throws ContentRepositoryException {
 
         // store pdf
         OutputStream outputStream = null;
         try {
             // write the inputStream to a FileOutputStream
             outputStream =
-                    new FileOutputStream(new File(PropertyReader.UPLOAD_PATH + id));
+                    new FileOutputStream(new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOAD_PATH + id));
 
             int read;
             byte[] bytes = new byte[1024];

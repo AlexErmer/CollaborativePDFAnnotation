@@ -37,9 +37,10 @@
                 <li><a href="/contact.jsp">About/Contact</a></li>
             </ul>
             <c:if test="${not empty sessionScope.profile}">
-                <div class="navbar-form navbar-right">
-                    <a href="/pages/logout" class="btn btn-default">Logout</a>
-                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p class="navbar-text">Hallo ${sessionScope.profile.main.name}!</p></li>
+                    <li><a href="/pages/logout">Logout</a></li>
+                </ul>
             </c:if>
         </div>
     </div>

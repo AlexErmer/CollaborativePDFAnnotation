@@ -1,5 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions;
 
+import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
@@ -29,10 +30,13 @@ public abstract class DocumentModificationAction implements Action {
         // perform custom action
         doCustomAction(request, response, documentBean, pageNumber);
 
+        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        String userid = profile.getMain().getUserId();
+
         // finished everything.. store bean and also attach it to the request
         try {
             DocumentDao documentDao = new DocumentDaoImpl();
-            documentDao.store(documentBean);
+            documentDao.store(userid, documentBean);
         } catch (IOException e) {
             request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
         }

@@ -1,5 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
+import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
@@ -14,6 +15,8 @@ import java.io.InputStream;
 public class UploadAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        String userid = profile.getMain().getUserId();
 
         // get filestream
         Part filePart = request.getPart("pdfFile");
@@ -26,7 +29,7 @@ public class UploadAction implements Action {
         // store pdf
         try {
             ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-            contentRepositoryDao.store(id, filecontent);
+            contentRepositoryDao.store(userid, id, filecontent);
         } catch (ContentRepositoryException e) {
             request.setAttribute("errorMessage", "Error while handling FileStreams: " + e.getMessage());
         } finally {

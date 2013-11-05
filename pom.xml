@@ -24,6 +24,8 @@
 
     <properties>
         <project.build.sourceEncoding>ISO-8859-15</project.build.sourceEncoding>
+        <offlineLogin>false</offlineLogin>
+        <applicationVersion>1.0-SNAPSHOT</applicationVersion>
     </properties>
 
     <repositories>
@@ -171,4 +173,14 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>offlineLogin</id>
+            <properties>
+                <offlineLogin>true</offlineLogin>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>

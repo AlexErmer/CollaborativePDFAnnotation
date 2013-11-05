@@ -1,5 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
+import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
@@ -30,9 +31,12 @@ public class ExtractAction implements Action {
             return "";
         }
 
+        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        String userid = profile.getMain().getUserId();
+
         // get document model from dao
         try {
-            documentBean = documentDao.load(id);
+            documentBean = documentDao.load(userid, id);
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {
@@ -44,7 +48,7 @@ public class ExtractAction implements Action {
         // if no model found, extract it from real file with knowminer
         if (documentBean == null) {
             ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-            File file = contentRepositoryDao.load(id);
+            File file = contentRepositoryDao.load(userid, id);
 
             try {
                 Extractor extractor = new KnowminerExtractor();
@@ -58,7 +62,7 @@ public class ExtractAction implements Action {
         // finished everything.. store bean and also attach it to the request
         if (documentBean != null) {
             try {
-                documentDao.store(documentBean);
+                documentDao.store(userid, documentBean);
             } catch (IOException e) {
                 request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
             }
