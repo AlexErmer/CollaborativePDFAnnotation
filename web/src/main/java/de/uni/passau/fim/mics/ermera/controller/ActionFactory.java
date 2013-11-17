@@ -33,6 +33,8 @@ public class ActionFactory {
         actions.put("GET/document_toggleBlockNewParagraph", new ToggleNewParagraphAction());
         actions.put("GET/export", new ExportAction());
 
+        actions.put("GET/nlp", new NLPAction());
+
         actions.put("POST/upload", new UploadAction());
     }
 

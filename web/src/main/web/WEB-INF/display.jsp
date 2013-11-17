@@ -90,6 +90,7 @@
 <div id="sortedTextOutputWrapper">
     <div class="buttonLine">
         <a class="btn btn-primary" href="export?id=${documentBean.id}">Export zu brat</a>
+        <a class="btn" href="nlp?id=${documentBean.id}">Export zu NLP</a>
     </div>
 
     <div id="sortedTextOutput">
