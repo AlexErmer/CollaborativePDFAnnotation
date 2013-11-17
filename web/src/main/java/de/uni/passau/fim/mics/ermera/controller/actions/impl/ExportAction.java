@@ -1,7 +1,9 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
-import de.uni.passau.fim.mics.ermera.controller.exporters.BratConnector;
+import de.uni.passau.fim.mics.ermera.controller.exporters.BratExporter;
+import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
+import de.uni.passau.fim.mics.ermera.controller.exporters.Exporter;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +21,14 @@ public class ExportAction implements Action {
             return "";
         }
 
+        // export files to brat working directories
+        Exporter exporter = new BratExporter();
         try {
-            if (BratConnector.saveForBrat(documentBean)) {
+            if (exporter.export(documentBean)) {
                 request.setAttribute("successMessage", "Saved for brat");
             }
-        } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not save Text for Brat: " + e.getMessage());
+        } catch (ExportException e) {
+            request.setAttribute("errorMessage", e.getMessage());
         }
 
         // redirect to brat

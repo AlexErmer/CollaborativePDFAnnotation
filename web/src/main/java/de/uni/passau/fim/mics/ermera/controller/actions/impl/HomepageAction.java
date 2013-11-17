@@ -14,7 +14,7 @@ public class HomepageAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         Profile profile = (Profile) request.getSession().getAttribute("profile");
-        String userid = profile.getMain().getUserId();
+        String userid = profile.getMain().getProfileId();
 
         ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
         List<String> fileIds = contentRepositoryDao.getAllFileIDs(userid);

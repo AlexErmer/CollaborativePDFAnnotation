@@ -32,7 +32,7 @@ public class ExtractAction implements Action {
         }
 
         Profile profile = (Profile) request.getSession().getAttribute("profile");
-        String userid = profile.getMain().getUserId();
+        String userid = profile.getMain().getProfileId();
 
         // get document model from dao
         try {

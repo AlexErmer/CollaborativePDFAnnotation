@@ -31,7 +31,7 @@ public abstract class DocumentModificationAction implements Action {
         doCustomAction(request, response, documentBean, pageNumber);
 
         Profile profile = (Profile) request.getSession().getAttribute("profile");
-        String userid = profile.getMain().getUserId();
+        String userid = profile.getMain().getProfileId();
 
         // finished everything.. store bean and also attach it to the request
         try {

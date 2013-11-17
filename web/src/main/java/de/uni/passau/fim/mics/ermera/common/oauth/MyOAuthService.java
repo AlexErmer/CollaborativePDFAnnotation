@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera.controller.actions.impl;
+package de.uni.passau.fim.mics.ermera.common.oauth;
 
 import com.mendeley.oapi.schema.Profile;
 import org.scribe.model.Token;

@@ -3,6 +3,8 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 import com.mendeley.oapi.schema.Profile;
 import com.mendeley.oapi.schema.User;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
+import de.uni.passau.fim.mics.ermera.common.oauth.MendeleyOAuthServiceImpl;
+import de.uni.passau.fim.mics.ermera.common.oauth.MyOAuthService;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
 import org.scribe.model.Token;
@@ -19,12 +21,13 @@ public class LoginAction implements Action {
         if (PropertyReader.OFFLINELOGIN) {
             User user = new User();
             user.setUserId("dummyUser");
+            user.setProfileId("dummyUser");
             user.setName("dummyUser");
 
             Profile profile = new Profile();
             profile.setMain(user);
 
-            createFolders("dummyUser");
+            createFolders("dummyUser", request);
 
             request.getSession().setAttribute("profile", profile);
 
@@ -57,7 +60,7 @@ public class LoginAction implements Action {
             Profile profile = oAuthService.getMyProfile(accessToken);
             request.getSession().setAttribute("profile", profile);
 
-            createFolders(profile.getMain().getUserId());
+            createFolders(profile.getMain().getProfileId(), request);
 
             request.setAttribute("successMessage", "Erfolgreich eingeloggt!");
 
@@ -65,14 +68,19 @@ public class LoginAction implements Action {
         }
     }
 
-    private void createFolders(String userid) {
-        File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOAD_PATH);
-        dir.mkdirs();
+    private void createFolders(String userid, HttpServletRequest request) {
+        createFoldersHelper(PropertyReader.UPLOAD_PATH, userid, request);
+        createFoldersHelper(PropertyReader.STORAGE_PATH, userid, request);
+        createFoldersHelper(PropertyReader.BRAT_WORKING_PATH, userid, request);
+    }
 
-        dir = new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH);
-        dir.mkdirs();
+    private void createFoldersHelper(String path, String userid, HttpServletRequest request) {
+        boolean success;
+        File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + path);
+        success = dir.mkdirs();
 
-        dir = new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.BRAT_WORKING_PATH);
-        dir.mkdirs();
+        if (!success) {
+            request.setAttribute("errorMessage", "Ordner nicht korrek erstellt!");
+        }
     }
 }
