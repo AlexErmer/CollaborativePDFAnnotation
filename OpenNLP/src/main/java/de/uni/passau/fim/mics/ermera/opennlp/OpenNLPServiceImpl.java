@@ -11,17 +11,15 @@ import opennlp.tools.util.TrainingParameters;
 import opennlp.tools.util.eval.FMeasure;
 import opennlp.tools.util.featuregen.*;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Collections;
 
 public class OpenNLPServiceImpl {
 
     public void executeNameFinder(String userid) throws IOException {
         TokenNameFinderModel model = train(userid);
-        evaluate(userid, model);
+
+        System.out.println(evaluate(userid, model).toString());
     }
 
     private ObjectStream<NameSample> getStream(String userid) throws IOException {
@@ -38,7 +36,7 @@ public class OpenNLPServiceImpl {
         return nameSampleStream;
     }
 
-    private TokenNameFinderModel train(String userid) throws IOException {
+    public TokenNameFinderModel train(String userid) throws IOException {
         ObjectStream<NameSample> sampleStream = getStream(userid);
         TokenNameFinderModel model;
 
@@ -59,26 +57,15 @@ public class OpenNLPServiceImpl {
             sampleStream.close();
         }
 
-        OutputStream modelOut = null;
-        try {
-            modelOut = new BufferedOutputStream(new FileOutputStream("model.txt"));
-            model.serialize(modelOut);
-        } finally {
-            if (modelOut != null)
-                modelOut.close();
-        }
-
         return model;
     }
 
-    private void evaluate(String userid, TokenNameFinderModel model) throws IOException {
+    private FMeasure evaluate(String userid, TokenNameFinderModel model) throws IOException {
         ObjectStream<NameSample> sampleStream = getStream(userid);
 
         TokenNameFinderEvaluator evaluator = new TokenNameFinderEvaluator(new NameFinderME(model));
         evaluator.evaluate(sampleStream);
 
-        FMeasure result = evaluator.getFMeasure();
-
-        System.out.println(result.toString());
+        return evaluator.getFMeasure();
     }
 }

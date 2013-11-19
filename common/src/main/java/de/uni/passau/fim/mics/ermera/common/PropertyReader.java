@@ -12,6 +12,7 @@ public class PropertyReader {
     public static final String UPLOAD_PATH;
     public static final String STORAGE_PATH;
     public static final String BRAT_WORKING_PATH;
+    public static final String MODEL_PATH;
     public static final boolean OFFLINELOGIN;
 
     // private constructor to prevent instanciation
@@ -33,6 +34,7 @@ public class PropertyReader {
         UPLOAD_PATH = p.getProperty("UPLOAD_PATH");
         STORAGE_PATH = p.getProperty("STORAGE_PATH");
         BRAT_WORKING_PATH = p.getProperty("BRAT_WORKING_PATH");
+        MODEL_PATH = p.getProperty("MODEL_PATH");
         OFFLINELOGIN = p.getProperty("OFFLINELOGIN").equals("true");
     }
 }

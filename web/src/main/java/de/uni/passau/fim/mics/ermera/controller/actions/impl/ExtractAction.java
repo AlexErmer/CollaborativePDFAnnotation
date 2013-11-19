@@ -36,7 +36,7 @@ public class ExtractAction implements Action {
 
         // get document model from dao
         try {
-            documentBean = documentDao.load(userid, id);
+            documentBean = documentDao.loadDocumentBean(userid, id);
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class ExtractAction implements Action {
         // finished everything.. store bean and also attach it to the request
         if (documentBean != null) {
             try {
-                documentDao.store(userid, documentBean);
+                documentDao.storeDocumentBean(userid, documentBean);
             } catch (IOException e) {
                 request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
             }

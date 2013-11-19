@@ -69,18 +69,16 @@ public class LoginAction implements Action {
     }
 
     private void createFolders(String userid, HttpServletRequest request) {
-        createFoldersHelper(PropertyReader.UPLOAD_PATH, userid, request);
-        createFoldersHelper(PropertyReader.STORAGE_PATH, userid, request);
-        createFoldersHelper(PropertyReader.BRAT_WORKING_PATH, userid, request);
+        createFolder(PropertyReader.UPLOAD_PATH, userid, request);
+        createFolder(PropertyReader.STORAGE_PATH, userid, request);
+        createFolder(PropertyReader.BRAT_WORKING_PATH, userid, request);
+        createFolder(PropertyReader.MODEL_PATH, userid, request);
     }
 
-    private void createFoldersHelper(String path, String userid, HttpServletRequest request) {
-        boolean success;
+    private void createFolder(String path, String userid, HttpServletRequest request) {
         File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + path);
-        success = dir.mkdirs();
-
-        if (!success) {
-            request.setAttribute("errorMessage", "Ordner nicht korrek erstellt!");
+        if (!dir.mkdirs()) {
+            request.setAttribute("errorMessage", "Ordner \"" + path + "\" nicht korrekt erstellt!");
         }
     }
 }

@@ -36,7 +36,7 @@ public abstract class DocumentModificationAction implements Action {
         // finished everything.. store bean and also attach it to the request
         try {
             DocumentDao documentDao = new DocumentDaoImpl();
-            documentDao.store(userid, documentBean);
+            documentDao.storeDocumentBean(userid, documentBean);
         } catch (IOException e) {
             request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
         }
