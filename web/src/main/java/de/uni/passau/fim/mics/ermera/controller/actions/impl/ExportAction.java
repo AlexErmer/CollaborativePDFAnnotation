@@ -1,5 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
+import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.controller.exporters.BratExporter;
 import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
@@ -21,10 +22,13 @@ public class ExportAction implements Action {
             return "";
         }
 
+        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        String userid = profile.getMain().getProfileId();
+
         // export files to brat working directories
         Exporter exporter = new BratExporter();
         try {
-            if (exporter.export(documentBean)) {
+            if (exporter.export(userid, documentBean)) {
                 request.setAttribute("successMessage", "Saved for brat");
             }
         } catch (ExportException e) {
@@ -32,6 +36,6 @@ public class ExportAction implements Action {
         }
 
         // redirect to brat
-        return "../brat/index.xhtml#/" + documentBean.getId();
+        return "../brat/index.xhtml#/" + userid + "/" + documentBean.getId();
     }
 }
