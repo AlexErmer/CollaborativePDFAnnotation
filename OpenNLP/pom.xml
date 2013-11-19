@@ -16,6 +16,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.uni.passau.fim.mics.ermera</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.opennlp</groupId>
             <artifactId>opennlp-tools</artifactId>
         </dependency>

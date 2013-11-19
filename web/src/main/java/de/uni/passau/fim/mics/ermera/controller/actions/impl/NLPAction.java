@@ -22,13 +22,11 @@ public class NLPAction implements Action {
         Profile profile = (Profile) request.getSession().getAttribute("profile");
         String userid = profile.getMain().getProfileId();
 
-        //TODO: convert brat standoff annotation format to opennlp annotation format
-        //TODO: concat all trainingdate files and pass this to the modelbuilder
         //TODO: store model
         //TODO: use model on new pdfs
 
         OpenNLPServiceImpl nlpService = new OpenNLPServiceImpl();
-        nlpService.executeNameFinder();
+        nlpService.executeNameFinder(userid);
 
         // redirect to brat
         return "homepage";
