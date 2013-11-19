@@ -18,6 +18,10 @@
     <dependencies>
         <dependency>
             <groupId>de.uni.passau.fim.mics.ermera</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.uni.passau.fim.mics.ermera</groupId>
             <artifactId>OpenNLP</artifactId>
         </dependency>
 

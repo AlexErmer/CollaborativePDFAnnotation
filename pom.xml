@@ -15,6 +15,7 @@
     <modules>
         <module>web</module>
         <module>OpenNLP</module>
+        <module>common</module>
     </modules>
 
     <scm>
@@ -44,6 +45,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>de.uni.passau.fim.mics.ermera</groupId>
+                <artifactId>common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>de.uni.passau.fim.mics.ermera</groupId>
                 <artifactId>OpenNLP</artifactId>
@@ -140,7 +146,7 @@
             <dependency>
                 <groupId>org.apache.opennlp</groupId>
                 <artifactId>opennlp-tools</artifactId>
-                <version>1.5.3</version>
+                <version>1.6.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
