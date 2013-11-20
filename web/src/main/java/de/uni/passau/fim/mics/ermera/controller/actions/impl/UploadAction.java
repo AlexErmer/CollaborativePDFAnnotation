@@ -43,7 +43,7 @@ public class UploadAction implements Action {
         }
 
         // forward to extract
-        return "extract?id=" + id;
+        return "extract?type=knowminer&id=" + id;
     }
 
     /**

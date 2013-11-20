@@ -4,7 +4,7 @@ import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
-import de.uni.passau.fim.mics.ermera.controller.extractors.KnowminerExtractor;
+import de.uni.passau.fim.mics.ermera.controller.extractors.Extractors;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
@@ -24,6 +24,12 @@ public class ExtractAction implements Action {
         HttpSession session = request.getSession();
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean = null;
+
+        Extractors extractorType = Extractors.valueOf(request.getParameter("type").toUpperCase());
+        if (extractorType == null) {
+            request.setAttribute("errorMessage", "Extractorstype not found");
+            return "";
+        }
 
         String id = request.getParameter("id");
         if (id == null){
@@ -45,13 +51,13 @@ public class ExtractAction implements Action {
             request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
         }
 
-        // if no model found, extract it from real file with knowminer
+        // if no model found, extract it from real file
         if (documentBean == null) {
             ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
             File file = contentRepositoryDao.load(userid, id);
 
             try {
-                Extractor extractor = new KnowminerExtractor();
+                Extractor extractor = extractorType.getInstance();
                 documentBean = extractor.extract(id, file);
             } catch (ExtractException e) {
                 request.setAttribute("errorMessage", e.getMessage());

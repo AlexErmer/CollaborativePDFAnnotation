@@ -11,6 +11,10 @@ import java.nio.file.StandardCopyOption;
 
 public class BratExporter implements Exporter {
 
+    public String getRedirectURL(String userid, String fileid) {
+        return "../brat/index.xhtml#/" + userid + "/" + fileid;
+    }
+
     public boolean export(String userid, DocumentBean documentBean) throws ExportException {
         try {
             String path = PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "/";

@@ -36,6 +36,7 @@ public class ActionFactory {
         actions.put("GET/nlp", new NLPAction());
 
         actions.put("POST/upload", new UploadAction());
+        actions.put("POST/filelist", new FilelistAction());
     }
 
     public static Action getAction(HttpServletRequest request) {

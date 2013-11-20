@@ -4,4 +4,5 @@ import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 public interface Exporter {
     public boolean export(String userid, DocumentBean documentBean) throws ExportException;
+    public String getRedirectURL(String userid, String fileid);
 }
