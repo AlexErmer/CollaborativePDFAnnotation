@@ -1,5 +1,7 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
@@ -11,9 +13,11 @@ public class DisplayAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+
         DocumentBean documentBean = (DocumentBean) session.getAttribute("documentBean");
         if (documentBean == null) {
-            request.setAttribute("errorMessage", "No loaded document");
+            mu.addMessage(MessageTypes.ERROR, "No loaded document");
             return "";
         }
 

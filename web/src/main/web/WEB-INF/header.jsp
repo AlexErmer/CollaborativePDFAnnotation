@@ -49,12 +49,15 @@
 <div class="container">
     <div class="bodywrapper">
 
-        <c:if test="${successMessage != null && !successMessage.isEmpty()}">
-            <div class="alert alert-success">${successMessage}</div>
-        </c:if>
-        <c:if test="${errorMessage != null && !errorMessage.isEmpty()}">
-            <div class="alert alert-danger">${errorMessage}</div>
-        </c:if>
-        <c:if test="${infoMessage != null && !infoMessage.isEmpty()}">
-            <div class="alert alert-warn">${infoMessage}</div>
-        </c:if>
+        <c:forEach items="${messageUtil.messages}" var="message">
+            <c:if test="${message.type == 'SUCCESS'}">
+                <div class="alert alert-success">
+            </c:if>
+            <c:if test="${message.type == 'ERROR'}">
+                <div class="alert alert-danger">
+            </c:if>
+            <c:if test="${message.type == 'INFO'}">
+                <div class="alert alert-warn">
+            </c:if>
+            ${message.msg}</div>
+        </c:forEach>

@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions;
 
 import com.mendeley.oapi.schema.Profile;
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
@@ -13,12 +15,14 @@ import java.io.IOException;
 
 public abstract class DocumentModificationAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+
         int pageNumber = 0;
 
-        HttpSession session = request.getSession();
         DocumentBean documentBean = (DocumentBean) session.getAttribute("documentBean");
         if (documentBean == null) {
-            request.setAttribute("errorMessage", "No loaded document");
+            mu.addMessage(MessageTypes.ERROR, "No loaded document");
             return "";
         }
 
@@ -38,7 +42,7 @@ public abstract class DocumentModificationAction implements Action {
             DocumentDao documentDao = new DocumentDaoImpl();
             documentDao.storeDocumentBean(userid, documentBean);
         } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, "Could not save DocumentBean: " + e.getMessage());
         }
 
         return "display";

@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.mendeley.oapi.schema.Profile;
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporter;
@@ -19,18 +21,20 @@ public class ExportAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean = null;
 
         Exporters exporterType = Exporters.valueOf(request.getParameter("type").toUpperCase());
         if (exporterType == null) {
-            request.setAttribute("errorMessage", "Exportertype not found");
+            mu.addMessage(MessageTypes.ERROR, "Exportertype not found");
             return "";
         }
 
         String id = request.getParameter("id");
         if (id == null) {
-            request.setAttribute("errorMessage", "ID must not be null");
+            mu.addMessage(MessageTypes.ERROR, "ID must not be null");
             return "";
         }
 
@@ -43,19 +47,19 @@ public class ExportAction implements Action {
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not load saved file: " + e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, "Could not load saved file: " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, "Corrupt save? Could not find class: " + e.getMessage());
         }
 
         Exporter exporter = exporterType.getInstance();
         try {
             if (exporter.export(userid, documentBean)) {
-                request.setAttribute("successMessage", "export successful");
+                mu.addMessage(MessageTypes.SUCCESS,"export successful");
                 return exporter.getRedirectURL(userid, documentBean.getId());
             }
         } catch (ExportException e) {
-            request.setAttribute("errorMessage", e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, e.getMessage());
         }
 
         // redirect to homepage in errorcase

@@ -5,17 +5,48 @@
 <h1>PDF Extraction Demo</h1>
 
 <form action="/pages/upload" method="post" enctype="multipart/form-data">
-    Choose a PDF to upload:
-    <input name="pdfFile" type="file" accept="application/pdf;text/pdf"/><br/>
-    <input type="submit"/>
+    <div class="form-group">
+        <label for="pdfFile">PDF Upload</label>
+        <p class="help-block">Choose a PDF to upload:</p>
+        <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf;text/pdf"/>
+        <button type="submit" class="btn btn-default">Upload</button>
+    </div>
 </form>
 
 <h1>Repository</h1>
 
-<ul>
-    <c:forEach items="${indexBean.fileIds}" var="fileId">
-        <li><a href="/pages/extract?id=${fileId}"> ${fileId}</a></li>
-    </c:forEach>
-</ul>
+<form action="/pages/nlp" method="post">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Filename</th>
+                <th>extract text</th>
+                <th>annotate in brat</th>
+            </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${indexBean.fileIds}" var="fileId">
+            <tr>
+                <td>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="files" value="${fileId}" /> ${fileId}
+                        </label>
+                    </div>
+                </td>
+                <td><a class="btn btn-default" href="/pages/extract?type=knowminer&amp;id=${fileId}">extract</a></td>
+                <td><a class="btn btn-default" href="/pages/export?type=brat&amp;id=${fileId}">annotate</a></td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <label for="modelname">Modelname</label>
+        <input type="text" id="modelname" class="form-control" name="name" placeholder="Enter modelname"/>
+    </div>
+    <button type="submit" class="btn btn-default" name="create">create Model</button>
+    <button type="submit" class="btn btn-default" name="use">use Model</button>
+</form>
 
 <jsp:include page="footer.jsp"/>

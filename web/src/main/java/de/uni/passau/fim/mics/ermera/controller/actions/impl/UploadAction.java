@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.mendeley.oapi.schema.Profile;
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
@@ -8,6 +10,7 @@ import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +18,9 @@ import java.io.InputStream;
 public class UploadAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+
         Profile profile = (Profile) request.getSession().getAttribute("profile");
         String userid = profile.getMain().getProfileId();
 
@@ -31,14 +37,14 @@ public class UploadAction implements Action {
             ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
             contentRepositoryDao.store(userid, id, filecontent);
         } catch (ContentRepositoryException e) {
-            request.setAttribute("errorMessage", "Error while handling FileStreams: " + e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
         } finally {
             try {
                 if (filecontent != null) {
                     filecontent.close();
                 }
             } catch (IOException e) {
-                request.setAttribute("errorMessage", "Error while closing FileStreams: " + e.getMessage());
+                mu.addMessage(MessageTypes.ERROR, "Error while closing FileStreams: " + e.getMessage());
             }
         }
 

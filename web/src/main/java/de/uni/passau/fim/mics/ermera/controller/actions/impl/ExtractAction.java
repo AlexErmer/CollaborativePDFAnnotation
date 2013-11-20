@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.mendeley.oapi.schema.Profile;
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
@@ -22,18 +24,20 @@ public class ExtractAction implements Action {
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean = null;
 
         Extractors extractorType = Extractors.valueOf(request.getParameter("type").toUpperCase());
         if (extractorType == null) {
-            request.setAttribute("errorMessage", "Extractorstype not found");
+            mu.addMessage(MessageTypes.ERROR, "Extractorstype not found");
             return "";
         }
 
         String id = request.getParameter("id");
         if (id == null){
-            request.setAttribute("errorMessage", "ID must not be null");
+            mu.addMessage(MessageTypes.ERROR, "ID must not be null");
             return "";
         }
 
@@ -46,9 +50,9 @@ public class ExtractAction implements Action {
         } catch (FileNotFoundException e) {
             // do nothing if only the file was not found..
         } catch (IOException e) {
-            request.setAttribute("errorMessage", "Could not load saved file: " + e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, "Could not load saved file: " + e.getMessage());
         } catch (ClassNotFoundException e) {
-            request.setAttribute("errorMessage", "Corrupt save? Could not find class: " + e.getMessage());
+            mu.addMessage(MessageTypes.ERROR, "Corrupt save? Could not find class: " + e.getMessage());
         }
 
         // if no model found, extract it from real file
@@ -60,7 +64,7 @@ public class ExtractAction implements Action {
                 Extractor extractor = extractorType.getInstance();
                 documentBean = extractor.extract(id, file);
             } catch (ExtractException e) {
-                request.setAttribute("errorMessage", e.getMessage());
+                mu.addMessage(MessageTypes.ERROR, e.getMessage());
                 return "display";
             }
         }
@@ -70,7 +74,7 @@ public class ExtractAction implements Action {
             try {
                 documentDao.storeDocumentBean(userid, documentBean);
             } catch (IOException e) {
-                request.setAttribute("errorMessage", "Could not save DocumentBean: " + e.getMessage());
+                mu.addMessage(MessageTypes.ERROR, "Could not save DocumentBean: " + e.getMessage());
             }
             session.setAttribute("documentBean", documentBean);
         }
