@@ -11,7 +11,7 @@ import java.io.IOException;
  * Filter that checks, if there is a profile in the session. If not, it redirects to the loginpage
  */
 @WebFilter(urlPatterns = "/pages/*")
-public class LoginFilter2 implements Filter {
+public class LoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
