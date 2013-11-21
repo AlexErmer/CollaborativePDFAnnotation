@@ -32,13 +32,13 @@ public class ExtractAction implements Action {
         Extractors extractorType = Extractors.valueOf(request.getParameter("type").toUpperCase());
         if (extractorType == null) {
             mu.addMessage(MessageTypes.ERROR, "Extractorstype not found");
-            return "";
+            return null;
         }
 
         String id = request.getParameter("id");
         if (id == null){
             mu.addMessage(MessageTypes.ERROR, "ID must not be null");
-            return "";
+            return null;
         }
 
         Profile profile = (Profile) request.getSession().getAttribute("profile");

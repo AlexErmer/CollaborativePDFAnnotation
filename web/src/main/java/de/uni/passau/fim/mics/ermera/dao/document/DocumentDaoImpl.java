@@ -9,9 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DocumentDaoImpl implements DocumentDao {
+    private final String DOCUMENT_PREFIX = "document_";
+    private final String MODEL_PREFIX = "model_";
+
     @Override
     public DocumentBean loadDocumentBean(String userid, String id) throws IOException, ClassNotFoundException {
-        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + "document_" + id);
+        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENT_PREFIX + id);
         ObjectInputStream in = new ObjectInputStream(fis);
         DocumentBean documentBean = (DocumentBean) in.readObject();
         fis.close();
@@ -22,7 +25,7 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException {
-        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + "document_" + documentBean.getId());
+        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENT_PREFIX + documentBean.getId());
         ObjectOutputStream out = new ObjectOutputStream(fos);
         out.writeObject(documentBean);
         fos.close();
@@ -30,7 +33,7 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public TokenNameFinderModel loadModel(String userid, String name) throws IOException, ClassNotFoundException {
-        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + "model_" + name);
+        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODEL_PREFIX + name);
         TokenNameFinderModel model = new TokenNameFinderModel(fis);
         fis.close();
 
@@ -46,7 +49,7 @@ public class DocumentDaoImpl implements DocumentDao {
         if (files != null) {
             for (File f : files) {
                 if (!f.isDirectory()) {
-                    ret.add(f.getName());
+                    ret.add(f.getName().replace(MODEL_PREFIX, ""));
                 }
             }
         }
@@ -59,7 +62,7 @@ public class DocumentDaoImpl implements DocumentDao {
         //TODO: check modelname already exists
         OutputStream modelOut = null;
         try {
-            modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + "model_" + name));
+            modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODEL_PREFIX + name));
             model.serialize(modelOut);
         } finally {
             if (modelOut != null)

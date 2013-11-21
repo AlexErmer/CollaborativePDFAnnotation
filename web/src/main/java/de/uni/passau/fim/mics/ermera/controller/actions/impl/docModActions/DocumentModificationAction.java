@@ -23,7 +23,7 @@ public abstract class DocumentModificationAction implements Action {
         DocumentBean documentBean = (DocumentBean) session.getAttribute("documentBean");
         if (documentBean == null) {
             mu.addMessage(MessageTypes.ERROR, "No loaded document");
-            return "";
+            return null;
         }
 
         // get pageNumber Paramater

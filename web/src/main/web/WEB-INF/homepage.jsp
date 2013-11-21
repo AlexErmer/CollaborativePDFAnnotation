@@ -43,7 +43,15 @@
 
     <div class="form-group">
         <label for="modelname">Modelname</label>
-        <input type="text" id="modelname" class="form-control" name="name" placeholder="Enter modelname"/>
+        <input type="text" id="modelname" class="form-control" name="modelname" placeholder="Enter modelname"/>
+    </div>
+    <div class="form-group">
+        <label for="modelselect">Modelname</label>
+        <select id="modelselect" name="modelselect">
+            <c:forEach items="${indexBean.models}" var="model">
+                <option value="${model}">${model}</option>
+            </c:forEach>
+        </select>
     </div>
     <button type="submit" class="btn btn-default" name="create">create Model</button>
     <button type="submit" class="btn btn-default" name="use">use Model</button>

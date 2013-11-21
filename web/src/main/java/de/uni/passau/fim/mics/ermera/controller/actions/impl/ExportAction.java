@@ -29,13 +29,13 @@ public class ExportAction implements Action {
         Exporters exporterType = Exporters.valueOf(request.getParameter("type").toUpperCase());
         if (exporterType == null) {
             mu.addMessage(MessageTypes.ERROR, "Exportertype not found");
-            return "";
+            return null;
         }
 
         String id = request.getParameter("id");
         if (id == null) {
             mu.addMessage(MessageTypes.ERROR, "ID must not be null");
-            return "";
+            return null;
         }
 
         Profile profile = (Profile) request.getSession().getAttribute("profile");

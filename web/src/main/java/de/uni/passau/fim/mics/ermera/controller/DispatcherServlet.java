@@ -32,6 +32,12 @@ public class DispatcherServlet extends HttpServlet {
                 view = action.execute(request, response);
             }
 
+            if (view == null) {
+                view = (String) request.getSession().getAttribute("lastValidView");
+            } else {
+                request.getSession().setAttribute("lastValidView", view);
+            }
+
             if (view != null) {
                 if (view.equals(request.getPathInfo().substring(1))) {
                     request.getRequestDispatcher("/WEB-INF/" + view + ".jsp").forward(request, response);
