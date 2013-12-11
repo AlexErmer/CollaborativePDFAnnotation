@@ -1,14 +1,12 @@
-package de.uni.passau.fim.mics.ermera.common.oauth;
+package de.uni.passau.fim.mics.ermera.oauth;
 
 import com.google.gson.*;
 import com.mendeley.oapi.schema.Profile;
+import com.mendeley.oapi.schema.User;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.MendeleyApi;
-import org.scribe.model.OAuthRequest;
-import org.scribe.model.Response;
-import org.scribe.model.Token;
-import org.scribe.model.Verb;
+import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
 import java.io.InputStreamReader;
@@ -27,7 +25,10 @@ public class MendeleyOAuthServiceImpl implements MyOAuthService {
     }
 
     @Override
-    public Profile getMyProfile(Token accessToken) {
+    public Profile getProfile(Token requestToken, String authcode) {
+        Verifier verifier = new Verifier(authcode);
+        Token accessToken = service.getAccessToken(requestToken, verifier);
+
         OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, "http://api.mendeley.com/oapi/profiles/info/me");
         service.signRequest(accessToken, oAuthRequest);
         Response oAuthResponse = oAuthRequest.send();
@@ -42,7 +43,24 @@ public class MendeleyOAuthServiceImpl implements MyOAuthService {
     }
 
     @Override
-    public OAuthService getService() {
-        return service;
+    public Token getRequestToken() {
+        return service.getRequestToken();
+    }
+
+    @Override
+    public String getAuthorizationUrl(Token requestToken) {
+        return service.getAuthorizationUrl(requestToken);
+    }
+
+    @Override
+    public Profile getDummyProfile() {
+        User user = new User();
+        user.setUserId("dummyUser");
+        user.setProfileId("dummyUser");
+        user.setName("dummyUser");
+
+        Profile profile = new Profile();
+        profile.setMain(user);
+        return profile;
     }
 }

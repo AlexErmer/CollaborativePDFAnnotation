@@ -12,7 +12,6 @@ public class LogoutAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
 
-        request.getSession().removeAttribute("accessToken");
         request.getSession().removeAttribute("service");
         request.getSession().removeAttribute("profile");
 

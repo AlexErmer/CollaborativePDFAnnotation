@@ -1,17 +1,14 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.mendeley.oapi.schema.Profile;
-import com.mendeley.oapi.schema.User;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
-import de.uni.passau.fim.mics.ermera.common.oauth.MendeleyOAuthServiceImpl;
-import de.uni.passau.fim.mics.ermera.common.oauth.MyOAuthService;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
+import de.uni.passau.fim.mics.ermera.oauth.MendeleyOAuthServiceImpl;
+import de.uni.passau.fim.mics.ermera.oauth.MyOAuthService;
 import org.scribe.model.Token;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,46 +19,32 @@ public class LoginAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
 
+        Token requestToken;
+        MyOAuthService oAuthService = new MendeleyOAuthServiceImpl();
+
         if (PropertyReader.OFFLINELOGIN) {
-            User user = new User();
-            user.setUserId("dummyUser");
-            user.setProfileId("dummyUser");
-            user.setName("dummyUser");
-
-            Profile profile = new Profile();
-            profile.setMain(user);
-
+            Profile profile = oAuthService.getDummyProfile();
             createFolders("dummyUser", mu);
-
             request.getSession().setAttribute("profile", profile);
-
-            mu.addMessage(MessageTypes.SUCCESS, "Login successful");
+            mu.addMessage(MessageTypes.SUCCESS, "Dummy Login successful");
             return "homepage";
         }
 
-        Token requestToken;
-        MyOAuthService oAuthService = new MendeleyOAuthServiceImpl();
-        OAuthService service = oAuthService.getService();
-
         String authcode = request.getParameter("oauth_verifier");
         if (authcode == null) {
-            requestToken = service.getRequestToken();
+            requestToken = oAuthService.getRequestToken();
             request.getSession().setAttribute("requestToken", requestToken);
 
             LoginBean loginBean = new LoginBean();
-            loginBean.setMendeleyLink(service.getAuthorizationUrl(requestToken));
+            loginBean.setMendeleyLink(oAuthService.getAuthorizationUrl(requestToken));
             request.setAttribute("loginBean", loginBean);
 
             return "login";
         } else {
-            Verifier verifier = new Verifier(authcode);
             requestToken = (Token) request.getSession().getAttribute("requestToken");
-
-            Token accessToken = service.getAccessToken(requestToken, verifier);
-            request.getSession().setAttribute("accessToken", accessToken);
             request.removeAttribute("requestToken");
 
-            Profile profile = oAuthService.getMyProfile(accessToken);
+            Profile profile = oAuthService.getProfile(requestToken, authcode);
             request.getSession().setAttribute("profile", profile);
 
             createFolders(profile.getMain().getProfileId(), mu);
@@ -73,6 +56,7 @@ public class LoginAction implements Action {
     }
 
     private void createFolders(String userid, MessageUtil mu) {
+        //TODO auslagern in content/documentDAO!
         createFolder(PropertyReader.UPLOAD_PATH, userid, mu);
         createFolder(PropertyReader.STORAGE_PATH, userid, mu);
         createFolder(PropertyReader.BRAT_WORKING_PATH, userid, mu);

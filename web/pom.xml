@@ -24,6 +24,10 @@
             <groupId>de.uni.passau.fim.mics.ermera</groupId>
             <artifactId>OpenNLP</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.uni.passau.fim.mics.ermera</groupId>
+            <artifactId>OAuth</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>at.know-center.ie</groupId>

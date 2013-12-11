@@ -56,6 +56,9 @@ public class UploadAction implements Action {
      * Credit goes to BAUKE SCHOLTZ alias BalusC
      * http://stackoverflow.com/questions/2422468/how-to-upload-files-to-server-using-jsp-servlet#2424824
      * http://balusc.blogspot.de/2009/12/uploading-files-in-servlet-30.html
+     *
+     * @param part part
+     * @return the filename
      */
     private static String getFilename(Part part) {
         for (String cd : part.getHeader("content-disposition").split(";")) {
