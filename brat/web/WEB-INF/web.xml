@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <servlet>
+        <servlet-name>mybrat</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.CGIServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>executable</param-name>
+            <param-value>D:/Entwicklung/python2.7/python.exe</param-value>
+        </init-param>
+        <init-param>
+            <param-name>cgiPathPrefix</param-name>
+            <param-value>WEB-INF/cgi</param-value>
+        </init-param>
+        <init-param>
+            <param-name>passShellEnvironment</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
+    <!-- Serve what is necessary to run brat statically
+         Note: If anyone know a better way than to list things explicitly,
+            please do tell me. -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.gif</url-pattern>
+        <url-pattern>*.html</url-pattern>
+        <url-pattern>*.ico</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.png</url-pattern>
+
+        <!-- fonts -->
+        <url-pattern>*.eot</url-pattern>
+        <url-pattern>*.ttf</url-pattern>
+        <url-pattern>*.woff</url-pattern>
+        <url-pattern>*.svg</url-pattern>
+    </servlet-mapping>
+    <!-- But serve CGI as, well, CGI. -->
+    <servlet-mapping>
+        <servlet-name>mybrat</servlet-name>
+        <url-pattern>*.cgi</url-pattern>
+    </servlet-mapping>
+
+</web-app>

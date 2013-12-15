@@ -3,6 +3,23 @@
 Masterarbeit: Implementierung eines Workflows zur collaborativen PDF-Annotation
 
 
+## Konfiguration
+Es ist nötig einige Konfigurationen vorzunehmen:
+
+### brat konfigurieren
+Speichern Sie die Datei ````brat/web/WEB-INF/cgi/brat/config_template.py```` im selben Ordner unter dem Dateinamen ````config.py```` (diese Datei wird von git ignoriert).
+In der Datei müssen dann BASE_DIR, DATA_DIR und WORK_DIR gepflegt werden.
+Ausserdem muss ein Login angelegt werden, zum Beispiel so:
+````
+USER_PASSWORD = {
+    'editor': 'annotate'
+}
+````
+
+### java Applikation konfiguieren
+Alle Einstellungen werden aus der Datei ````common\src\main\resources\config.conf```` geladen und können dort geändert werden.
+Es ist hier darauf zu achten, dass die Property BRAT_WORKING_PATH hier mit der Konfiguration von Brat selbst übereinstimmt.
+
 ## Installation
 Um das Projekt zu bauen ist maven notwendig.
 

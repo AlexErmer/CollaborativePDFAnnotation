@@ -17,6 +17,7 @@
         <module>OpenNLP</module>
         <module>common</module>
         <module>OAuth</module>
+        <module>brat</module>
     </modules>
 
     <scm>
@@ -46,6 +47,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>de.uni.passau.fim.mics.ermera</groupId>
+                <artifactId>brat</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>de.uni.passau.fim.mics.ermera</groupId>
                 <artifactId>common</artifactId>
