@@ -18,11 +18,11 @@
 <form action="/pages/nlp" method="post">
     <table class="table table-hover table-striped">
         <thead>
-            <tr>
-                <th>Filename</th>
-                <th>extract text</th>
-                <th>annotate in brat</th>
-            </tr>
+        <tr>
+            <th>Filename</th>
+            <th>extract text</th>
+            <th>annotate in brat</th>
+        </tr>
         </thead>
         <tbody>
         <c:forEach items="${indexBean.fileIds}" var="fileId">
@@ -30,7 +30,7 @@
                 <td>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="files" value="${fileId}" /> ${fileId}
+                            <input type="checkbox" name="files" value="${fileId}"/> ${fileId}
                         </label>
                     </div>
                 </td>

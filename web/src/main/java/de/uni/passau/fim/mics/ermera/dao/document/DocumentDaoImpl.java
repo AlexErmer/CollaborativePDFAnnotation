@@ -1,10 +1,12 @@
 package de.uni.passau.fim.mics.ermera.dao.document;
 
+import de.uni.passau.fim.mics.ermera.common.FileUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import opennlp.tools.namefind.TokenNameFinderModel;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,5 +70,18 @@ public class DocumentDaoImpl implements DocumentDao {
             if (modelOut != null)
                 modelOut.close();
         }
+    }
+
+    @Override
+    public String loadBratFile(String userid, String name) throws IOException {
+        return FileUtil.readFile(PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "\\" + name + ".txt", StandardCharsets.UTF_8);
+    }
+
+    @Override
+    public void storeAnnotationFile(String userid, String name, String content) throws IOException {
+        //TODO: versionierung!! anderenfalls werden die annotationfiles ggf. korrupt
+        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "\\" + name + ".ann", true); // APPEND!
+        fos.write(content.getBytes());
+        fos.close();
     }
 }

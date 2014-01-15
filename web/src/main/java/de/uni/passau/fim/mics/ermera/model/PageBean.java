@@ -124,14 +124,14 @@ public class PageBean implements Comparable<PageBean>, Serializable {
         for (BlockBean block : blocks) {
             if (block.isSelectedBlock()) {
                 if (sb.length() != 0 && block.isHeadline()) {
-                    sb.append(System.getProperty("line.separator"));
-                    sb.append(System.getProperty("line.separator"));
+                    sb.append(System.lineSeparator());
+                    sb.append(System.lineSeparator());
                 } else if (block.isNewParagraph()) {
-                    sb.append(System.getProperty("line.separator"));
+                    sb.append(System.lineSeparator());
                 }
                 sb.append(block.getText());
                 if (block.isHeadline()) {
-                    sb.append(System.getProperty("line.separator"));
+                    sb.append(System.lineSeparator());
                 }
             }
         }

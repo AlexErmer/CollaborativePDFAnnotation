@@ -61,7 +61,7 @@ public class NLPAction implements Action {
     private void createModel(String userid, String modelname, String[] files) throws IOException {
         //TODO: select documents which should form a new model
         OpenNLPServiceImpl nlpService = new OpenNLPServiceImpl();
-        TokenNameFinderModel model = nlpService.train(userid, "Person");
+        TokenNameFinderModel model = nlpService.train(userid, "Person");  //TODO: entitytype muss festgelegt werden können!!
 
         // store model
         DocumentDao documentDao = new DocumentDaoImpl();

@@ -7,10 +7,14 @@ import java.io.IOException;
 import java.util.List;
 
 public interface DocumentDao {
-    DocumentBean loadDocumentBean(String userid, String id) throws IOException, ClassNotFoundException;
-    void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException;
+    public DocumentBean loadDocumentBean(String userid, String id) throws IOException, ClassNotFoundException;
+    public void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException;
 
-    TokenNameFinderModel loadModel(String userid, String name) throws IOException, ClassNotFoundException;
+    public TokenNameFinderModel loadModel(String userid, String name) throws IOException, ClassNotFoundException;
     public List<String> loadAllModels(String userid);
-    void storeModel(String userid, String name, TokenNameFinderModel tokenNameFinderModel) throws IOException;
+    public void storeModel(String userid, String name, TokenNameFinderModel tokenNameFinderModel) throws IOException;
+
+    //TODO: nach brat auslagern?!
+    public String loadBratFile(String userid, String name) throws IOException;
+    public void storeAnnotationFile(String userid, String name, String content) throws IOException;
 }
