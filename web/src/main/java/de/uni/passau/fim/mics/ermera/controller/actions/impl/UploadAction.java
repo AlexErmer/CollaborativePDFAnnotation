@@ -8,6 +8,7 @@ import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryException;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,36 +21,44 @@ public class UploadAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
-
-        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        Profile profile = (Profile) session.getAttribute("profile");
         String userid = profile.getMain().getProfileId();
 
         // get filestream
-        Part filePart = request.getPart("pdfFile");
-        String filename = getFilename(filePart);
-        InputStream filecontent = filePart.getInputStream();
-
-        // create id
-        String id = filename.replaceAll("\\s", "");
-
-        // store pdf
+        Part filePart = null;
         try {
-            ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-            contentRepositoryDao.store(userid, id, filecontent);
-        } catch (ContentRepositoryException e) {
-            mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
-        } finally {
-            try {
-                if (filecontent != null) {
-                    filecontent.close();
-                }
-            } catch (IOException e) {
-                mu.addMessage(MessageTypes.ERROR, "Error while closing FileStreams: " + e.getMessage());
-            }
+            filePart = request.getPart("pdfFile");
+        } catch (ServletException e) {
+            //nothing to do
         }
+        if (filePart != null) {
+            String filename = getFilename(filePart);
+            InputStream filecontent = filePart.getInputStream();
 
-        // forward to extract
-        return "extract?type=knowminer&id=" + id;
+            // create id
+            String id = filename.replaceAll("\\s", "");
+
+            // store pdf
+            try {
+                ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
+                contentRepositoryDao.store(userid, id, filecontent);
+            } catch (ContentRepositoryException e) {
+                mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
+            } finally {
+                try {
+                    if (filecontent != null) {
+                        filecontent.close();
+                    }
+                } catch (IOException e) {
+                    mu.addMessage(MessageTypes.ERROR, "Error while closing FileStreams: " + e.getMessage());
+                }
+            }
+
+            // forward to extract
+            return "extract?type=knowminer&id=" + id;
+        } else {
+            return "upload";
+        }
     }
 
     /**

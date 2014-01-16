@@ -1,1 +1,3 @@
-
+function selectAll(seletor) {
+    $(selector);
+}

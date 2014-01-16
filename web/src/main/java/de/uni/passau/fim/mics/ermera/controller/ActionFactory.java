@@ -24,6 +24,8 @@ public class ActionFactory {
         actions.put("GET/logout", new LogoutAction());
 
         actions.put("GET/homepage", new HomepageAction());
+        actions.put("GET/upload", new UploadAction());
+        actions.put("POST/upload", new UploadAction());
         actions.put("GET/extract", new ExtractAction());
         actions.put("GET/display", new DisplayAction());
         actions.put("GET/image", new ImageAction());
@@ -31,13 +33,13 @@ public class ActionFactory {
         actions.put("GET/document_removeBlock", new RemoveBlockAction());
         actions.put("GET/document_toggleBlockHeadline", new ToggleHeadlineAction());
         actions.put("GET/document_toggleBlockNewParagraph", new ToggleNewParagraphAction());
+        actions.put("GET/annotate", new AnnotateAction());
         actions.put("GET/export", new ExportAction());
+        actions.put("GET/modelCreate", new ModelCreateAction());
+        actions.put("GET/modelUse", new ModelUseAction());
+        actions.put("POST/nlp", new NLPAction());
         actions.put("GET/evaluation", new EvaluationAction());
         actions.put("POST/evaluation", new EvaluationSaveAction());
-
-        actions.put("POST/nlp", new NLPAction());
-
-        actions.put("POST/upload", new UploadAction());
     }
 
     public static Action getAction(HttpServletRequest request) {

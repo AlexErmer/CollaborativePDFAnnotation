@@ -1,6 +1,13 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp"/>
 
 <jsp:useBean id="documentBean" scope="session" class="de.uni.passau.fim.mics.ermera.model.DocumentBean"/>
+
+<h1>PDF Extraction Demo - Extract - Korrektur</h1>
+<p class="text-info">Hier kann die automatische Textextraktion korrigiert werden.
+    Links ist das PDF abgebildet, rechts der extrahierte Text.
+     Änderungen werden sofort gespeichert.
+</p>
 
 <c:choose>
     <c:when test="${param.pageNumber == null}">
@@ -218,5 +225,13 @@
         });
     }
 </script>
+<div style="clear:both"></div>
+
+<form class="form-horizontal" style="margin-top: 20px;" role="form">
+    <div class="well well-sm form-group clearer">
+        <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+        <a class="btn btn-default col-sm-2" href="/pages/extract" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
+    </div>
+</form>
 
 <jsp:include page="footer.jsp"/>

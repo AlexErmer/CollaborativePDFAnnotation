@@ -12,12 +12,14 @@ import org.scribe.model.Token;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 
 public class LoginAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
+        HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
 
         Token requestToken;
         MyOAuthService oAuthService = new MendeleyOAuthServiceImpl();
@@ -25,7 +27,7 @@ public class LoginAction implements Action {
         if (PropertyReader.OFFLINELOGIN) {
             Profile profile = oAuthService.getDummyProfile();
             createFolders("dummyUser", mu);
-            request.getSession().setAttribute("profile", profile);
+            session.setAttribute("profile", profile);
             mu.addMessage(MessageTypes.SUCCESS, "Dummy Login successful");
             return "homepage";
         }
@@ -33,7 +35,7 @@ public class LoginAction implements Action {
         String authcode = request.getParameter("oauth_verifier");
         if (authcode == null) {
             requestToken = oAuthService.getRequestToken();
-            request.getSession().setAttribute("requestToken", requestToken);
+            session.setAttribute("requestToken", requestToken);
 
             LoginBean loginBean = new LoginBean();
             loginBean.setMendeleyLink(oAuthService.getAuthorizationUrl(requestToken));
@@ -41,11 +43,11 @@ public class LoginAction implements Action {
 
             return "login";
         } else {
-            requestToken = (Token) request.getSession().getAttribute("requestToken");
+            requestToken = (Token) session.getAttribute("requestToken");
             request.removeAttribute("requestToken");
 
             Profile profile = oAuthService.getProfile(requestToken, authcode);
-            request.getSession().setAttribute("profile", profile);
+            session.setAttribute("profile", profile);
 
             createFolders(profile.getMain().getProfileId(), mu);
 

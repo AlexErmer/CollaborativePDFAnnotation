@@ -6,14 +6,16 @@ import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class LogoutAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
+        HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
 
-        request.getSession().removeAttribute("service");
-        request.getSession().removeAttribute("profile");
+        session.removeAttribute("service");
+        session.removeAttribute("profile");
 
         mu.addMessage(MessageTypes.SUCCESS, "Logout successful");
 

@@ -21,6 +21,7 @@ import opennlp.tools.util.Span;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -31,8 +32,9 @@ public class EvaluationSaveAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         //TODO: VIEL ZU LANGE MEHTODE
-        MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
-        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+        Profile profile = (Profile) session.getAttribute("profile");
         String userid = profile.getMain().getProfileId();
 
         //TODO: entitiytyp muss aus dem model kommen?!
@@ -40,7 +42,7 @@ public class EvaluationSaveAction implements Action {
 
         // resultmap contains all finding from previous nlp action
         @SuppressWarnings("unchecked")
-        Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) request.getSession().getAttribute("resultMap");
+        Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) session.getAttribute("resultMap");
 
         //load bratannotations in a map
         createBratDocumentMap(userid);

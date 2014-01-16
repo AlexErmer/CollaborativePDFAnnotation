@@ -1,60 +1,34 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="header.jsp"/>
 
 <jsp:useBean id="indexBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.IndexBean"/>
 
 <h1>PDF Extraction Demo</h1>
 
-<form action="/pages/upload" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label for="pdfFile">PDF Upload</label>
-        <p class="help-block">Choose a PDF to upload:</p>
-        <input type="file" id="pdfFile" name="pdfFile" accept="application/pdf;text/pdf"/>
-        <button type="submit" class="btn btn-default">Upload</button>
+<form class="form-horizontal" role="form">
+    <div class="well well-sm form-group">
+        <a class="btn btn-primary col-sm-2" href="/pages/upload" role="button">PDF hochladen</a>
+        <p class="help-block col-sm-10">Laden Sie weitere PDF Dateien auf die Plattform um ihre Modelle zu verbessern.</p>
     </div>
-</form>
-
-<h1>Repository</h1>
-
-<form action="/pages/nlp" method="post">
-    <table class="table table-hover table-striped">
-        <thead>
-        <tr>
-            <th>Filename</th>
-            <th>extract text</th>
-            <th>annotate in brat</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${indexBean.fileIds}" var="fileId">
-            <tr>
-                <td>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="files" value="${fileId}"/> ${fileId}
-                        </label>
-                    </div>
-                </td>
-                <td><a class="btn btn-default" href="/pages/extract?type=knowminer&amp;id=${fileId}">extract</a></td>
-                <td><a class="btn btn-default" href="/pages/export?type=brat&amp;id=${fileId}">annotate</a></td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
-    <div class="form-group">
-        <label for="modelname">Modelname</label>
-        <input type="text" id="modelname" class="form-control" name="modelname" placeholder="Enter modelname"/>
+    <div class="well well-sm form-group">
+        <a class="btn btn-primary col-sm-2" href="/pages/extract" role="button">Text-Extraktion</a>
+        <p class="help-block col-sm-10">Korrigieren Sie die automatische Text-Extraktion.</p>
     </div>
-    <div class="form-group">
-        <label for="modelselect">Modelname</label>
-        <select id="modelselect" name="modelselect">
-            <c:forEach items="${indexBean.models}" var="model">
-                <option value="${model}">${model}</option>
-            </c:forEach>
-        </select>
+    <div class="well well-sm form-group">
+        <a class="btn btn-primary col-sm-2" href="/pages/annotate" role="button">Annotieren</a>
+        <p class="help-block col-sm-10">Annotieren Sie die extrahierten Texte.</p>
     </div>
-    <button type="submit" class="btn btn-default" name="create">create Model</button>
-    <button type="submit" class="btn btn-default" name="use">use Model</button>
+    <div class="well well-sm form-group">
+        <a class="btn btn-primary col-sm-2" href="/pages/modelCreate" role="button">Model erstellen</a>
+        <p class="help-block col-sm-10">Erstellen Sie aus den annotierten Texten Modelle.</p>
+    </div>
+    <div class="well well-sm form-group">
+        <a class="btn btn-primary col-sm-2" href="/pages/modelUse" role="button">Model anwenden</a>
+        <p class="help-block col-sm-10">Wenden Sie ihre erstellten Modelle auf (weitere) Texte an und evaluieren Sie die
+            Ergebnisse.
+            Die akzeptierten Funde werden direkt als neue Annotationen gespeichert und können in neue Modelle
+            einfließen.</p>
+    </div>
 </form>
 
 <jsp:include page="footer.jsp"/>

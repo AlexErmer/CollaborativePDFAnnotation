@@ -7,15 +7,17 @@ import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 public class EvaluationAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
+        HttpSession session = request.getSession();
+        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
 
-        Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) request.getSession().getAttribute("resultMap");
-        //request.getSession().removeAttribute("resultMap");
+        Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) session.getAttribute("resultMap");
+        //TODO: filter exisiting annotations?!
 
         EvaluationBean evaluationBean = new EvaluationBean();
         evaluationBean.setResultMap(resultMap);

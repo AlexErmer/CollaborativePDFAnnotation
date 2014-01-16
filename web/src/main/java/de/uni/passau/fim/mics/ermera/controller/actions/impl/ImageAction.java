@@ -12,7 +12,6 @@ import java.io.OutputStream;
 
 public class ImageAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
         String imageFile = request.getParameter("file");
         File f = new File(imageFile);
         String mt = new MimetypesFileTypeMap().getContentType(f);

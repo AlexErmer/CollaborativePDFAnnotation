@@ -25,7 +25,7 @@ public class NLPAction implements Action {
         HttpSession session = request.getSession();
         mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
 
-        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        Profile profile = (Profile) session.getAttribute("profile");
         String userid = profile.getMain().getProfileId();
 
         String[] files = request.getParameterValues("files");
@@ -36,12 +36,17 @@ public class NLPAction implements Action {
 
         if (request.getParameter("create") != null) {
             String modelname = request.getParameter("modelname");
+            String entitiytype = request.getParameter("entitiytype");
             if (modelname == null) {
                 mu.addMessage(MessageTypes.ERROR, "no modelname entered");
                 return null;
             }
+            if (entitiytype == null) {
+                mu.addMessage(MessageTypes.ERROR, "no entitiytype entered");
+                return null;
+            }
 
-            createModel(userid, modelname, files);
+            createModel(userid, modelname, entitiytype, files);
         } else if (request.getParameter("use") != null) {
             String modelname = request.getParameter("modelselect");
             if (modelname == null) {
@@ -50,7 +55,7 @@ public class NLPAction implements Action {
             }
 
             Map<String, NameFinderResult> map = useModel(userid, modelname, files);
-            request.getSession().setAttribute("resultMap", map);
+            session.setAttribute("resultMap", map);
             return "evaluation";
         }
 
@@ -58,10 +63,10 @@ public class NLPAction implements Action {
         return "homepage";
     }
 
-    private void createModel(String userid, String modelname, String[] files) throws IOException {
+    private void createModel(String userid, String modelname, String entitiytype, String[] files) throws IOException {
         //TODO: select documents which should form a new model
         OpenNLPServiceImpl nlpService = new OpenNLPServiceImpl();
-        TokenNameFinderModel model = nlpService.train(userid, "Person");  //TODO: entitytype muss festgelegt werden können!!
+        TokenNameFinderModel model = nlpService.train(userid, entitiytype);
 
         // store model
         DocumentDao documentDao = new DocumentDaoImpl();

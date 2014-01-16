@@ -38,7 +38,7 @@ public class ExportAction implements Action {
             return null;
         }
 
-        Profile profile = (Profile) request.getSession().getAttribute("profile");
+        Profile profile = (Profile) session.getAttribute("profile");
         String userid = profile.getMain().getProfileId();
 
         // get document model from dao
