@@ -55,7 +55,7 @@ public class ExportAction implements Action {
         Exporter exporter = exporterType.getInstance();
         try {
             if (exporter.export(userid, documentBean)) {
-                mu.addMessage(MessageTypes.SUCCESS,"export successful");
+                //mu.addMessage(MessageTypes.SUCCESS,"export successful");
                 return exporter.getRedirectURL(userid, documentBean.getId());
             }
         } catch (ExportException e) {

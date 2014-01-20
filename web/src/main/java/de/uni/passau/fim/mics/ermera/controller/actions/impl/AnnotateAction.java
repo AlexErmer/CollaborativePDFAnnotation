@@ -31,6 +31,12 @@ public class AnnotateAction implements Action {
 
         ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
         IndexBean indexBean = new IndexBean();
+
+        String fileId = request.getParameter("fileid");
+        if (fileId != null) {
+            indexBean.setSelectedFile(fileId);
+        }
+
         indexBean.setFileIds(contentRepositoryDao.getAllFileIDs(userid));
         request.setAttribute("indexBean", indexBean);
         return "annotate";
