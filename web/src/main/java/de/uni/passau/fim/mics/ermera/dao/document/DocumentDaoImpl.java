@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.dao.document;
 
 import de.uni.passau.fim.mics.ermera.common.FileUtil;
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import opennlp.tools.namefind.TokenNameFinderModel;
@@ -83,5 +85,22 @@ public class DocumentDaoImpl implements DocumentDao {
         OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "\\" + name + ".ann", true); // APPEND!
         fos.write(content.getBytes());
         fos.close();
+    }
+
+    @Override
+    public void createUserFolders(String userid, MessageUtil mu) {
+        createFolder(PropertyReader.UPLOAD_PATH, userid, mu);
+        createFolder(PropertyReader.STORAGE_PATH, userid, mu);
+        createFolder(PropertyReader.BRAT_WORKING_PATH, userid, mu);
+        createFolder(PropertyReader.MODEL_PATH, userid, mu);
+    }
+
+    private void createFolder(String path, String userid, MessageUtil mu) {
+        File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + path);
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                mu.addMessage(MessageTypes.ERROR, "Directory \"" + path + "\" not created!");
+            }
+        }
     }
 }

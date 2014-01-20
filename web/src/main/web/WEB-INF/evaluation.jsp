@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<jsp:include page="header.jsp"/>
+<jsp:include page="common/header.jsp"/>
 
 <jsp:useBean id="evaluationBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.EvaluationBean"/>
 
@@ -58,4 +58,4 @@ Im Anschluss daran können neue Modelle mit den erweiterten Annotationen erstell
     </div>
 </form>
 
-<jsp:include page="footer.jsp"/>
+<jsp:include page="common/footer.jsp"/>

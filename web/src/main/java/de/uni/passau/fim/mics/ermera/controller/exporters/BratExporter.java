@@ -12,7 +12,7 @@ import java.nio.file.StandardCopyOption;
 public class BratExporter implements Exporter {
 
     public String getRedirectURL(String userid, String fileid) {
-        return "../brat/index.xhtml#/" + userid + "/" + fileid;
+        return "../brat/brat/index.xhtml#/" + userid + "/" + fileid;
     }
 
     public boolean export(String userid, DocumentBean documentBean) throws ExportException {

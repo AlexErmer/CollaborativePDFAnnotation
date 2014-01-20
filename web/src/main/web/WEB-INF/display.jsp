@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<jsp:include page="header.jsp"/>
+<jsp:include page="common/header.jsp"/>
 
 <jsp:useBean id="documentBean" scope="session" class="de.uni.passau.fim.mics.ermera.model.DocumentBean"/>
 
@@ -23,7 +23,7 @@
         <c:set var="pageNumber" value="${param.pageNumber}"/>
     </c:otherwise>
 </c:choose>
-<jsp:include page="paginator.jsp">
+<jsp:include page="common/paginator.jsp">
     <jsp:param name="pageNumber" value="${pageNumber}"/>
     <jsp:param name="pages" value="${fn:length(documentBean.pages)}"/>
     <jsp:param name="link" value="display?pageNumber="/>
@@ -142,7 +142,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         // highlight corresponding text
-        // TODO add autoscroll to the highlightes text?
+        // IDEA add autoscroll to the highlightes text?
         $(".page div.block").hover(function() {
             $(this).addClass('highlightCorresponding');
             $('#t_' + $(this).data('id')).addClass('highlightCorresponding');
@@ -234,4 +234,4 @@
     </div>
 </form>
 
-<jsp:include page="footer.jsp"/>
+<jsp:include page="common/footer.jsp"/>

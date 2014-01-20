@@ -1,5 +1,6 @@
 package de.uni.passau.fim.mics.ermera.dao.document;
 
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import opennlp.tools.namefind.TokenNameFinderModel;
 
@@ -17,4 +18,6 @@ public interface DocumentDao {
     //TODO: nach brat auslagern?!
     public String loadBratFile(String userid, String name) throws IOException;
     public void storeAnnotationFile(String userid, String name, String content) throws IOException;
+
+    public void createUserFolders(String userid, MessageUtil mu);
 }

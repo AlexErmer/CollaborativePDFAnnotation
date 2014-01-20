@@ -5,6 +5,8 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
 import de.uni.passau.fim.mics.ermera.oauth.MendeleyOAuthServiceImpl;
 import de.uni.passau.fim.mics.ermera.oauth.MyOAuthService;
@@ -13,20 +15,20 @@ import org.scribe.model.Token;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 
 public class LoginAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
         MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+        DocumentDao documentDao = new DocumentDaoImpl();
 
         Token requestToken;
         MyOAuthService oAuthService = new MendeleyOAuthServiceImpl();
 
         if (PropertyReader.OFFLINELOGIN) {
             Profile profile = oAuthService.getDummyProfile();
-            createFolders("dummyUser", mu);
+            documentDao.createUserFolders("dummyUser", mu);
             session.setAttribute("profile", profile);
             mu.addMessage(MessageTypes.SUCCESS, "Dummy Login successful");
             return "homepage";
@@ -49,7 +51,7 @@ public class LoginAction implements Action {
             Profile profile = oAuthService.getProfile(requestToken, authcode);
             session.setAttribute("profile", profile);
 
-            createFolders(profile.getMain().getProfileId(), mu);
+            documentDao.createUserFolders(profile.getMain().getProfileId(), mu);
 
             mu.addMessage(MessageTypes.SUCCESS, "Login successful");
 
@@ -57,20 +59,5 @@ public class LoginAction implements Action {
         }
     }
 
-    private void createFolders(String userid, MessageUtil mu) {
-        //TODO auslagern in content/documentDAO!
-        createFolder(PropertyReader.UPLOAD_PATH, userid, mu);
-        createFolder(PropertyReader.STORAGE_PATH, userid, mu);
-        createFolder(PropertyReader.BRAT_WORKING_PATH, userid, mu);
-        createFolder(PropertyReader.MODEL_PATH, userid, mu);
-    }
 
-    private void createFolder(String path, String userid, MessageUtil mu) {
-        File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + path);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                mu.addMessage(MessageTypes.ERROR, "Directory \"" + path + "\" not created!");
-            }
-        }
-    }
 }

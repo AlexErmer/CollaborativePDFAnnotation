@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<jsp:include page="header.jsp"/>
+<jsp:include page="common/header.jsp"/>
 
 <jsp:useBean id="indexBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.IndexBean"/>
 
@@ -24,7 +24,7 @@
             <th>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="selectAll" onclick="selectAll('files')"/> <b>Filename</b>
+                        <input type="checkbox" name="selectAll" class="selectAll"/> <b>Filename</b>
                     </label>
                 </div>
             </th>
@@ -57,4 +57,4 @@
     </div>
 </form>
 
-<jsp:include page="footer.jsp"/>
+<jsp:include page="common/footer.jsp"/>
