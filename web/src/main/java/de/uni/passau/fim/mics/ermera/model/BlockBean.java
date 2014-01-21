@@ -17,17 +17,39 @@ public class BlockBean implements Comparable<BlockBean>, Serializable {
 
     /**
      * Compare with other {@code BlockBean} by order number.
+     *
      * @param o other {@code BlockBean}
      * @return 0, if orders are equal;
-     * 1, if this order is lower then other;
-     * -1, else
+     *         +, if this order is lower then other;
+     *         -, else
      */
+    @Override
     public int compareTo(BlockBean o) {
-        if (this.order < o.getOrder()) {
-            return -1;
-        } else {
-            return 1;
+        return this.order - o.order;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
+        if (obj == null || (this.getClass() != obj.getClass())) {
+            return false;
+        }
+        BlockBean other = (BlockBean) obj;
+        return (this.id.equals(other.id))
+                && (this.text.equals(other.text))
+                && (this.order == other.order);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        result = 31 * result + (id != null ? id.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + order;
+
+        return result;
     }
 
     // Getter & Setter

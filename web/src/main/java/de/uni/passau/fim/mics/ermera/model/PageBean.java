@@ -13,24 +13,42 @@ public class PageBean implements Comparable<PageBean>, Serializable {
     private int height;
     private String imagefilename;
     private List<BlockBean> blocks = new ArrayList<>();
-    transient private List<LineBean> lines = new ArrayList<>();
+    private transient List<LineBean> lines = new ArrayList<>();
 
     /**
      * Compare with other {@code PageBean} by page number
      *
      * @param o other {@code PageBean}
      * @return 0, if page numbers are equal;
-     *         1, if this page numbers is higher then other;
-     *         -1, else
+     *         +, if this page numbers is higher then other;
+     *         -, else
      */
+    @Override
     public int compareTo(PageBean o) {
-        if (this.number == o.number) {
-            return 0;
-        } else if (this.number > o.number) {
-            return 1;
-        } else {
-            return -1;
+        return this.number - o.number;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
+        if (obj == null || (this.getClass() != obj.getClass())) {
+            return false;
+        }
+        PageBean other = (PageBean) obj;
+        return (this.number == other.number)
+                && (this.imagefilename.equals(other.imagefilename));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        result = 31 * result + number;
+        result = 31 * result + (imagefilename != null ? imagefilename.hashCode() : 0);
+
+        return result;
     }
 
     /**

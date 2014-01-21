@@ -5,9 +5,6 @@ import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.StandardCopyOption;
 
 public class BratExporter implements Exporter {
 

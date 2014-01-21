@@ -13,5 +13,5 @@ public interface Extractor {
      * @return extracted {@code DocumentBean}
      * @throws ExtractException any exception while extraction
      */
-    public DocumentBean extract(String id, File file) throws ExtractException;
+    DocumentBean extract(String id, File file) throws ExtractException;
 }

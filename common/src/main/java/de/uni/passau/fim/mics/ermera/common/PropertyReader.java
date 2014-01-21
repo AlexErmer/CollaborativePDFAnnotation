@@ -1,9 +1,12 @@
 package de.uni.passau.fim.mics.ermera.common;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.util.Properties;
 
 public class PropertyReader {
+    private static final Logger LOGGER = Logger.getLogger(PropertyReader.class);
 
     public static final String APPLICATION_URI;
     public static final String MENDELEY_API_KEY;
@@ -24,7 +27,7 @@ public class PropertyReader {
         try {
             p.load(PropertyReader.class.getResourceAsStream("/config.conf"));
         } catch (IOException e) {
-            System.out.println("Could not load Config!");
+            LOGGER.error("Propertyreader could not load Config!", e);
         }
 
         APPLICATION_URI = p.getProperty("APPLICATION_URI");

@@ -1,10 +1,7 @@
 package de.uni.passau.fim.mics.ermera.oauth;
 
 import com.mendeley.oapi.schema.Profile;
-import org.scribe.model.OAuthRequest;
 import org.scribe.model.Token;
-import org.scribe.model.Verifier;
-import org.scribe.oauth.OAuthService;
 
 public interface MyOAuthService {
     /**
@@ -21,7 +18,7 @@ public interface MyOAuthService {
      *
      * @return request token
      */
-    public Token getRequestToken();
+    Token getRequestToken();
 
     /**
      * Returns the URL where you should redirect your users to authenticate
@@ -30,7 +27,7 @@ public interface MyOAuthService {
      * @param requestToken the request token you need to authorize
      * @return the URL where you should redirect your users
      */
-    public String getAuthorizationUrl(Token requestToken);
+    String getAuthorizationUrl(Token requestToken);
 
 
     /**
@@ -38,5 +35,5 @@ public interface MyOAuthService {
      *
      * @return the dummy profile
      */
-    public Profile getDummyProfile();
+    Profile getDummyProfile();
 }

@@ -7,7 +7,6 @@ import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
-import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.opennlp.MyBratNameSampleStream;
 import de.uni.passau.fim.mics.ermera.opennlp.MyBratNameSampleStreamFactory;
 import de.uni.passau.fim.mics.ermera.opennlp.MySpanAnnotation;

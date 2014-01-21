@@ -26,5 +26,5 @@ public interface ValueEnum {
 	 * 
 	 * @return the string
 	 */
-	public abstract String value();
+	String value();
 }

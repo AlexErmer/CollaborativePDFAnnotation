@@ -160,8 +160,31 @@
                 <artifactId>opennlp-tools</artifactId>
                 <version>1.6.0-SNAPSHOT</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.1</version>
+                <type>maven-plugin</type>
+            </dependency>
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.9</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>2.1</version>
+            <type>maven-plugin</type>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -178,6 +201,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
                 <configuration>
                     <archive>
                         <manifestEntries>
@@ -189,6 +213,7 @@
                     <warName>${project.name}</warName>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -198,6 +223,27 @@
             <properties>
                 <offlineLogin>true</offlineLogin>
             </properties>
+        </profile>
+        <profile>
+            <id>sonar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>2.1</version>
+                        <executions>
+                            <execution>
+                                <id>make-sonar</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>sonar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

@@ -23,7 +23,8 @@ public class DocumentDaoImpl implements DocumentDao {
         DocumentBean documentBean = (DocumentBean) in.readObject();
         fis.close();
 
-        documentBean.createLines(); // create lines, because they are not serialized
+        // create lines, because they are not serialized
+        documentBean.createLines();
         return documentBean;
     }
 
@@ -69,8 +70,9 @@ public class DocumentDaoImpl implements DocumentDao {
             modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODEL_PREFIX + name));
             model.serialize(modelOut);
         } finally {
-            if (modelOut != null)
+            if (modelOut != null) {
                 modelOut.close();
+            }
         }
     }
 

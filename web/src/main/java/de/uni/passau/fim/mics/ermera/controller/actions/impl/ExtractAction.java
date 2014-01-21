@@ -13,6 +13,7 @@ import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.model.IndexBean;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class ExtractAction implements Action {
+
+    private static final Logger LOGGER = Logger.getLogger(ExtractAction.class);
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
@@ -48,9 +51,12 @@ public class ExtractAction implements Action {
                 documentBean = documentDao.loadDocumentBean(userid, id);
             } catch (FileNotFoundException e) {
                 // do nothing if only the file was not found..
+                LOGGER.info("not important .. just file not found", e);
             } catch (IOException e) {
+                LOGGER.error("IO Could not load saved file", e);
                 mu.addMessage(MessageTypes.ERROR, "Could not load saved file: " + e.getMessage());
             } catch (ClassNotFoundException e) {
+                LOGGER.error("Corrupt save? Could not find class", e);
                 mu.addMessage(MessageTypes.ERROR, "Corrupt save? Could not find class: " + e.getMessage());
             }
 
@@ -63,6 +69,7 @@ public class ExtractAction implements Action {
                     Extractor extractor = extractorType.getInstance();
                     documentBean = extractor.extract(id, file);
                 } catch (ExtractException e) {
+                    LOGGER.error("ExtractException", e);
                     mu.addMessage(MessageTypes.ERROR, e.getMessage());
                     return "display";
                 }
@@ -73,6 +80,7 @@ public class ExtractAction implements Action {
                 try {
                     documentDao.storeDocumentBean(userid, documentBean);
                 } catch (IOException e) {
+                    LOGGER.error("IO Could not save DocumentBean", e);
                     mu.addMessage(MessageTypes.ERROR, "Could not save DocumentBean: " + e.getMessage());
                 }
                 session.setAttribute("documentBean", documentBean);

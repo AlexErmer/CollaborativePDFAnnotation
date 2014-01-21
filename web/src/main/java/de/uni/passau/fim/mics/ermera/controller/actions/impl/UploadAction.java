@@ -7,6 +7,7 @@ import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryException;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class UploadAction implements Action {
+
+    private static final Logger LOGGER = Logger.getLogger(UploadAction.class);
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession();
@@ -30,6 +33,7 @@ public class UploadAction implements Action {
             filePart = request.getPart("pdfFile");
         } catch (ServletException e) {
             //nothing to do
+            LOGGER.info("nothing to do.. just catching a servletException", e);
         }
         if (filePart != null) {
             String filename = getFilename(filePart);
@@ -43,6 +47,7 @@ public class UploadAction implements Action {
                 ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
                 contentRepositoryDao.store(userid, id, filecontent);
             } catch (ContentRepositoryException e) {
+                LOGGER.error("Error while handling FileStreams", e);
                 mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
             } finally {
                 try {
@@ -50,6 +55,7 @@ public class UploadAction implements Action {
                         filecontent.close();
                     }
                 } catch (IOException e) {
+                    LOGGER.error("IO Error while closing FileStreams", e);
                     mu.addMessage(MessageTypes.ERROR, "Error while closing FileStreams: " + e.getMessage());
                 }
             }

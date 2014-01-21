@@ -7,9 +7,11 @@ import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
+import de.uni.passau.fim.mics.ermera.opennlp.NLPException;
 import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPServiceImpl;
 import opennlp.tools.namefind.TokenNameFinderModel;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NLPAction implements Action {
+
+    private static final Logger LOGGER = Logger.getLogger(NLPAction.class);
+
     private MessageUtil mu;
 
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -73,7 +78,7 @@ public class NLPAction implements Action {
         documentDao.storeModel(userid, modelname, model);
     }
 
-    private Map<String, NameFinderResult> useModel(String userid, String modelname, String[] files) {
+    private Map<String, NameFinderResult> useModel(String userid, String modelname, String[] files) throws NLPException {
         OpenNLPServiceImpl nlpService = new OpenNLPServiceImpl();
 
         // model holen
@@ -82,20 +87,24 @@ public class NLPAction implements Action {
         try {
             model = documentDao.loadModel(userid, modelname);
         } catch (IOException e) {
+            LOGGER.error("IO error loading the model", e);
             mu.addMessage(MessageTypes.ERROR, "Error loading the model: " + e.getMessage());
         } catch (ClassNotFoundException e) {
+            LOGGER.error("Class not found?", e);
             mu.addMessage(MessageTypes.ERROR, e.getMessage());
         }
 
         //get files as texts
         Map<String, String> documentStrs = new HashMap();
-        for (String filename: files) {
+        for (String filename : files) {
             DocumentBean documentBean = null;
             try {
                 documentBean = documentDao.loadDocumentBean(userid, filename);
             } catch (IOException e) {
+                LOGGER.error("IO error loading the document", e);
                 mu.addMessage(MessageTypes.ERROR, "Error loading the document " + filename + ": " + e.getMessage());
             } catch (ClassNotFoundException e) {
+                LOGGER.error("Class not found?", e);
                 mu.addMessage(MessageTypes.ERROR, e.getMessage());
             }
 

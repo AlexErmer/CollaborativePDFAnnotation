@@ -8,6 +8,7 @@ import de.uni.passau.fim.mics.ermera.model.BlockBean;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.model.PageBean;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import javax.imageio.ImageIO;
@@ -20,23 +21,25 @@ import java.io.InputStream;
 import java.util.SortedSet;
 
 public class KnowminerExtractor implements Extractor {
+    private static final Logger LOGGER = Logger.getLogger(KnowminerExtractor.class);
 
-    private final static PdfToImage.RendererType RENDERER_TYPE = PdfToImage.RendererType.Sun;
+    private static final PdfToImage.RendererType RENDERER_TYPE = PdfToImage.RendererType.Sun;
     private PdfExtractionPipeline pipeline;
 
-    public KnowminerExtractor() {
-        System.out.println("Loading models");
+    public KnowminerExtractor() throws ExtractException {
+        LOGGER.info("Loading models");
         ObjectMapper mapper = new ObjectMapper();
+        ExtractionConfiguration config = null;
         try {
-            ExtractionConfiguration config = mapper.readValue(KnowminerExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
-
-            // load Pdf extractor pipeline
-            pipeline = new PdfExtractionPipeline(config.blockModelFile, config.featuresFile,
-                    config.tokenModelFile, config.languageModelDir);
-        } catch (Throwable t) {
-            throw new RuntimeException("Couldn't create server", t);
+            config = mapper.readValue(KnowminerExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
+        } catch (IOException e) {
+            throw new ExtractException("Could not create server: " + e.getMessage(), e);
         }
-        System.out.println("Loading models done");
+
+        // load Pdf extractor pipeline
+        pipeline = new PdfExtractionPipeline(config.blockModelFile, config.featuresFile,
+                config.tokenModelFile, config.languageModelDir);
+        LOGGER.info("Loading models done");
     }
 
     public DocumentBean extract(String id, File file) throws ExtractException {

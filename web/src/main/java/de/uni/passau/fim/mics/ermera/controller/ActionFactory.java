@@ -6,12 +6,15 @@ import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.Remov
 import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.SortBlocksAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.ToggleHeadlineAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.impl.docModActions.ToggleNewParagraphAction;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ActionFactory {
+    private static final Logger LOGGER = Logger.getLogger(ActionFactory.class);
+
     private static Map<String, Action> actions;
 
     // private constructor to make class not instancable
@@ -43,7 +46,7 @@ public class ActionFactory {
     }
 
     public static Action getAction(HttpServletRequest request) {
-        System.out.println("Routing: " + request.getMethod() + request.getPathInfo());
+        LOGGER.info("Routing: " + request.getMethod() + request.getPathInfo());
         return actions.get(request.getMethod() + request.getPathInfo());
     }
 }

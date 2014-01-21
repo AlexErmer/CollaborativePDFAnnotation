@@ -80,7 +80,7 @@ public class OpenNLPServiceImpl {
      * @param documentStrs The Map of documents in which should be searched
      * @return a map which contains the found entities for each document.
      */
-    public Map<String, NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) {
+    public Map<String, NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
 /*        //TODO: remove defaultmodel here!
         InputStream modelbb = OpenNLPServiceImpl.class.getResourceAsStream("/en-ner-person.bin");
         TokenNameFinderModel tnfm = null;
@@ -101,6 +101,7 @@ public class OpenNLPServiceImpl {
             sentenceModel = new SentenceModel(sentIn);
             tokenizerModel = new TokenizerModel(tokIn);
         } catch (IOException e) {
+            throw new NLPException("Could not load sentence- or tokenmodels", e);
         }
         SentenceDetector sentenceDetector = new SentenceDetectorME(sentenceModel);
         Tokenizer tokenizer = new TokenizerME(tokenizerModel);
@@ -110,17 +111,16 @@ public class OpenNLPServiceImpl {
         for (Map.Entry<String, String> docStr : documentStrs.entrySet()) {
             tokens = new ArrayList<>();
 
-            String sentences[] = sentenceDetector.sentDetect(docStr.getValue());
+            String[] sentences = sentenceDetector.sentDetect(docStr.getValue());
             for (String sentence : sentences) {
                 tokens.addAll(Arrays.asList(tokenizer.tokenize(sentence)));
             }
             String[] tokensTmp = tokens.toArray(new String[tokens.size()]);
 
-            Span nameSpans[] = nameFinderME.find(tokensTmp);
+            Span[] nameSpans = nameFinderME.find(tokensTmp);
             results.put(docStr.getKey(), new NameFinderResult(tokensTmp, nameSpans));
         }
         return results;
-
     }
 
     private FMeasure evaluate(String userid, TokenNameFinderModel model) throws IOException {
