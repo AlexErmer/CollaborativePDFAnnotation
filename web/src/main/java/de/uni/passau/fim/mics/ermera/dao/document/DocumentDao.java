@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.List;
 
 public interface DocumentDao {
-    DocumentBean loadDocumentBean(String userid, String id) throws IOException, ClassNotFoundException;
+    DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException;
     void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException;
 
-    TokenNameFinderModel loadModel(String userid, String name) throws IOException, ClassNotFoundException;
+    TokenNameFinderModel loadModel(String userid, String name) throws IOException;
     List<String> loadAllModels(String userid);
     void storeModel(String userid, String name, TokenNameFinderModel tokenNameFinderModel) throws IOException;
 

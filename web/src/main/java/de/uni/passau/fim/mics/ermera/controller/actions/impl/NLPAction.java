@@ -5,6 +5,7 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.opennlp.NLPException;
@@ -89,9 +90,6 @@ public class NLPAction implements Action {
         } catch (IOException e) {
             LOGGER.error("IO error loading the model", e);
             mu.addMessage(MessageTypes.ERROR, "Error loading the model: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("Class not found?", e);
-            mu.addMessage(MessageTypes.ERROR, e.getMessage());
         }
 
         //get files as texts
@@ -100,12 +98,10 @@ public class NLPAction implements Action {
             DocumentBean documentBean = null;
             try {
                 documentBean = documentDao.loadDocumentBean(userid, filename);
-            } catch (IOException e) {
-                LOGGER.error("IO error loading the document", e);
-                mu.addMessage(MessageTypes.ERROR, "Error loading the document " + filename + ": " + e.getMessage());
-            } catch (ClassNotFoundException e) {
-                LOGGER.error("Class not found?", e);
-                mu.addMessage(MessageTypes.ERROR, e.getMessage());
+            } catch (DocumentDaoException e) {
+                LOGGER.error("error while loading documentBean", e);
+                mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+                continue;
             }
 
             documentStrs.put(documentBean.getId(), documentBean.toString());

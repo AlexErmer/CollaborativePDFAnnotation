@@ -14,6 +14,7 @@ import java.io.IOException;
 public class LoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // nothing to do
     }
 
     @Override
@@ -22,16 +23,15 @@ public class LoginFilter implements Filter {
         HttpSession session = httpRequest.getSession();
         String path = httpRequest.getRequestURI();
 
-        if (!path.equals("/pages/login")) {
-            if (session.getAttribute("profile") == null) {
-                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL("/pages/login"));
-                return;
-            }
+        if (!"/pages/login".equals(path) && session.getAttribute("profile") == null) {
+            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL("/pages/login"));
+            return;
         }
         chain.doFilter(request, response);
     }
 
     @Override
     public void destroy() {
+        // nothing to do
     }
 }

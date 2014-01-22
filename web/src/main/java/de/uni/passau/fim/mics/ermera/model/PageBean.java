@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PageBean implements Comparable<PageBean>, Serializable {
-    private final int NOT_SORTED = -10;
+    private static final int NOT_SORTED = -10;
 
     private int number;
     private int width;

@@ -8,6 +8,7 @@ import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporter;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporters;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import org.apache.log4j.Logger;
@@ -27,7 +28,7 @@ public class ExportAction implements Action {
         MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
 
         DocumentDao documentDao = new DocumentDaoImpl();
-        DocumentBean documentBean = null;
+        DocumentBean documentBean;
 
         Exporters exporterType = Exporters.valueOf(request.getParameter("type").toUpperCase());
         if (exporterType == null) {
@@ -47,21 +48,15 @@ public class ExportAction implements Action {
         // get document model from dao
         try {
             documentBean = documentDao.loadDocumentBean(userid, id);
-        } catch (FileNotFoundException e) {
-            // do nothing if only the file was not found..
-            LOGGER.info("not important .. just file not found", e);
-        } catch (IOException e) {
-            LOGGER.error("IO Could not load saved file", e);
-            mu.addMessage(MessageTypes.ERROR, "Could not load saved file: " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("Corrupt save? Could not find class", e);
-            mu.addMessage(MessageTypes.ERROR, "Corrupt save? Could not find class: " + e.getMessage());
+        } catch (DocumentDaoException e) {
+            LOGGER.error("error while loading documentBean", e);
+            mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+            return "homepage";
         }
 
         Exporter exporter = exporterType.getInstance();
         try {
             if (exporter.export(userid, documentBean)) {
-                //mu.addMessage(MessageTypes.SUCCESS,"export successful");
                 return exporter.getRedirectURL(userid, documentBean.getId());
             }
         } catch (ExportException e) {

@@ -15,6 +15,7 @@ import java.io.IOException;
 public class MessageUtilFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // nothing to do
     }
 
     @Override
@@ -31,5 +32,6 @@ public class MessageUtilFilter implements Filter {
 
     @Override
     public void destroy() {
+        // nothing to do
     }
 }

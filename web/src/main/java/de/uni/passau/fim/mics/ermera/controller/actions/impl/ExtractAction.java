@@ -10,6 +10,7 @@ import de.uni.passau.fim.mics.ermera.controller.extractors.Extractors;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.model.IndexBean;
@@ -49,15 +50,9 @@ public class ExtractAction implements Action {
             // get document model from dao
             try {
                 documentBean = documentDao.loadDocumentBean(userid, id);
-            } catch (FileNotFoundException e) {
-                // do nothing if only the file was not found..
-                LOGGER.info("not important .. just file not found", e);
-            } catch (IOException e) {
-                LOGGER.error("IO Could not load saved file", e);
-                mu.addMessage(MessageTypes.ERROR, "Could not load saved file: " + e.getMessage());
-            } catch (ClassNotFoundException e) {
-                LOGGER.error("Corrupt save? Could not find class", e);
-                mu.addMessage(MessageTypes.ERROR, "Corrupt save? Could not find class: " + e.getMessage());
+            } catch (DocumentDaoException e) {
+                LOGGER.error("error while loading documentBean", e);
+                mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
             }
 
             // if no model found, extract it from real file

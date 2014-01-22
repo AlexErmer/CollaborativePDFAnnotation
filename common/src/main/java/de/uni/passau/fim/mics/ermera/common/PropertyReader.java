@@ -38,6 +38,6 @@ public class PropertyReader {
         STORAGE_PATH = p.getProperty("STORAGE_PATH");
         BRAT_WORKING_PATH = p.getProperty("BRAT_WORKING_PATH");
         MODEL_PATH = p.getProperty("MODEL_PATH");
-        OFFLINELOGIN = p.getProperty("OFFLINELOGIN").equals("true");
+        OFFLINELOGIN = "true".equals(p.getProperty("OFFLINELOGIN"));
     }
 }

@@ -13,32 +13,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DocumentDaoImpl implements DocumentDao {
-    private final String DOCUMENT_PREFIX = "document_";
-    private final String MODEL_PREFIX = "model_";
+    private static final String DOCUMENTPREFIX = "document_";
+    private static final String MODELPREFIX = "model_";
 
     @Override
-    public DocumentBean loadDocumentBean(String userid, String id) throws IOException, ClassNotFoundException {
-        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENT_PREFIX + id);
-        ObjectInputStream in = new ObjectInputStream(fis);
-        DocumentBean documentBean = (DocumentBean) in.readObject();
-        fis.close();
+    public DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException {
+        DocumentBean documentBean;
+        try {
+            InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENTPREFIX + id);
+            ObjectInputStream in = new ObjectInputStream(fis);
+            documentBean = (DocumentBean) in.readObject();
+            fis.close();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new DocumentDaoException("failed to load documentBean", e);
+        }
 
         // create lines, because they are not serialized
-        documentBean.createLines();
+        if (documentBean != null) {
+            documentBean.createLines();
+        }
         return documentBean;
     }
 
     @Override
     public void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException {
-        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENT_PREFIX + documentBean.getId());
+        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENTPREFIX + documentBean.getId());
         ObjectOutputStream out = new ObjectOutputStream(fos);
         out.writeObject(documentBean);
         fos.close();
     }
 
     @Override
-    public TokenNameFinderModel loadModel(String userid, String name) throws IOException, ClassNotFoundException {
-        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODEL_PREFIX + name);
+    public TokenNameFinderModel loadModel(String userid, String name) throws IOException {
+        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODELPREFIX + name);
         TokenNameFinderModel model = new TokenNameFinderModel(fis);
         fis.close();
 
@@ -54,7 +61,7 @@ public class DocumentDaoImpl implements DocumentDao {
         if (files != null) {
             for (File f : files) {
                 if (!f.isDirectory()) {
-                    ret.add(f.getName().replace(MODEL_PREFIX, ""));
+                    ret.add(f.getName().replace(MODELPREFIX, ""));
                 }
             }
         }
@@ -67,7 +74,7 @@ public class DocumentDaoImpl implements DocumentDao {
         //TODO: check modelname already exists
         OutputStream modelOut = null;
         try {
-            modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODEL_PREFIX + name));
+            modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODELPREFIX + name));
             model.serialize(modelOut);
         } finally {
             if (modelOut != null) {
@@ -99,10 +106,8 @@ public class DocumentDaoImpl implements DocumentDao {
 
     private void createFolder(String path, String userid, MessageUtil mu) {
         File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + path);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                mu.addMessage(MessageTypes.ERROR, "Directory \"" + path + "\" not created!");
-            }
+        if (!dir.exists() && !dir.mkdirs()) {
+            mu.addMessage(MessageTypes.ERROR, "Directory \"" + path + "\" not created!");
         }
     }
 }

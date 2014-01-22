@@ -81,15 +81,6 @@ public class OpenNLPServiceImpl {
      * @return a map which contains the found entities for each document.
      */
     public Map<String, NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
-/*        //TODO: remove defaultmodel here!
-        InputStream modelbb = OpenNLPServiceImpl.class.getResourceAsStream("/en-ner-person.bin");
-        TokenNameFinderModel tnfm = null;
-        try {
-            tnfm = new TokenNameFinderModel(modelbb);
-        } catch (IOException e) {
-        }
-
-        NameFinderME nameFinderME = new NameFinderME(tnfm);*/
         NameFinderME nameFinderME = new NameFinderME(model);
 
         // split strings into sentences and tokens
@@ -121,14 +112,5 @@ public class OpenNLPServiceImpl {
             results.put(docStr.getKey(), new NameFinderResult(tokensTmp, nameSpans));
         }
         return results;
-    }
-
-    private FMeasure evaluate(String userid, TokenNameFinderModel model) throws IOException {
-        ObjectStream<NameSample> sampleStream = getStream(userid);
-
-        TokenNameFinderEvaluator evaluator = new TokenNameFinderEvaluator(new NameFinderME(model));
-        evaluator.evaluate(sampleStream);
-
-        return evaluator.getFMeasure();
     }
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.uni.passau.fim.mics.ermera.opennlp;
+package de.uni.passau.fim.mics.ermera.opennlp.overrides;
 
 import opennlp.tools.formats.brat.BratAnnotation;
 import opennlp.tools.formats.brat.BratDocument;
@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * direct copy of {@code opennlp.tools.formats.brat.BratNameSampleStream}! All credit belongs to them!!
  * Generates Name Sample objects for a Brat Document object. 
  */
 public class MyBratNameSampleStream extends SegmenterObjectStream<BratDocument, NameSample> {

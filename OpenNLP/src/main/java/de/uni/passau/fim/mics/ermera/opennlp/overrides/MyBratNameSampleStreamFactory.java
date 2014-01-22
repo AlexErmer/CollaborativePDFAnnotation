@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package de.uni.passau.fim.mics.ermera.opennlp;
+package de.uni.passau.fim.mics.ermera.opennlp.overrides;
 
 import opennlp.tools.cmdline.ArgumentParser;
 import opennlp.tools.cmdline.ArgumentParser.OptionalParameter;

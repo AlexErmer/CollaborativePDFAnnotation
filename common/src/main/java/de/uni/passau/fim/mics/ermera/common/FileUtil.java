@@ -9,6 +9,10 @@ import java.nio.file.Paths;
 
 public class FileUtil {
 
+    private FileUtil() {
+        // private constructor for preventing instanciation
+    }
+
     public static String readFile(String path) throws IOException {
         return readFile(path, Charset.defaultCharset());
     }

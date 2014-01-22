@@ -1,12 +1,14 @@
 package de.uni.passau.fim.mics.ermera.dao.content;
 
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContentRepositoryDaoImpl implements ContentRepositoryDao {
+    private static final Logger LOGGER = Logger.getLogger(ContentRepositoryDaoImpl.class);
 
     @Override
     public List<String> getAllFileIDs(String userid) {
@@ -26,14 +28,12 @@ public class ContentRepositoryDaoImpl implements ContentRepositoryDao {
     }
 
     @Override
-    public File load(String userid,String id) {
+    public File load(String userid, String id) {
         return new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOAD_PATH + id);
     }
 
     @Override
     public void store(String userid, String id, InputStream filecontent) throws ContentRepositoryException {
-
-        // store pdf
         OutputStream outputStream = null;
         try {
             // write the inputStream to a FileOutputStream
@@ -49,12 +49,16 @@ public class ContentRepositoryDaoImpl implements ContentRepositoryDao {
         } catch (IOException e) {
             throw new ContentRepositoryException("Fehler beim Speichern", e);
         } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (IOException e) {
-                    throw new ContentRepositoryException("Fehler beim Schließen des Speicherstreams", e);
-                }
+            closeStream(outputStream);
+        }
+    }
+
+    private void closeStream(OutputStream outputStream) {
+        if (outputStream != null) {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                LOGGER.error("Fehler beim Schließen des Speicherstreams", e);
             }
         }
     }

@@ -7,8 +7,8 @@ import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
-import de.uni.passau.fim.mics.ermera.opennlp.MyBratNameSampleStream;
-import de.uni.passau.fim.mics.ermera.opennlp.MyBratNameSampleStreamFactory;
+import de.uni.passau.fim.mics.ermera.opennlp.overrides.MyBratNameSampleStream;
+import de.uni.passau.fim.mics.ermera.opennlp.overrides.MyBratNameSampleStreamFactory;
 import de.uni.passau.fim.mics.ermera.opennlp.MySpanAnnotation;
 import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 import opennlp.tools.formats.brat.BratAnnotation;
@@ -58,64 +58,66 @@ public class EvaluationSaveAction implements Action {
 
         // loop all selected findings
         String[] ids = request.getParameterValues("ok");
-        if (ids != null ) for (String id : ids) {
-            // get NameFinderResult from id
-            String[] idSplits = id.split("__");
-            String filename = idSplits[1];
-            String index = idSplits[2];
-            Span span = resultMap.get(filename).getNameSpans()[Integer.valueOf(index)];
+        if (ids != null ) {
+            for (String id : ids) {
+                // get NameFinderResult from id
+                String[] idSplits = id.split("__");
+                String filename = idSplits[1];
+                String index = idSplits[2];
+                Span span = resultMap.get(filename).getNameSpans()[Integer.valueOf(index)];
 
-            // add this filename for later saving to the Set
-            filenames.add(filename);
+                // add this filename for later saving to the Set
+                filenames.add(filename);
 
-            // get offsets of this span
-            int offsetStart = span.getStart();
-            int offsetEnd = span.getEnd();
+                // get offsets of this span
+                int offsetStart = span.getStart();
+                int offsetEnd = span.getEnd();
 
-            // concat coveredtext
-            String searchstr = resultMap.get(filename).getTokens()[offsetStart];
-            for (int i = offsetStart + 1; i <= offsetEnd - 1; i++) {
-                searchstr = searchstr.concat(" " + resultMap.get(filename).getTokens()[i]);
-            }
-
-            // determine the real char offsets by searching for the text
-            // TODO: implement caching to reduce IO actions
-            String text = documentDao.loadBratFile(userid, filename).replace(System.lineSeparator(),"~~");
-            int hit_start = text.indexOf(searchstr);
-            int hit_end = hit_start + searchstr.length();
-
-            // doublecheck found text matches
-            if (searchstr.equals(text.substring(hit_start, hit_end))) {
-                //scan if this annotation already exists
-                boolean found = false;
-
-                BratDocument bratdoc = bratDocumentMap.get(filename);
-                Collection<BratAnnotation> annos = bratdoc.getAnnotations();
-                for (BratAnnotation anno : annos) {
-                    SpanAnnotation bspan = (SpanAnnotation) anno;
-                    if (type.equals(bspan.getSpan().getType())
-                            && hit_start == bspan.getSpan().getStart()
-                            && hit_end == bspan.getSpan().getEnd()) {
-                        found = true;
-                    }
+                // concat coveredtext
+                String searchstr = resultMap.get(filename).getTokens()[offsetStart];
+                for (int i = offsetStart + 1; i <= offsetEnd - 1; i++) {
+                    searchstr = searchstr.concat(" " + resultMap.get(filename).getTokens()[i]);
                 }
 
-                int nextID = nextID(annos);
+                // determine the real char offsets by searching for the text
+                // TODO: implement caching to reduce IO actions
+                String text = documentDao.loadBratFile(userid, filename).replace(System.lineSeparator(),"~~");
+                int hitStart = text.indexOf(searchstr);
+                int hitEnd = hitStart + searchstr.length();
 
-                //if not, add this new one
-                if (!found) {
-                    //Brat/Spanannoation kann ich nicht sebst erzeugen, weil sie protected im opennlp sind...
-                    List<MySpanAnnotation> list = mySpanAnnotations.get(filename);
-                    if (list == null) {
-                        list = new ArrayList<>();
+                // doublecheck found text matches
+                if (searchstr.equals(text.substring(hitStart, hitEnd))) {
+                    //scan if this annotation already exists
+                    boolean found = false;
+
+                    BratDocument bratdoc = bratDocumentMap.get(filename);
+                    Collection<BratAnnotation> annos = bratdoc.getAnnotations();
+                    for (BratAnnotation anno : annos) {
+                        SpanAnnotation bspan = (SpanAnnotation) anno;
+                        if (type.equals(bspan.getSpan().getType())
+                                && hitStart == bspan.getSpan().getStart()
+                                && hitEnd == bspan.getSpan().getEnd()) {
+                            found = true;
+                        }
                     }
-                    list.add(new MySpanAnnotation("T" + nextID++, type,
-                            new Span(hit_start, hit_end, type), searchstr));
-                    mySpanAnnotations.put(filename, list);
+
+                    int nextID = nextID(annos);
+
+                    //if not, add this new one
+                    if (!found) {
+                        //Brat/Spanannoation kann ich nicht sebst erzeugen, weil sie protected im opennlp sind...
+                        List<MySpanAnnotation> list = mySpanAnnotations.get(filename);
+                        if (list == null) {
+                            list = new ArrayList<>();
+                        }
+                        list.add(new MySpanAnnotation("T" + nextID++, type,
+                                new Span(hitStart, hitEnd, type), searchstr));
+                        mySpanAnnotations.put(filename, list);
+                    }
                 }
             }
         }
-        if (mySpanAnnotations.size() == 0) {
+        if (mySpanAnnotations.isEmpty()) {
             mu.addMessage(MessageTypes.INFO, "Nothing to save selected");
         } else {
             // create new annotationfile with the new annotations recently accepted
@@ -145,7 +147,7 @@ public class EvaluationSaveAction implements Action {
     private int nextID(Collection<BratAnnotation> annos) {
         int highestnumber = 0;
         for (BratAnnotation anno : annos) {
-            if (anno.getId().substring(0, 1).equals("T")) {
+            if ("T".equals(anno.getId().substring(0, 1))) {
                 int number = Integer.parseInt(anno.getId().substring(1));
                 if (number > highestnumber) {
                     highestnumber = number;
