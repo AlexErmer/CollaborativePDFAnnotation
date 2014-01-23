@@ -54,10 +54,12 @@ public class MendeleyOAuthServiceImpl implements MyOAuthService {
 
     @Override
     public Profile getDummyProfile() {
+        final String dummyUserName = "dummyUser";
+
         User user = new User();
-        user.setUserId("dummyUser");
-        user.setProfileId("dummyUser");
-        user.setName("dummyUser");
+        user.setUserId(dummyUserName);
+        user.setProfileId(dummyUserName);
+        user.setName(dummyUserName);
 
         Profile profile = new Profile();
         profile.setMain(user);

@@ -22,8 +22,6 @@ public class MessageUtil {
         private MessageTypes type;
         private String msg;
 
-        private Message() { }
-
         private Message(MessageTypes type, String msg) {
             this.type = type;
             this.msg = msg;
@@ -33,16 +31,8 @@ public class MessageUtil {
             return type;
         }
 
-        public void setType(MessageTypes type) {
-            this.type = type;
-        }
-
         public String getMsg() {
             return msg;
-        }
-
-        public void setMsg(String msg) {
-            this.msg = msg;
         }
     }
 }

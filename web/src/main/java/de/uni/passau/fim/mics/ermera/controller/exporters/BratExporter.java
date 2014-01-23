@@ -17,13 +17,10 @@ public class BratExporter implements Exporter {
             String path = PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "/";
 
             // copy file with utf-8 encoding
-            Writer out = new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(path + "/" + documentBean.getId() + ".txt"), "UTF-8"));
-            try {
+            try (Writer out = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(path + "/" + documentBean.getId() + ".txt"), "UTF-8"))) {
                 String str = StringEscapeUtils.unescapeHtml(documentBean.toString());
                 out.write(str);
-            } finally {
-                out.close();
             }
 
             // create seperate annotation file
@@ -64,19 +61,13 @@ public class BratExporter implements Exporter {
      * @throws IOException IOException
      */
     private void copyFileUsingStream(InputStream source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = source;
-            os = new FileOutputStream(dest);
+        try (OutputStream os = new FileOutputStream(dest)) {
             byte[] buffer = new byte[1024];
             int length;
-            while ((length = is.read(buffer)) > 0) {
+            while ((length = source.read(buffer)) > 0) {
                 os.write(buffer, 0, length);
             }
-        } finally {
-            is.close();
-            os.close();
         }
+
     }
 }

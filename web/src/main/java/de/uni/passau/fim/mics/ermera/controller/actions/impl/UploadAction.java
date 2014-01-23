@@ -1,9 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
-import de.uni.passau.fim.mics.ermera.common.MessageUtil;
-import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
 import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryException;
@@ -12,21 +11,15 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class UploadAction implements Action {
-
+public class UploadAction extends AbstractAction {
     private static final Logger LOGGER = Logger.getLogger(UploadAction.class);
 
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
-        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
-        Profile profile = (Profile) session.getAttribute("profile");
-        String userid = profile.getMain().getProfileId();
-
+    @Override
+    public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         // get filestream
         Part filePart = null;
         try {
@@ -34,36 +27,56 @@ public class UploadAction implements Action {
         } catch (ServletException e) {
             //nothing to do
             LOGGER.info("nothing to do.. just catching a servletException", e);
+        } catch (IOException e) {
+            throw new ActionException("Fehler beim Lesen der hochgeladenen Datei", e);
         }
         if (filePart != null) {
             String filename = getFilename(filePart);
-            InputStream filecontent = filePart.getInputStream();
+            if ("".equals(filename)) {
+                mu.addMessage(MessageTypes.ERROR, "Keine Datei zum hochladen ausgewählt");
+                return "upload";
+            }
+            if (!"application/pdf".equals(filePart.getContentType())) {
+                mu.addMessage(MessageTypes.ERROR, "Bitte wählen Sie eine PDF Datei");
+                return "upload";
+            }
+
+            InputStream filecontent;
+            try {
+                filecontent = filePart.getInputStream();
+            } catch (IOException e) {
+                throw new ActionException("Fehler beim Lesen der hochgeladenen Datei", e);
+            }
 
             // create id
             String id = filename.replaceAll("\\s", "");
 
             // store pdf
-            try {
-                ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-                contentRepositoryDao.store(userid, id, filecontent);
-            } catch (ContentRepositoryException e) {
-                LOGGER.error("Error while handling FileStreams", e);
-                mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
-            } finally {
-                try {
-                    if (filecontent != null) {
-                        filecontent.close();
-                    }
-                } catch (IOException e) {
-                    LOGGER.error("IO Error while closing FileStreams", e);
-                    mu.addMessage(MessageTypes.ERROR, "Error while closing FileStreams: " + e.getMessage());
-                }
-            }
+            storePDF(filecontent, id);
 
             // forward to extract
             return "extract?type=knowminer&id=" + id;
         } else {
             return "upload";
+        }
+    }
+
+    private void storePDF(InputStream filecontent, String id) {
+        try {
+            ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
+            contentRepositoryDao.store(userid, id, filecontent);
+        } catch (ContentRepositoryException e) {
+            LOGGER.error("Error while handling FileStreams", e);
+            mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
+        } finally {
+            try {
+                if (filecontent != null) {
+                    filecontent.close();
+                }
+            } catch (IOException e) {
+                LOGGER.error("IO Error while closing FileStreams", e);
+                mu.addMessage(MessageTypes.ERROR, "Error while closing FileStreams: " + e.getMessage());
+            }
         }
     }
 

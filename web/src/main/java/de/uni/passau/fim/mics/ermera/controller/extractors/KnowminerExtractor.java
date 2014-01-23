@@ -29,7 +29,7 @@ public class KnowminerExtractor implements Extractor {
     public KnowminerExtractor() throws ExtractException {
         LOGGER.info("Loading models");
         ObjectMapper mapper = new ObjectMapper();
-        ExtractionConfiguration config = null;
+        ExtractionConfiguration config;
         try {
             config = mapper.readValue(KnowminerExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
         } catch (IOException e) {

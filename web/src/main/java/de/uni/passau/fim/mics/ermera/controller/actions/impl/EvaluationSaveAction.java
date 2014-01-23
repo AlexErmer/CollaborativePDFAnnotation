@@ -1,10 +1,9 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
-import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
-import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.opennlp.overrides.MyBratNameSampleStream;
@@ -20,22 +19,16 @@ import opennlp.tools.util.Span;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
-public class EvaluationSaveAction implements Action {
+public class EvaluationSaveAction extends AbstractAction {
 
     private Map<String, BratDocument> bratDocumentMap = new HashMap<>();
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         //TODO: VIEL ZU LANGE MEHTODE
-        HttpSession session = request.getSession();
-        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
-        Profile profile = (Profile) session.getAttribute("profile");
-        String userid = profile.getMain().getProfileId();
-
         //TODO: entitiytyp muss aus dem model kommen?!
         String type = "Person";
 
@@ -44,7 +37,11 @@ public class EvaluationSaveAction implements Action {
         Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) session.getAttribute("resultMap");
 
         //load bratannotations in a map
-        createBratDocumentMap(userid);
+        try {
+            createBratDocumentMap(userid);
+        } catch (IOException e) {
+            throw new ActionException("Fehler beim Erstellen der DocumentMap", e);
+        }
 
         // documentloader for textsearch
         DocumentDao documentDao = new DocumentDaoImpl();
@@ -81,7 +78,12 @@ public class EvaluationSaveAction implements Action {
 
                 // determine the real char offsets by searching for the text
                 // TODO: implement caching to reduce IO actions
-                String text = documentDao.loadBratFile(userid, filename).replace(System.lineSeparator(),"~~");
+                String text;
+                try {
+                    text = documentDao.loadBratFile(userid, filename).replace(System.lineSeparator(),"~~");
+                } catch (IOException e) {
+                    throw new ActionException("Fehler beim Lesen des Bratfiles", e);
+                }
                 int hitStart = text.indexOf(searchstr);
                 int hitEnd = hitStart + searchstr.length();
 
@@ -122,7 +124,11 @@ public class EvaluationSaveAction implements Action {
         } else {
             // create new annotationfile with the new annotations recently accepted
             for (String filename : filenames) {
-                createNewAnnotationFile(userid, filename, mySpanAnnotations);
+                try {
+                    createNewAnnotationFile(userid, filename, mySpanAnnotations);
+                } catch (IOException e) {
+                    throw new ActionException("Fehler beim erstellen eines neuen Annotationsfiles", e);
+                }
             }
             mu.addMessage(MessageTypes.SUCCESS, "Results saved");
         }

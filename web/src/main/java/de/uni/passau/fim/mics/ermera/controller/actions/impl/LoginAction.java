@@ -2,9 +2,9 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
-import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
-import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
@@ -14,13 +14,11 @@ import org.scribe.model.Token;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-public class LoginAction implements Action {
+public class LoginAction extends AbstractAction {
+
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
-        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
+    public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         DocumentDao documentDao = new DocumentDaoImpl();
 
         Token requestToken;
@@ -28,7 +26,7 @@ public class LoginAction implements Action {
 
         if (PropertyReader.OFFLINELOGIN) {
             Profile profile = oAuthService.getDummyProfile();
-            documentDao.createUserFolders("dummyUser", mu);
+            documentDao.createUserFolders(profile.getMain().getProfileId(), mu);
             session.setAttribute("profile", profile);
             mu.addMessage(MessageTypes.SUCCESS, "Dummy Login successful");
             return "homepage";

@@ -72,15 +72,10 @@ public class DocumentDaoImpl implements DocumentDao {
     @Override
     public void storeModel(String userid, String name, TokenNameFinderModel model) throws IOException {
         //TODO: check modelname already exists
-        OutputStream modelOut = null;
-        try {
-            modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODELPREFIX + name));
+        try (OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODEL_PATH + MODELPREFIX + name))) {
             model.serialize(modelOut);
-        } finally {
-            if (modelOut != null) {
-                modelOut.close();
-            }
         }
+
     }
 
     @Override

@@ -2,8 +2,8 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
-import de.uni.passau.fim.mics.ermera.common.MessageUtil;
-import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
+import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporter;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporters;
@@ -15,18 +15,12 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
-public class ExportAction implements Action {
-
+public class ExportAction extends AbstractAction {
     private static final Logger LOGGER = Logger.getLogger(ExportAction.class);
 
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
-        MessageUtil mu = (MessageUtil) session.getAttribute(MessageUtil.NAME);
-
+    @Override
+    public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean;
 

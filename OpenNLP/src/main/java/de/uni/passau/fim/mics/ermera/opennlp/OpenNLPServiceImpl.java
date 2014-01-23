@@ -4,7 +4,6 @@ import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import opennlp.tools.cmdline.StreamFactoryRegistry;
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.NameSample;
-import opennlp.tools.namefind.TokenNameFinderEvaluator;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import opennlp.tools.sentdetect.SentenceDetector;
 import opennlp.tools.sentdetect.SentenceDetectorME;
@@ -15,14 +14,13 @@ import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
 import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.eval.FMeasure;
 import opennlp.tools.util.featuregen.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class OpenNLPServiceImpl {
+public class OpenNLPServiceImpl implements OpenNLPService {
 
     //TODO: refactor for loose couling.. its now tied wirh brat
     private ObjectStream<NameSample> getStream(String userid) throws IOException {
@@ -47,6 +45,7 @@ public class OpenNLPServiceImpl {
      * @return the newly generated {@code TokenNameFinderModel}
      * @throws IOException exception for not being able to read files.
      */
+    @Override
     public TokenNameFinderModel train(String userid, String entityName) throws IOException {
         ObjectStream<NameSample> sampleStream = getStream(userid);
         TokenNameFinderModel model;
@@ -80,6 +79,7 @@ public class OpenNLPServiceImpl {
      * @param documentStrs The Map of documents in which should be searched
      * @return a map which contains the found entities for each document.
      */
+    @Override
     public Map<String, NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
         NameFinderME nameFinderME = new NameFinderME(model);
 
