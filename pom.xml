@@ -184,6 +184,18 @@
             <version>2.1</version>
             <type>maven-plugin</type>
         </dependency>
+
+        <!-- TODO: wieso brauch ich diese dinger hier?! hat knowminer etwas geändert? komisches ding.. -->
+        <dependency>
+            <groupId>org.apache.opennlp</groupId>
+            <artifactId>opennlp-maxent</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.opennlp</groupId>
+            <artifactId>opennlp-tools</artifactId>
+            <version>1.5.3</version>
+        </dependency>
     </dependencies>
 
     <build>
