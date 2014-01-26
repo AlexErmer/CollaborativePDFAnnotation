@@ -10,7 +10,7 @@
     <div class="form-group">
         <input type="file" class="form-control" id="pdfFile" name="pdfFile" accept="application/pdf;text/pdf"/>
     </div>
-    <button type="submit" class="btn btn-primary">Upload</button>
+    <input type="submit" class="btn btn-primary" value="Upload"/>
 </form>
 
 

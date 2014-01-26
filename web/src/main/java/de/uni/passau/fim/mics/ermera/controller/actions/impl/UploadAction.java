@@ -54,6 +54,7 @@ public class UploadAction extends AbstractAction {
             // store pdf
             storePDF(filecontent, id);
 
+            request.getSession().setAttribute("extract_upload", "yes");
             request.getSession().setAttribute("extract_type", "knowminer");
             request.getSession().setAttribute("extract_id", id);
 

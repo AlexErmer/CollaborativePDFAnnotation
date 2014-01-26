@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Alexander Ermer">
+    <meta http-equiv="pragma" content="no-cache">
     <title>Code PDF Extraction Demo Webapp</title>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css"

@@ -27,36 +27,17 @@ public class KnowminerExtractor implements Extractor {
     private PdfExtractionPipeline pipeline;
 
     public KnowminerExtractor() throws ExtractException {
-        LOGGER.info("Loading models");
-        ObjectMapper mapper = new ObjectMapper();
-        ExtractionConfiguration config;
-        try {
-            config = mapper.readValue(KnowminerExtractor.class.getResourceAsStream("/extract-config-local.json"), ExtractionConfiguration.class);
-        } catch (IOException e) {
-            throw new ExtractException("Could not create server: " + e.getMessage(), e);
-        }
-
-        // load Pdf extractor pipeline
-        pipeline = new PdfExtractionPipeline(config.blockModelFile, config.featuresFile,
-                config.tokenModelFile, config.languageModelDir);
-        LOGGER.info("Loading models done");
+        pipeline = new PdfExtractionPipeline(true);
     }
 
     public DocumentBean extract(String id, File file) throws ExtractException {
+        if (id == null || file == null ) {
+            throw new ExtractException("Extraction failed, id and file parameter must not be null");
+        }
+
         try {
-            InputStream in = new FileInputStream(file);
-            Image[] images = new PdfToImage(RENDERER_TYPE).toImages(in);
-
-            String[] imageFileNames = new String[images.length];
-            for (int pageId = 0; pageId < images.length; pageId++) {
-                File f = File.createTempFile(id + "_" + pageId, ".png");
-                BufferedImage image = (BufferedImage) images[pageId];
-                ImageIO.write(image, "png", f);
-                imageFileNames[pageId] = f.getCanonicalPath();
-            }
-
+            String[] imageFileNames = loadImages(id, file);
             PdfExtractionPipeline.PdfExtractionResult result = pipeline.runPipeline(id, file);
-            in.close();
 
             return createDocumentBean(id, imageFileNames, result);
         } catch (PdfParser.PdfParserException e) {
@@ -64,6 +45,21 @@ public class KnowminerExtractor implements Extractor {
         } catch (IOException e) {
             throw new ExtractException("Could not read input stream: " + e.getMessage(), e);
         }
+    }
+
+    private String[] loadImages(String id, File file) throws PdfParser.PdfParserException, IOException {
+        InputStream in = new FileInputStream(file);
+        Image[] images = new PdfToImage(RENDERER_TYPE).toImages(in);
+        in.close();
+
+        String[] imageFileNames = new String[images.length];
+        for (int pageId = 0; pageId < images.length; pageId++) {
+            File f = File.createTempFile(id + "_" + pageId, ".png");
+            BufferedImage image = (BufferedImage) images[pageId];
+            ImageIO.write(image, "png", f);
+            imageFileNames[pageId] = f.getCanonicalPath();
+        }
+        return imageFileNames;
     }
 
     private DocumentBean createDocumentBean(String id, String[] imageFileNames, PdfExtractionPipeline.PdfExtractionResult result) {

@@ -26,15 +26,9 @@ public class ExtractAction extends AbstractAction {
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean = null;
 
-        String type = request.getParameter("type");
-        if (type == null) {
-            type = (String) session.getAttribute("extract_type");
-        }
-        String id = request.getParameter("id");
-        if (id == null) {
-            id = (String) session.getAttribute("extract_id");
-        }
-
+        String upload = getParameter(request, "upload");
+        String type = getParameter(request, "type");
+        String id = getParameter(request, "id");
         if (type == null || id == null) {
             return showExtractlist(request, documentDao);
         } else {
@@ -44,9 +38,11 @@ public class ExtractAction extends AbstractAction {
             try {
                 documentBean = documentDao.loadDocumentBean(userid, id);
             } catch (DocumentDaoException e) {
-                //TODO dont show this message after uploading a new file.. there cant be documentbean...
-                LOGGER.error("error while loading documentBean", e);
-                mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+                if (upload == null) {
+                    // dont show this message after uploading a new file.. there cant be documentbean...
+                    LOGGER.error("error while loading documentBean", e);
+                    mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+                }
             }
 
             // if no model found, extract it from real file
@@ -56,10 +52,11 @@ public class ExtractAction extends AbstractAction {
                 try {
                     Extractor extractor = extractorType.getInstance();
                     documentBean = extractor.extract(id, file);
+                    mu.addMessage(MessageTypes.SUCCESS, "everything ok, created a new one from scratch");
                 } catch (ExtractException e) {
                     LOGGER.error("ExtractException", e);
                     mu.addMessage(MessageTypes.ERROR, e.getMessage());
-                    return "display";
+                    return "extract";
                 }
             }
 
@@ -76,6 +73,15 @@ public class ExtractAction extends AbstractAction {
 
             return "display";
         }
+    }
+
+    private String getParameter(HttpServletRequest request, String parameterName) {
+        String type = request.getParameter(parameterName);
+        if (type == null) {
+            type = (String) session.getAttribute("extract_" + parameterName);
+            session.removeAttribute("extract_" + parameterName);
+        }
+        return type;
     }
 
     private String showExtractlist(HttpServletRequest request, DocumentDao documentDao) {
