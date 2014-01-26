@@ -6,11 +6,9 @@ import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.ExtractException;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractor;
 import de.uni.passau.fim.mics.ermera.controller.extractors.Extractors;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoException;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import de.uni.passau.fim.mics.ermera.model.IndexBean;
 import org.apache.log4j.Logger;
@@ -29,13 +27,16 @@ public class ExtractAction extends AbstractAction {
         DocumentBean documentBean = null;
 
         String type = request.getParameter("type");
+        if (type == null) {
+            type = (String) session.getAttribute("extract_type");
+        }
         String id = request.getParameter("id");
+        if (id == null) {
+            id = (String) session.getAttribute("extract_id");
+        }
+
         if (type == null || id == null) {
-            ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-            IndexBean indexBean = new IndexBean();
-            indexBean.setFileIds(contentRepositoryDao.getAllFileIDs(userid));
-            request.setAttribute("indexBean", indexBean);
-            return "extract";
+            return showExtractlist(request, documentDao);
         } else {
             Extractors extractorType = Extractors.valueOf(type.toUpperCase());
 
@@ -43,14 +44,14 @@ public class ExtractAction extends AbstractAction {
             try {
                 documentBean = documentDao.loadDocumentBean(userid, id);
             } catch (DocumentDaoException e) {
+                //TODO dont show this message after uploading a new file.. there cant be documentbean...
                 LOGGER.error("error while loading documentBean", e);
                 mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
             }
 
             // if no model found, extract it from real file
             if (documentBean == null) {
-                ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-                File file = contentRepositoryDao.load(userid, id);
+                File file = documentDao.loadPDF(userid, id);
 
                 try {
                     Extractor extractor = extractorType.getInstance();
@@ -75,5 +76,13 @@ public class ExtractAction extends AbstractAction {
 
             return "display";
         }
+    }
+
+    private String showExtractlist(HttpServletRequest request, DocumentDao documentDao) {
+        IndexBean indexBean = new IndexBean();
+        indexBean.setFileIds(documentDao.loadPDFFiles(userid));
+        request.setAttribute("indexBean", indexBean);
+
+        return "extract";
     }
 }

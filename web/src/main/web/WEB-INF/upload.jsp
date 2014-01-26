@@ -4,7 +4,7 @@
 <jsp:useBean id="indexBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.IndexBean"/>
 
 <h1>PDF Extraction Demo - Upload PDF</h1>
-<p class="text-info">Wählen Sie die PDF-Datei, die in das System eingestellt werden soll.</p>
+<p class="text-info">Wählen Sie die PDF-Datei, die in das System eingestellt werden soll. Bitte beachten Sie, dass dieser Vorgang einige Zeit in Anspruch nehmen kann!</p>
 
 <form class="form-inline" action="/pages/upload" method="post" enctype="multipart/form-data">
     <div class="form-group">

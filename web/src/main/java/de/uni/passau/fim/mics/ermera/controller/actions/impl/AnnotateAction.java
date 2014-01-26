@@ -2,8 +2,8 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.IndexBean;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +13,7 @@ public class AnnotateAction extends AbstractAction {
 
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
+        DocumentDao documentDao = new DocumentDaoImpl();
         IndexBean indexBean = new IndexBean();
 
         String fileId = request.getParameter("fileid");
@@ -21,7 +21,7 @@ public class AnnotateAction extends AbstractAction {
             indexBean.setSelectedFile(fileId);
         }
 
-        indexBean.setFileIds(contentRepositoryDao.getAllFileIDs(userid));
+        indexBean.setFileIds(documentDao.loadPDFFiles(userid));
         request.setAttribute("indexBean", indexBean);
         return "annotate";
     }

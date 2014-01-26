@@ -14,6 +14,9 @@ import java.io.IOException;
 @WebServlet(name = "Dispatcher", urlPatterns = "/pages/*")
 @MultipartConfig(maxFileSize = 10485760L) // 10MB.
 public class DispatcherServlet extends HttpServlet {
+
+    public static final String LAST_VALID_VIEW = "lastValidView";
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         service(request, response);
@@ -33,9 +36,9 @@ public class DispatcherServlet extends HttpServlet {
             }
 
             if (view == null) {
-                view = (String) request.getSession().getAttribute("lastValidView");
+                view = (String) request.getSession().getAttribute(LAST_VALID_VIEW);
             } else {
-                request.getSession().setAttribute("lastValidView", view);
+                request.getSession().setAttribute(LAST_VALID_VIEW, view);
             }
 
             if (view != null) {

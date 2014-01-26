@@ -3,8 +3,8 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl.doc;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import org.apache.log4j.Logger;
 

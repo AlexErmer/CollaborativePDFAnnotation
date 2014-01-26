@@ -3,9 +3,9 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDao;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryDaoImpl;
-import de.uni.passau.fim.mics.ermera.dao.content.ContentRepositoryException;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -54,8 +54,11 @@ public class UploadAction extends AbstractAction {
             // store pdf
             storePDF(filecontent, id);
 
+            request.getSession().setAttribute("extract_type", "knowminer");
+            request.getSession().setAttribute("extract_id", id);
+
             // forward to extract
-            return "extract?type=knowminer&id=" + id;
+            return "extract";
         } else {
             return "upload";
         }
@@ -63,9 +66,9 @@ public class UploadAction extends AbstractAction {
 
     private void storePDF(InputStream filecontent, String id) {
         try {
-            ContentRepositoryDao contentRepositoryDao = new ContentRepositoryDaoImpl();
-            contentRepositoryDao.store(userid, id, filecontent);
-        } catch (ContentRepositoryException e) {
+            DocumentDao documentDao = new DocumentDaoImpl();
+            documentDao.storePDF(userid, id, filecontent);
+        } catch (DocumentDaoException e) {
             LOGGER.error("Error while handling FileStreams", e);
             mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
         } finally {

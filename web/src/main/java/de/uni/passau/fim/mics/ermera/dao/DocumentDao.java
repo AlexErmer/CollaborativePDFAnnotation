@@ -1,13 +1,19 @@
-package de.uni.passau.fim.mics.ermera.dao.document;
+package de.uni.passau.fim.mics.ermera.dao;
 
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import opennlp.tools.namefind.TokenNameFinderModel;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public interface DocumentDao {
+    List<String> loadPDFFiles(String userid);
+    File loadPDF(String userid, String id);
+    void storePDF(String userid, String id, InputStream file) throws DocumentDaoException;
+
     DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException;
     void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException;
 

@@ -7,9 +7,9 @@ import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporter;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporters;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDao;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoException;
-import de.uni.passau.fim.mics.ermera.dao.document.DocumentDaoImpl;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import org.apache.log4j.Logger;
 

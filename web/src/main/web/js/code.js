@@ -8,3 +8,8 @@ $(function() {
         }
     });
 });
+
+// On submit disable its submit button
+$('form').submit(function(){
+    $('input[type=submit]', this).attr('disabled', 'disabled');
+});

@@ -1,4 +1,4 @@
-package de.uni.passau.fim.mics.ermera.dao.document;
+package de.uni.passau.fim.mics.ermera.dao;
 
 public class DocumentDaoException extends Exception {
 
