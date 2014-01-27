@@ -13,8 +13,6 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import opennlp.tools.util.ObjectStream;
 import opennlp.tools.util.Span;
-import opennlp.tools.util.TrainingParameters;
-import opennlp.tools.util.featuregen.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,17 +22,15 @@ public class OpenNLPServiceImpl implements OpenNLPService {
 
     //TODO: refactor for loose couling.. its now tied wirh brat
     private ObjectStream<NameSample> getStream(String userid) throws IOException {
-        ObjectStream<NameSample> nameSampleStream =
-                StreamFactoryRegistry.getFactory(NameSample.class, "brat")
-                        .create(new String[]{
-                                "-bratDataDir", PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid
-                                , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + "annotation.conf"
-                                //,"-recursive", "false"
-                                //,"-sentenceDetectorModel", ""
-                                //,"-tokenizerModel", ""
-                                , "-ruleBasedTokenizer", "simple"
-                        });
-        return nameSampleStream;
+        return StreamFactoryRegistry.getFactory(NameSample.class, "brat")
+                .create(new String[]{
+                        "-bratDataDir", PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid
+                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + "annotation.conf"
+                        //,"-recursive", "false"
+                        //,"-sentenceDetectorModel", ""
+                        //,"-tokenizerModel", ""
+                        , "-ruleBasedTokenizer", "simple"
+                });
     }
 
     /**
@@ -50,19 +46,8 @@ public class OpenNLPServiceImpl implements OpenNLPService {
         ObjectStream<NameSample> sampleStream = getStream(userid);
         TokenNameFinderModel model;
 
-        AdaptiveFeatureGenerator featureGenerator = new CachedFeatureGenerator(
-                new AdaptiveFeatureGenerator[]{
-                        new WindowFeatureGenerator(new TokenFeatureGenerator(), 2, 2),
-                        new WindowFeatureGenerator(new TokenClassFeatureGenerator(true), 2, 2),
-                        new OutcomePriorFeatureGenerator(),
-                        new PreviousMapFeatureGenerator(),
-                        new BigramNameFeatureGenerator(),
-                        new SentenceFeatureGenerator(true, false)
-                });
         try {
-            model = NameFinderME.train("en", entityName, sampleStream, TrainingParameters.defaultParams(),
-                    featureGenerator, Collections.<String, Object>emptyMap());
-
+            model = NameFinderME.train("en", entityName, sampleStream, Collections.<String, Object>emptyMap());
         } finally {
             sampleStream.close();
         }
@@ -86,8 +71,8 @@ public class OpenNLPServiceImpl implements OpenNLPService {
         // split strings into sentences and tokens
         InputStream sentIn = OpenNLPServiceImpl.class.getResourceAsStream("/en-sent.bin");
         InputStream tokIn = OpenNLPServiceImpl.class.getResourceAsStream("/en-token.bin");
-        SentenceModel sentenceModel = null;
-        TokenizerModel tokenizerModel = null;
+        SentenceModel sentenceModel;
+        TokenizerModel tokenizerModel;
         try {
             sentenceModel = new SentenceModel(sentIn);
             tokenizerModel = new TokenizerModel(tokIn);

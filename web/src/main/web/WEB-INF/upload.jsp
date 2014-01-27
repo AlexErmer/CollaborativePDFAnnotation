@@ -14,7 +14,7 @@
 </form>
 
 
-<form class="form-horizontal" style="margin-top: 20px;" role="form">
+<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
     <div class="well well-sm form-group">
         <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
     </div>

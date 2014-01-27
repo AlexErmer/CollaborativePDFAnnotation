@@ -6,7 +6,7 @@ import java.util.List;
 public class MessageUtil {
     public static final String NAME = "messageUtil";
 
-    private List<Message> messageList = new ArrayList();
+    private List<Message> messageList = new ArrayList<>();
 
     public void addMessage(MessageTypes type, String msg) {
         messageList.add(new Message(type, msg));
@@ -14,7 +14,7 @@ public class MessageUtil {
 
     public List<Message> getMessages() {
         List<Message> ret = messageList;
-        messageList = new ArrayList();
+        messageList = new ArrayList<>();
         return ret;
     }
 

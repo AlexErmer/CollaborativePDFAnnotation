@@ -115,6 +115,7 @@ body {
 
 .buttonLine {
     margin-bottom: 3px;
+    height: 34px;
 }
 
 #sortedTextOutputWrapper {

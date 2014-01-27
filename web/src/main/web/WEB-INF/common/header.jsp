@@ -1,3 +1,5 @@
+<%--@elvariable id="messageUtil" type="de.uni.passau.fim.mics.ermera.common.MessageUtil"--%>
+<%--@elvariable id="message" type="de.uni.passau.fim.mics.ermera.common.Message"--%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>

@@ -1,3 +1,7 @@
+<%--@elvariable id="item" type="java.util.Map"--%>
+<%--@elvariable id="namespan" type="opennlp.tools.util.Span"--%>
+<%--@elvariable id="index" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
+<%--@elvariable id="namespanCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
 
@@ -13,7 +17,13 @@ Im Anschluss daran können neue Modelle mit den erweiterten Annotationen erstell
         <tr>
             <th>document</th>
             <th>entity</th>
-            <th>action</th>
+            <th>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="selectAll" class="selectAll"/> <b>action</b>
+                    </label>
+                </div>
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -51,7 +61,7 @@ Im Anschluss daran können neue Modelle mit den erweiterten Annotationen erstell
     <button type="submit" class="btn btn-primary" name="submit">Submit</button>
 </form>
 
-<form class="form-horizontal" style="margin-top: 20px;" role="form">
+<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
     <div class="well well-sm form-group">
         <a class="btn btn-default col-sm-2" href="/" role="button"><span
                 class="glyphicon glyphicon-chevron-left"></span> zurück</a>

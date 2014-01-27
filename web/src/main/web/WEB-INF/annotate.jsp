@@ -1,3 +1,4 @@
+<%--@elvariable id="fileId" type="java.util.List"--%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
 
@@ -40,10 +41,12 @@
     </iframe>
 </c:if>
 
-<form class="form-horizontal" style="margin-top: 20px;" role="form">
+<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
     <div class="well well-sm form-group">
         <a class="btn btn-default col-sm-2" href="/" role="button"><span
                 class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+        <a class="btn btn-primary col-sm-2 pull-right" href="/pages/modelCreate" role="button">Modell erstellen <span
+                class="glyphicon glyphicon-chevron-right"></span></a>
     </div>
 </form>
 

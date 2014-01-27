@@ -1,3 +1,7 @@
+<%--@elvariable id="pageNumber" type="java.lang.Integer"--%>
+<%--@elvariable id="page" type="de.uni.passau.fim.mics.ermera.model.PageBean"--%>
+<%--@elvariable id="line" type="de.uni.passau.fim.mics.ermera.model.LineBean"--%>
+<%--@elvariable id="block" type="de.uni.passau.fim.mics.ermera.model.BlockBean"--%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
 
@@ -46,7 +50,7 @@
     </svg>
 
     <div class="page" style="position:relative; width: ${page.width + 4}px; height: ${page.height + 4}px">
-        <img src="image?file=${page.imagefilename}" width="${page.width}" height="${page.height}"
+        <img src="/pages/image?file=${page.imagefilename}" width="${page.width}" height="${page.height}"
              alt="Page ${page.number}"/>
 
 
@@ -96,13 +100,13 @@
 
 <div id="sortedTextOutputWrapper">
     <div class="buttonLine">
-        <a class="btn btn-default" href="export?type=brat&amp;id=${documentBean.id}">annotate in brat</a>
     </div>
 
     <div id="sortedTextOutput">
         <c:forEach items="${page.blocks}" var="block">
             <c:if test="${block.selectedBlock}">
-                <div id="t_${block.id}" data-id="${block.id}"
+                <div id="t_${block.id}"
+                     data-id="${block.id}"
                      class="text ${block.headline?' headline':''} ${block.newParagraph?' newParagraph':''}">
                     <div class="options ui-widget-header ui-corner-all">
                         <div class="option">
@@ -227,10 +231,12 @@
 </script>
 <div style="clear:both"></div>
 
-<form class="form-horizontal" style="margin-top: 20px;" role="form">
+<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
     <div class="well well-sm form-group clearer">
         <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-        <a class="btn btn-default col-sm-2" href="/pages/extract" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
+        <a class="btn btn-default col-sm-3" href="/pages/extract" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
+        <a class="btn btn-primary pull-right" href="/pages/annotate?fileid=${documentBean.id}">annotate in brat <span
+                class="glyphicon glyphicon-chevron-right"></span></a>
     </div>
 </form>
 

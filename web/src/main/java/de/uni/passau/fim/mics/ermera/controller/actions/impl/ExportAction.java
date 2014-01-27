@@ -1,6 +1,5 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import com.mendeley.oapi.schema.Profile;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
@@ -35,9 +34,6 @@ public class ExportAction extends AbstractAction {
             mu.addMessage(MessageTypes.ERROR, "ID must not be null");
             return null;
         }
-
-        Profile profile = (Profile) session.getAttribute("profile");
-        String userid = profile.getMain().getProfileId();
 
         // get document model from dao
         try {
