@@ -1,0 +1,40 @@
+Diese Liste enthält noch offene Punkte der Implementierung:
+
+- Dependencies:
+    - scheinbar hat sich was am knowminer repository geändert, da ich seit neuestem opennlp selbst einbinden muss... (26.01.14)
+
+
+- Implementierung:
+    - sollte das DocumentDao nicht besser statisch sein?!
+
+
+- Dateiablage:
+    - brat speichert aktuell in ein anderes verzeichnis als der rest der anwendung...
+
+
+- Workflow:
+    - wenn man eine bereits annotierten Text ändert, stimmen die Annotationen nicht mehr zum Text!
+        es gibt 3 Möglichkeiten:
+        - es muss eine neue Version angelegt werden, sodass die alten Annotationen auf dem alten Dokument gültig bleiben
+        - die Annotationen werden gelöscht, sobald der Text verändert wird. (hat das Auswirkungen auf bestehende Modelle?)
+        - wenn eine Datei bereits annotiert wurde, kann der Text nicht mehr verndert werden; es sei denn man löscht die Annotationen vorher)
+
+
+- Annotieren:
+    - es fehlt aktuell die Möglichkeit die Entitäten die man gerne annotieren will festzulegen.
+        soll diese Möglichkeit geschaffen werden, oder legen wir diese für diese Masterarbeit einmal fest?
+            wenn die Möglichkeit kommt, muss ich noch einen entsprechenden creator für die brat config-datei und die passende View dafür schreiben
+
+
+- Modelle erstellen:
+    - im Moment werden immer alle Dokumente für die Erstellung eines Modells verwendet und nicht die Menge die man auswählt.
+    - Modelle werden ohne Warnung überschrieben, wenn man den gleichen namen verwendet (userbezogen)
+
+
+- Evaluierung:
+    - bereits existierende Annotationen werden nicht gefiltert und ggf. erneut aufgelistet
+        beim Speichern wird aber überprüft, dass diese nicht doppelt aufgenommen werden
+    - aktuell hart auf Entity "Person", diese wird nicht aus dem Model gezogen!
+    - speichern: Methode aktuell noch nicht 100%ig korrekt, da Fundstellen per String gesucht werden
+    - speichern: mit dem speichern wird das brat annotationsfile überschrieben.. Sicherung vorher falls irgendwas kaputt geht?
+

@@ -13,6 +13,7 @@ public class EvaluationAction extends AbstractAction {
 
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
+        @SuppressWarnings("unchecked")
         Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) session.getAttribute("resultMap");
         //TODO: filter exisiting annotations?!
 

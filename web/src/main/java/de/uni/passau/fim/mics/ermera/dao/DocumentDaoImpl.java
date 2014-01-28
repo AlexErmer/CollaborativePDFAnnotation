@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: statisch machen?!
 public class DocumentDaoImpl implements DocumentDao {
     private static final Logger LOGGER = Logger.getLogger(DocumentDaoImpl.class);
 
