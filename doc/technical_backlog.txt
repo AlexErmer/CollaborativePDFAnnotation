@@ -6,18 +6,11 @@ Diese Liste enthält noch offene Punkte der Implementierung:
 
 - Implementierung:
     - sollte das DocumentDao nicht besser statisch sein?!
+    - multifile upload
 
 
 - Dateiablage:
     - brat speichert aktuell in ein anderes verzeichnis als der rest der anwendung...
-
-
-- Workflow:
-    - wenn man eine bereits annotierten Text ändert, stimmen die Annotationen nicht mehr zum Text!
-        es gibt 3 Möglichkeiten:
-        - es muss eine neue Version angelegt werden, sodass die alten Annotationen auf dem alten Dokument gültig bleiben
-        - die Annotationen werden gelöscht, sobald der Text verändert wird. (hat das Auswirkungen auf bestehende Modelle?)
-        - wenn eine Datei bereits annotiert wurde, kann der Text nicht mehr verndert werden; es sei denn man löscht die Annotationen vorher)
 
 
 - Annotieren:

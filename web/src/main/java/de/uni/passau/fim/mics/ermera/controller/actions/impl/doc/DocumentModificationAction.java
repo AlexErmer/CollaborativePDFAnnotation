@@ -4,13 +4,13 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
+import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public abstract class DocumentModificationAction extends AbstractAction {
     private static final Logger LOGGER = Logger.getLogger(DocumentModificationAction.class);
@@ -25,7 +25,7 @@ public abstract class DocumentModificationAction extends AbstractAction {
             return null;
         }
 
-        // get pageNumber Paramater
+        // get pageNumber paramater
         if (request.getParameter("pageNumber") != null) {
             pageNumber = Integer.valueOf(request.getParameter("pageNumber")) - 1;
         }
@@ -37,9 +37,9 @@ public abstract class DocumentModificationAction extends AbstractAction {
         try {
             DocumentDao documentDao = new DocumentDaoImpl();
             documentDao.storeDocumentBean(userid, documentBean);
-        } catch (IOException e) {
-            LOGGER.error("Could not save DocumentBean", e);
-            mu.addMessage(MessageTypes.ERROR, "Could not save DocumentBean: " + e.getMessage());
+        } catch (DocumentDaoException e) {
+            LOGGER.error("Error while saving documentBean", e);
+            mu.addMessage(MessageTypes.ERROR, "Error while saving documentBean: " + e.getMessage());
         }
 
         return "display";

@@ -15,7 +15,7 @@ public interface DocumentDao {
     void storePDF(String userid, String id, InputStream file) throws DocumentDaoException;
 
     DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException;
-    void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException;
+    void storeDocumentBean(String userid, DocumentBean documentBean) throws DocumentDaoException;
 
     TokenNameFinderModel loadModel(String userid, String name) throws IOException;
     List<String> loadAllModels(String userid);
@@ -24,6 +24,9 @@ public interface DocumentDao {
     //TODO: nach brat auslagern?!
     String loadBratFile(String userid, String name) throws IOException;
     void storeAnnotationFile(String userid, String name, String content) throws IOException;
+
+    boolean hasAnnotations(String userid, String id);
+    void deleteAnnotationFile(String userid, String id) throws DocumentDaoException;
 
     void createUserFolders(String userid, MessageUtil mu);
 }

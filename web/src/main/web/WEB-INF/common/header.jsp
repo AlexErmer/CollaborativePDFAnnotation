@@ -60,7 +60,7 @@
                 <div class="alert alert-danger">
             </c:if>
             <c:if test="${message.type == 'INFO'}">
-                <div class="alert alert-warn">
+                <div class="alert alert-warning">
             </c:if>
             ${message.msg}</div>
         </c:forEach>

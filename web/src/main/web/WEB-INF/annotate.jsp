@@ -37,7 +37,7 @@
     </p>
     <blockquote>Username: editor<br/>Passwort: annotate</blockquote>
 
-    <iframe src="/pages/export?type=brat&amp;id=${indexBean.selectedFile}" width="100%" height="500">
+    <iframe src="/pages/export?type=brat&amp;id=${indexBean.selectedFile}" width="100%" height="700">
     </iframe>
 </c:if>
 

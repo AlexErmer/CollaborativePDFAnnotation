@@ -12,6 +12,9 @@
     Links ist das PDF abgebildet, rechts der extrahierte Text.
      Änderungen werden sofort gespeichert.
 </p>
+<c:if test="${requestScope.hasAnnotationWarning}">
+<div class="alert alert-warning"><strong>ACHTUNG</strong> Es bestehen bereits Annotationen zu diesem Dokument! Wenn der extrahierte Text verändert wird, gehen diese Informationen verloren!</div>
+</c:if>
 
 <c:choose>
     <c:when test="${param.pageNumber == null}">
@@ -235,8 +238,7 @@
     <div class="well well-sm form-group clearer">
         <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
         <a class="btn btn-default col-sm-3" href="/pages/extract" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
-        <a class="btn btn-primary pull-right" href="/pages/annotate?fileid=${documentBean.id}">annotate in brat <span
-                class="glyphicon glyphicon-chevron-right"></span></a>
+        <a class="btn btn-primary pull-right" href="/pages/annotate?fileid=${documentBean.id}">annotate in brat <span class="glyphicon glyphicon-chevron-right"></span></a>
     </div>
 </form>
 

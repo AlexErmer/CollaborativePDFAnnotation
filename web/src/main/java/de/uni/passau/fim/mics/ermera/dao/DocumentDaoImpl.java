@@ -94,11 +94,18 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public void storeDocumentBean(String userid, DocumentBean documentBean) throws IOException {
-        OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENTPREFIX + documentBean.getId());
-        ObjectOutputStream out = new ObjectOutputStream(fos);
-        out.writeObject(documentBean);
-        fos.close();
+    public void storeDocumentBean(String userid, DocumentBean documentBean) throws DocumentDaoException {
+        try {
+            OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGE_PATH + DOCUMENTPREFIX + documentBean.getId());
+            ObjectOutputStream out = new ObjectOutputStream(fos);
+            out.writeObject(documentBean);
+            fos.close();
+        } catch (IOException e) {
+            LOGGER.error("IO Error: Could not save DocumentBean", e);
+            throw new DocumentDaoException("IO Error: Could not save DocumentBean", e);
+        }
+
+        deleteAnnotationFile(userid, documentBean.getId());
     }
 
     @Override
@@ -147,6 +154,20 @@ public class DocumentDaoImpl implements DocumentDao {
         OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "\\" + name + ".ann", true); // APPEND!
         fos.write(content.getBytes());
         fos.close();
+    }
+
+    @Override
+    public boolean hasAnnotations(String userid, String id) {
+        File annoFile = new File(PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "\\" + id + ".ann");
+        return annoFile.length() > 0;
+    }
+
+    @Override
+    public void deleteAnnotationFile(String userid, String id) throws DocumentDaoException {
+        File annoFile = new File(PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "\\" + id + ".ann");
+        if (annoFile.exists() && annoFile.delete()) {
+            throw new DocumentDaoException("Error while deleting annotationFile");
+        }
     }
 
     @Override
