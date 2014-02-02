@@ -14,61 +14,58 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 public class UploadAction extends AbstractAction {
     private static final Logger LOGGER = Logger.getLogger(UploadAction.class);
 
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        // get filestream
-        Part filePart = null;
+        Collection<Part> parts = null;
         try {
-            filePart = request.getPart("pdfFile");
+            parts = request.getParts();
         } catch (ServletException e) {
             //nothing to do
             LOGGER.info("nothing to do.. just catching a servletException", e);
         } catch (IOException e) {
             throw new ActionException("Fehler beim Lesen der hochgeladenen Datei", e);
         }
-        if (filePart != null) {
-            String filename = getFilename(filePart);
-            if ("".equals(filename)) {
-                mu.addMessage(MessageTypes.ERROR, "Keine Datei zum hochladen ausgewählt");
-                return "upload";
+        if (parts != null) {
+            for (Part filePart : parts) {
+                String filename = getFilename(filePart);
+                if ("".equals(filename)) {
+                    mu.addMessage(MessageTypes.ERROR, "Keine Datei zum hochladen ausgewählt");
+                    return "upload";
+                }
+                if (!"application/pdf".equals(filePart.getContentType())) {
+                    mu.addMessage(MessageTypes.ERROR, "Bitte wählen Sie eine PDF Datei");
+                    return "upload";
+                }
+
+                InputStream filecontent;
+                try {
+                    filecontent = filePart.getInputStream();
+                } catch (IOException e) {
+                    throw new ActionException("Fehler beim Lesen der hochgeladenen Datei", e);
+                }
+
+                // create id
+                String id = filename.replaceAll("\\s", "");
+
+                // store pdf
+                storePDF(filecontent, id);
+
             }
-            if (!"application/pdf".equals(filePart.getContentType())) {
-                mu.addMessage(MessageTypes.ERROR, "Bitte wählen Sie eine PDF Datei");
-                return "upload";
-            }
-
-            InputStream filecontent;
-            try {
-                filecontent = filePart.getInputStream();
-            } catch (IOException e) {
-                throw new ActionException("Fehler beim Lesen der hochgeladenen Datei", e);
-            }
-
-            // create id
-            String id = filename.replaceAll("\\s", "");
-
-            // store pdf
-            storePDF(filecontent, id);
-
-            session.setAttribute("extract_upload", "yes");
-            session.setAttribute("extract_type", "knowminer");
-            session.setAttribute("extract_id", id);
-
-            // forward to extract
-            return "extract";
-        } else {
-            return "upload";
         }
+        return "upload";
     }
 
     private void storePDF(InputStream filecontent, String id) {
         try {
             DocumentDao documentDao = new DocumentDaoImpl();
             documentDao.storePDF(userid, id, filecontent);
+
+            mu.addMessage(MessageTypes.SUCCESS, "Datei " + id + " erfolgreich hochgeladen.");
         } catch (DocumentDaoException e) {
             LOGGER.error("Error while handling FileStreams", e);
             mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());
