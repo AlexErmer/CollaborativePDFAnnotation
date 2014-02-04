@@ -29,4 +29,7 @@ public interface DocumentDao {
     void deleteAnnotationFile(String userid, String id) throws DocumentDaoException;
 
     void createUserFolders(String userid, MessageUtil mu);
+
+    List<String> loadTypeList(String userid) throws DocumentDaoException;
+    void saveTypeList(String userid, List<String> types) throws DocumentDaoException;
 }

@@ -1,27 +1,15 @@
 Diese Liste enthält noch offene Punkte der Implementierung:
 
-- Dependencies:
-    - scheinbar hat sich was am knowminer repository geändert, da ich seit neuestem opennlp selbst einbinden muss... (26.01.14)
-
-
 - Implementierung:
     - sollte das DocumentDao nicht besser statisch sein?!
-    - multifile upload
 
 
 - Dateiablage:
     - brat speichert aktuell in ein anderes verzeichnis als der rest der anwendung...
 
 
-- Annotieren:
-    - es fehlt aktuell die Möglichkeit die Entitäten die man gerne annotieren will festzulegen.
-        soll diese Möglichkeit geschaffen werden, oder legen wir diese für diese Masterarbeit einmal fest?
-            wenn die Möglichkeit kommt, muss ich noch einen entsprechenden creator für die brat config-datei und die passende View dafür schreiben
-
-
 - Modelle erstellen:
     - im Moment werden immer alle Dokumente für die Erstellung eines Modells verwendet und nicht die Menge die man auswählt.
-    - Modelle werden ohne Warnung überschrieben, wenn man den gleichen namen verwendet (userbezogen)
 
 
 - Evaluierung:

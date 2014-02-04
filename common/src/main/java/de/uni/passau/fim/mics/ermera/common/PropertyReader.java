@@ -12,10 +12,10 @@ public class PropertyReader {
     public static final String MENDELEY_API_KEY;
     public static final String MENDELEY_SECRET_KEY;
     public static final String DATA_PATH;
-    public static final String UPLOAD_PATH;
-    public static final String STORAGE_PATH;
-    public static final String BRAT_WORKING_PATH;
-    public static final String MODEL_PATH;
+    public static final String UPLOADFOLDER;
+    public static final String STORAGEFOLDER;
+    public static final String BRATFOLDER;
+    public static final String MODELFOLDER;
     public static final boolean OFFLINELOGIN;
 
     // private constructor to prevent instanciation
@@ -34,10 +34,10 @@ public class PropertyReader {
         MENDELEY_API_KEY = p.getProperty("MENDELEY_API_KEY");
         MENDELEY_SECRET_KEY = p.getProperty("MENDELEY_SECRET_KEY");
         DATA_PATH = p.getProperty("DATA_PATH");
-        UPLOAD_PATH = p.getProperty("UPLOAD_PATH");
-        STORAGE_PATH = p.getProperty("STORAGE_PATH");
-        BRAT_WORKING_PATH = p.getProperty("BRAT_WORKING_PATH");
-        MODEL_PATH = p.getProperty("MODEL_PATH");
+        UPLOADFOLDER = p.getProperty("UPLOADFOLDER");
+        STORAGEFOLDER = p.getProperty("STORAGEFOLDER");
+        BRATFOLDER = p.getProperty("BRATFOLDER");
+        MODELFOLDER = p.getProperty("MODELFOLDER");
         OFFLINELOGIN = "true".equals(p.getProperty("OFFLINELOGIN"));
     }
 }

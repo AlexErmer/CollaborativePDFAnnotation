@@ -24,8 +24,8 @@ public class OpenNLPServiceImpl implements OpenNLPService {
     private ObjectStream<NameSample> getStream(String userid) throws IOException {
         return StreamFactoryRegistry.getFactory(NameSample.class, "brat")
                 .create(new String[]{
-                        "-bratDataDir", PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid
-                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + "annotation.conf"
+                        "-bratDataDir", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid
+                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + "annotation.conf"
                         //,"-recursive", "false"
                         //,"-sentenceDetectorModel", ""
                         //,"-tokenizerModel", ""

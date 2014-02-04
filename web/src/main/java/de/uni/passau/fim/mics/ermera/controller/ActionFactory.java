@@ -29,6 +29,8 @@ public class ActionFactory {
         actions.put("GET/homepage", new HomepageAction());
         actions.put("GET/upload", new UploadAction());
         actions.put("POST/upload", new UploadAction());
+        actions.put("GET/config", new ConfigAction());
+        actions.put("POST/config", new ConfigAction());
         actions.put("GET/extract", new ExtractAction());
         actions.put("GET/display", new DisplayAction());
         actions.put("GET/image", new ImageAction());

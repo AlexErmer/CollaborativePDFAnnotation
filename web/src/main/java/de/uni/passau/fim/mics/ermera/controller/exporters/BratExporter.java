@@ -14,7 +14,7 @@ public class BratExporter implements Exporter {
 
     public boolean export(String userid, DocumentBean documentBean) throws ExportException {
         try {
-            String path = PropertyReader.DATA_PATH + PropertyReader.BRAT_WORKING_PATH + userid + "/";
+            String path = PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid + "/";
 
             // copy file with utf-8 encoding
             try (Writer out = new BufferedWriter(new OutputStreamWriter(
