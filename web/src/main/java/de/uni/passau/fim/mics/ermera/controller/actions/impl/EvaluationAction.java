@@ -1,8 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
+import de.uni.passau.fim.mics.ermera.controller.Views;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
-import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.model.EvaluationBean;
 import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 
