@@ -6,48 +6,47 @@ import de.uni.passau.fim.mics.ermera.controller.actions.impl.doc.SortBlocksActio
 import de.uni.passau.fim.mics.ermera.controller.actions.impl.doc.ToggleHeadlineAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.impl.doc.ToggleNewParagraphAction;
 
-
-//TODO: einbinden und damit die ActionFactory sparen
-// aber: ExportAction hat eine Redirection auf "../brat/brat/index.xhtml" das lässt sich so leider nicht mehr abbilden :(
 public enum Views {
-    HOMEPAGE("homepage", new HomepageAction(), null),
-    LOGIN("login", new LoginAction(), null),
-    LOGOUT("logout", new LogoutAction(), null),
-    UPLOAD("upload", new UploadAction(), new UploadAction()),
-    EXTRACT("extract", new ExtractAction(), null),
-    DISPLAY("display", new DisplayAction(), null),
-    IMAGE("image", new ImageAction(), null),
-    DOCUMENT_SORT("document_sort", new SortBlocksAction(), null),
-    DOCUMENT_REMOVEBLOCK("document_removeBlock", new RemoveBlockAction(), null),
-    DOCUMENT_TOGGLEBLOCKHEADLINE("document_toggleBlockHeadline", new ToggleHeadlineAction(), null),
-    DOCUMENT_TOGGLEBLOCKNEWPARAGRAPH("document_toggleBlockNewParagraph", new ToggleNewParagraphAction(), null),
-    ANNOTATE("annotate", new AnnotateAction(), null),
-    EXPORT("export", new ExportAction(), null),
-    MODEL_CREATE("modelCreate", new ModelCreateAction(), null),
-    MODEL_USE("modelUse", new ModelUseAction(), null),
-    NLP("nlp", new NLPAction(), null),
-    EVALUATION("evaluation", new EvaluationAction(), new EvaluationSaveAction());
-
+    HOMEPAGE("homepage", HomepageAction.class, null),
+    LOGIN("login", LoginAction.class, null),
+    LOGOUT("logout", LogoutAction.class, null),
+    CONFIG("config", ConfigAction.class, ConfigAction.class),
+    UPLOAD("upload", UploadAction.class, UploadAction.class),
+    EXTRACT("extract", ExtractAction.class, null),
+    DISPLAY("display", DisplayAction.class, null),
+    IMAGE("image", ImageAction.class, null),
+    DOCUMENT_SORT("document_sort", SortBlocksAction.class, null),
+    DOCUMENT_REMOVEBLOCK("document_removeBlock", RemoveBlockAction.class, null),
+    DOCUMENT_TOGGLEBLOCKHEADLINE("document_toggleBlockHeadline", ToggleHeadlineAction.class, null),
+    DOCUMENT_TOGGLEBLOCKNEWPARAGRAPH("document_toggleBlockNewParagraph", ToggleNewParagraphAction.class, null),
+    ANNOTATE("annotate", AnnotateAction.class, null),
+    EXPORT("export", ExportAction.class, null),
+    MODELCREATE("modelCreate", ModelCreateAction.class, null),
+    MODELUSE("modelUse", ModelUseAction.class, null),
+    NLP("nlp", NLPAction.class, null),
+    EVALUATION("evaluation", EvaluationAction.class, EvaluationSaveAction.class);
 
     private String viewName;
-    private Action get;
-    private Action post;
+    private Class get;
+    private Class post;
 
-    Views(String viewName, Action get, Action post) {
+    Views(String viewName, Class get, Class post) {
         this.viewName = viewName;
         this.get = get;
         this.post = post;
     }
 
-    public String getViewName() {
+    public Class getAction(String method) {
+        if (method.equals("GET")) {
+            return this.get;
+        } else if (method.equals("POST")) {
+            return this.post;
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
         return viewName;
-    }
-
-    public Action getGet() {
-        return get;
-    }
-
-    public Action getPost() {
-        return post;
     }
 }

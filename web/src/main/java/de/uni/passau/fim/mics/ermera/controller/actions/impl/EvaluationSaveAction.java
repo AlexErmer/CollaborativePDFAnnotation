@@ -4,6 +4,7 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.opennlp.MySpanAnnotation;
@@ -36,7 +37,7 @@ public class EvaluationSaveAction extends AbstractAction {
         loopFindings(request, resultMap, mySpanAnnotations);
 
         saveNewAnnotations(mySpanAnnotations);
-        return "homepage";
+        return Views.HOMEPAGE.toString();
     }
 
 

@@ -1,6 +1,8 @@
 package de.uni.passau.fim.mics.ermera.controller;
 
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
+import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,6 +16,7 @@ import java.io.IOException;
 @WebServlet(name = "Dispatcher", urlPatterns = "/pages/*")
 @MultipartConfig(maxFileSize = 10485760L) // 10MB.
 public class DispatcherServlet extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(DispatcherServlet.class);
 
     public static final String LAST_VALID_VIEW = "lastValidView";
 
@@ -30,17 +33,20 @@ public class DispatcherServlet extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String view = null;
         try {
-            Action action = ActionFactory.getAction(request);
+            // get and execute correct action
+            Action action = retrieveAction(request);
             if (action != null) {
                 view = action.execute(request, response);
             }
 
+            // fallback if view not found
             if (view == null) {
                 view = (String) request.getSession().getAttribute(LAST_VALID_VIEW);
             } else {
                 request.getSession().setAttribute(LAST_VALID_VIEW, view);
             }
 
+            // forward or redirect to next view
             if (view != null) {
                 if (view.equals(request.getPathInfo().substring(1))) {
                     request.getRequestDispatcher("/WEB-INF/" + view + ".jsp").forward(request, response);
@@ -51,5 +57,16 @@ public class DispatcherServlet extends HttpServlet {
         } catch (Exception e) {
             throw new ServletException("Executing action failed.", e);
         }
+    }
+
+    private Action retrieveAction(HttpServletRequest request) {
+        LOGGER.info("Routing: " + request.getMethod() + request.getPathInfo());
+        Action action = null;
+        try {
+            action = (Action) (Views.valueOf(request.getPathInfo()).getAction(request.getMethod())).newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            LOGGER.error("View not found", e);
+        }
+        return action;
     }
 }

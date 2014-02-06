@@ -3,6 +3,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
@@ -37,7 +38,7 @@ public class NLPAction extends AbstractAction {
         } else if (request.getParameter("use") != null) {
             return handleUseModel(request, session, userid, files);
         } else {
-           return "homepage";
+           return Views.HOMEPAGE.toString();
         }
     }
 
@@ -55,7 +56,7 @@ public class NLPAction extends AbstractAction {
             throw new ActionException("Fehler beim Anwenden des NLP Modells", e);
         }
         session.setAttribute("resultMap", map);
-        return "evaluation";
+        return Views.EVALUATION.toString();
     }
 
     private String handleCreateModel(HttpServletRequest request, String userid, String[] files) throws ActionException {
@@ -71,7 +72,7 @@ public class NLPAction extends AbstractAction {
         }
 
         createModel(userid, modelname, entitiytype, files);
-        return "homepage";
+        return Views.HOMEPAGE.toString();
     }
 
     private void createModel(String userid, String modelname, String entitiytype, String[] files) throws ActionException {

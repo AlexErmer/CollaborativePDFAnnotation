@@ -3,6 +3,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.controller.exporters.ExportException;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporter;
 import de.uni.passau.fim.mics.ermera.controller.exporters.Exporters;
@@ -41,7 +42,7 @@ public class ExportAction extends AbstractAction {
         } catch (DocumentDaoException e) {
             LOGGER.error("error while loading documentBean", e);
             mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
-            return "homepage";
+            return Views.HOMEPAGE.toString();
         }
 
         Exporter exporter = exporterType.getInstance();
@@ -55,6 +56,6 @@ public class ExportAction extends AbstractAction {
         }
 
         // redirect to homepage in errorcase
-        return "homepage";
+        return Views.HOMEPAGE.toString();
     }
 }

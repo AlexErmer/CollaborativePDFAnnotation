@@ -3,6 +3,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
@@ -35,11 +36,11 @@ public class UploadAction extends AbstractAction {
                 String filename = getFilename(filePart);
                 if ("".equals(filename)) {
                     mu.addMessage(MessageTypes.ERROR, "Keine Datei zum hochladen ausgewählt");
-                    return "upload";
+                    return Views.UPLOAD.toString();
                 }
                 if (!"application/pdf".equals(filePart.getContentType())) {
                     mu.addMessage(MessageTypes.ERROR, "Bitte wählen Sie eine PDF Datei");
-                    return "upload";
+                    return Views.UPLOAD.toString();
                 }
 
                 InputStream filecontent;
@@ -57,7 +58,7 @@ public class UploadAction extends AbstractAction {
 
             }
         }
-        return "upload";
+        return Views.UPLOAD.toString();
     }
 
     private void storePDF(InputStream filecontent, String id) {

@@ -2,6 +2,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.IndexBean;
@@ -20,6 +21,6 @@ public class ModelUseAction extends AbstractAction {
         indexBean.setModels(documentDao.loadAllModels(userid));
 
         request.setAttribute("indexBean", indexBean);
-        return "modelUse";
+        return Views.MODELUSE.toString();
     }
 }

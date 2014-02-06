@@ -3,6 +3,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
@@ -36,7 +37,7 @@ public class ConfigAction extends AbstractAction {
         // provide current list to viewbean
         configBean.setTypes(typeList);
         request.setAttribute("configBean", configBean);
-        return "config";
+        return Views.CONFIG.toString();
     }
 
     private void handleDeleteType(HttpServletRequest request, DocumentDao documentDao, List<String> typeList) {

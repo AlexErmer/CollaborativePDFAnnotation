@@ -5,6 +5,7 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
+import de.uni.passau.fim.mics.ermera.controller.actions.Views;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
@@ -29,7 +30,7 @@ public class LoginAction extends AbstractAction {
             documentDao.createUserFolders(profile.getMain().getProfileId(), mu);
             session.setAttribute("profile", profile);
             mu.addMessage(MessageTypes.SUCCESS, "Dummy Login successful");
-            return "homepage";
+            return Views.HOMEPAGE.toString();
         }
 
         String authcode = request.getParameter("oauth_verifier");
@@ -41,7 +42,7 @@ public class LoginAction extends AbstractAction {
             loginBean.setMendeleyLink(oAuthService.getAuthorizationUrl(requestToken));
             request.setAttribute("loginBean", loginBean);
 
-            return "login";
+            return Views.LOGIN.toString();
         } else {
             requestToken = (Token) session.getAttribute("requestToken");
             request.removeAttribute("requestToken");
@@ -53,7 +54,7 @@ public class LoginAction extends AbstractAction {
 
             mu.addMessage(MessageTypes.SUCCESS, "Login successful");
 
-            return "homepage";
+            return Views.HOMEPAGE.toString();
         }
     }
 
