@@ -526,7 +526,7 @@ def _profile_test():
     # To see a profile, run e.g.
     # python -c 'import pstats; pstats.Stats("norm.profile").strip_dirs().sort_stats("time").print_stats()' | less
     import cProfile
-    import os.path
+
     cProfile.run('_test()', 'norm.profile')
 
 if __name__ == '__main__':

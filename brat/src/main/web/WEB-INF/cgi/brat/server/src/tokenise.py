@@ -10,11 +10,6 @@ Author:     Pontus Stenetorp <pontus stenetorp se>
 Version:    2011-05-23
 '''
 
-from os.path import join as path_join
-from os.path import dirname
-from subprocess import Popen, PIPE
-from shlex import split as shlex_split
-
 def _token_boundaries_by_alignment(tokens, original_text):
     curr_pos = 0
     for tok in tokens:
@@ -42,8 +37,6 @@ def whitespace_token_boundary_gen(text):
 
 if __name__ == '__main__':
     from sys import argv
-
-    from annotation import open_textfile
 
     def _text_by_offsets_gen(text, offsets):
         for start, end in offsets:

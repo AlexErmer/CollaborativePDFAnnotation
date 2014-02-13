@@ -13,7 +13,6 @@ Version:    2012-06-26
 from __future__ import with_statement
 
 from collections import defaultdict
-from itertools import chain
 from sys import argv, path as sys_path, stderr, stdout
 from os.path import dirname, join as path_join
 from xml.etree import ElementTree

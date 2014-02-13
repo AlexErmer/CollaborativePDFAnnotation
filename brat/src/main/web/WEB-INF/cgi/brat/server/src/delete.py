@@ -8,7 +8,6 @@ Deletion functionality.
 
 from __future__ import with_statement
 
-from os.path import join as path_join
 from message import Messager
 
 def delete_document(collection, document):

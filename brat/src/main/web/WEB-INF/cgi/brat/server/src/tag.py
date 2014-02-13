@@ -21,7 +21,6 @@ from annotator import _json_from_ann, ModificationTracker
 from common import ProtocolError
 from document import real_directory
 from jsonwrap import loads
-from message import Messager
 from projectconfig import ProjectConfiguration
 
 ### Constants

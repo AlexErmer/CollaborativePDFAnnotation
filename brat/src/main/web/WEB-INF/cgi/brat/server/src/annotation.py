@@ -13,14 +13,12 @@ Version:    2011-01-25
 
 # TODO: Major re-work, cleaning up and conforming with new server paradigm
 
-from logging import info as log_info
 from codecs import open as codecs_open
-from functools import partial
 from itertools import chain, takewhile
-from os import close as os_close, utime
+from os import close as os_close
 from time import time
 from os.path import join as path_join
-from os.path import basename, splitext
+from os.path import  splitext
 from re import match as re_match
 from re import compile as re_compile
 
@@ -331,7 +329,7 @@ class Annotations(object):
         #TODO: DOC!
         #TODO: Incorparate file locking! Is the destructor called upon inter crash?
         from collections import defaultdict
-        from os.path import basename, getmtime, getctime
+        from os.path import  getmtime, getctime
         #from fileinput import FileInput, hook_encoded
 
         # we should remember this

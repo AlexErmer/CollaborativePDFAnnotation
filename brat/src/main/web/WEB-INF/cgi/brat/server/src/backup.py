@@ -21,8 +21,8 @@ from os.path import getmtime, isfile, dirname, abspath, basename
 from os.path import join as join_path
 from shlex import split as split_shlex
 from datetime import datetime, timedelta
-from os import listdir, walk
-from subprocess import Popen, PIPE
+from os import listdir
+from subprocess import Popen
 
 from filelock import file_lock, PID_WARN
 

@@ -15,7 +15,6 @@ Version:    2011-08-15
 
 import re
 import robotparser # TODO reduce scope
-import urlparse # TODO reduce scope
 import sys
 
 from annotation import open_textfile

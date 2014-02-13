@@ -25,10 +25,8 @@ from document import (get_directory_information, get_document,
 from download import download_file, download_collection
 from inspect import getargspec
 from itertools import izip
-from jsonwrap import dumps
 from logging import info as log_info
 from annlog import log_annotation
-from message import Messager
 from svg import store_svg, retrieve_stored
 from session import get_session, load_conf, save_conf
 from search import search_text, search_entity, search_event, search_relation, search_note

@@ -17,12 +17,10 @@ Version:    2011-04-21
 from os import listdir
 from os.path import abspath, dirname, isabs, isdir, normpath, getmtime
 from os.path import join as path_join
-from re import match,sub
 from errno import ENOENT, EACCES
 
 from annotation import (TextAnnotations, TEXT_FILE_SUFFIX,
-        AnnotationFileNotFoundError, 
-        AnnotationCollectionNotFoundError,
+                        AnnotationCollectionNotFoundError,
         JOINED_ANN_FILE_SUFF,
         open_textfile,
         BIONLP_ST_2013_COMPATIBILITY)
@@ -630,8 +628,6 @@ def _enrich_json_with_text(j_dic, txt_file_path, raw_text=None):
             raise UnableToReadTextFile(txt_file_path)
 
     j_dic['text'] = text
-    
-    from logging import info as log_info
 
     tokeniser = options_get_tokenization(dirname(txt_file_path))
 

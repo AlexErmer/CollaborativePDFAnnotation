@@ -21,7 +21,7 @@ except ImportError:
 from common import ProtocolError
 from config import USER_PASSWORD, DATA_DIR
 from message import Messager
-from session import get_session, invalidate_session
+from session import get_session
 from projectconfig import ProjectConfiguration
 
 

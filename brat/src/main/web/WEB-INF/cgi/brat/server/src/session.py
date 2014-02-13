@@ -15,13 +15,11 @@ Version:    2011-03-11
 from __future__ import with_statement
 
 from Cookie import CookieError, SimpleCookie
-from atexit import register as atexit_register
 from datetime import datetime, timedelta
 from hashlib import sha224
 from os import close as os_close, makedirs, remove
-from os.path import exists, dirname, join as path_join, isfile
+from os.path import   join as path_join, isfile
 from shutil import copy
-from shutil import move
 from tempfile import mkstemp
 
 try:

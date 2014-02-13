@@ -18,7 +18,7 @@ from os.path import split as path_split
 from re import compile as re_compile
 
 from annotation import (OnelineCommentAnnotation, TEXT_FILE_SUFFIX,
-        TextAnnotations, DependingAnnotationDeleteError, TextBoundAnnotation,
+        TextAnnotations, DependingAnnotationDeleteError,
         EventAnnotation, EquivAnnotation, open_textfile,
         AnnotationsIsReadOnlyError, AttributeAnnotation, 
         NormalizationAnnotation, SpanOffsetOverlapError, DISCONT_SEP)
@@ -30,7 +30,7 @@ except ImportError:
 from document import real_directory
 from jsonwrap import loads as json_loads, dumps as json_dumps
 from message import Messager
-from projectconfig import ProjectConfiguration, ENTITY_CATEGORY, EVENT_CATEGORY, RELATION_CATEGORY, UNKNOWN_CATEGORY
+from projectconfig import ProjectConfiguration, ENTITY_CATEGORY, EVENT_CATEGORY
 
 ### Constants
 MUL_NL_REGEX = re_compile(r'\n+')
@@ -152,9 +152,7 @@ def _json_from_ann(ann_obj):
     _enrich_json_with_data(j_dic, ann_obj)
     return j_dic
 
-from logging import info as log_info
 from annotation import TextBoundAnnotation, TextBoundAnnotationWithText
-from copy import deepcopy
 
 def _offsets_equal(o1, o2):
     """

@@ -9,10 +9,7 @@ Version:    2011-11-30
 
 from __future__ import with_statement
 
-from os.path import join as path_join
-
 from annotator import delete_span, create_span
-from annotation import TextAnnotations
 from common import ProtocolError
 from jsonwrap import loads as json_loads
 

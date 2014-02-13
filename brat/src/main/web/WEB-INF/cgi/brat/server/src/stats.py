@@ -19,7 +19,7 @@ from os import listdir
 from os.path import isfile, getmtime
 from os.path import join as path_join
 
-from annotation import Annotations, open_textfile
+from annotation import Annotations
 from config import DATA_DIR, BASE_DIR
 from message import Messager
 from projectconfig import get_config_path, options_get_validation
@@ -93,7 +93,6 @@ def get_statistics(directory, base_names, use_cache=True):
             
     if generate:
         # Generate the document statistics from scratch
-        from annotation import JOINED_ANN_FILE_SUFF
         log_info('generating statistics for "%s"' % directory)
         docstats = []
         for docname in base_names:

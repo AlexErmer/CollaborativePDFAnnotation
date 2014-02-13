@@ -48,7 +48,6 @@ class ConfigurationError(Exception):
 def _permission_check():
     from os import access, R_OK, W_OK
     from config import DATA_DIR, WORK_DIR
-    from jsonwrap import dumps
     from message import Messager
 
     if not access(WORK_DIR, R_OK | W_OK):

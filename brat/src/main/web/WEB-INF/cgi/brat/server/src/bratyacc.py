@@ -23,8 +23,6 @@ except ImportError:
 
     import ply.yacc as yacc
 
-from bratlex import tokens
-
 # TODO: Recurse all the way to a file
 # TODO: Comment annotation
 
