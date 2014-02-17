@@ -42,61 +42,58 @@ public class EvaluationSaveAction extends AbstractAction {
 
 
     private void loopFindings(HttpServletRequest request, Map<String, NameFinderResult> resultMap, Map<String, List<MySpanAnnotation>> mySpanAnnotations) throws ActionException {
-        DocumentDao documentDao = new DocumentDaoImpl();
         //load bratannotations in a map
         Map<String, BratDocument> bratDocumentMap = createBratDocumentMap(userid);
 
         //TODO: entitiytyp muss aus dem model kommen?!
         String type = "Person";
 
+
         // loop all SELECTED findings
         String[] ids = request.getParameterValues("ok");
         if (ids != null) {
             for (String id : ids) {
-                // get NameFinderResult from id (format: fielname__index
+                // get NameFinderResult from id (format: nsc__filename__sentenceIndex__findingIndex)
                 String[] idSplits = id.split("__");
                 String filename = idSplits[1];
-                Span span = resultMap.get(filename).getNameSpans()[Integer.valueOf(idSplits[2])];
+                String sentenceNumber = idSplits[2];
+                String findingNumber = idSplits[3];
+                NameFinderResult.Sentence sentence = resultMap.get(filename).getSentences().get(Integer.valueOf(sentenceNumber));
+                Span finding = sentence.getFindings()[Integer.valueOf(findingNumber)];
 
-                // concat coveredtext
-                String searchstr = resultMap.get(filename).getTokens()[span.getStart()];
-                for (int i = span.getStart() + 1; i <= span.getEnd() - 1; i++) {
-                    searchstr = searchstr.concat(" " + resultMap.get(filename).getTokens()[i]);
-                }
+                int start = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getStart()).getPosition().getStart();
+                int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getEnd()).getPosition().getEnd();
 
-                // determine the real char offsets by searching for the text
-                // TODO: implement caching to reduce IO actions
-                String text;
-                try {
-                    text = documentDao.loadBratFile(userid, filename).replace(System.lineSeparator(), "~~");
-                } catch (IOException e) {
-                    throw new ActionException("Fehler beim Lesen des Bratfiles", e);
-                }
-                int hitStart = text.indexOf(searchstr);
-                int hitEnd = hitStart + searchstr.length();
-
-                // doublecheck found text matches
-                if (searchstr.equals(text.substring(hitStart, hitEnd))) {
-                    BratDocument bratdoc = bratDocumentMap.get(filename);
-                    Collection<BratAnnotation> annos = bratdoc.getAnnotations();
-
-                    //scan if this annotation already exists; if not, add this new one
-                    if (!checkAnnotationAlreadyExists(type, hitStart, hitEnd, annos)) {
-                        addNewAnnotation(mySpanAnnotations, type, filename, searchstr, hitStart, hitEnd, annos);
+                StringBuilder sb = new StringBuilder();
+                boolean first = true;
+                for (int i = finding.getStart(); i <= finding.getEnd(); i++) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append(" ");
                     }
+                    sb.append(sentence.getTokens().get(i).getText());
+                }
+
+                BratDocument bratdoc = bratDocumentMap.get(filename);
+                Collection<BratAnnotation> annos = bratdoc.getAnnotations();
+
+                //scan if this annotation already exists; if not, add this new one
+                if (!checkAnnotationAlreadyExists(type, start, end, annos)) { //TODO: Collection.contains()  verwenden?!
+                    addNewAnnotation(mySpanAnnotations, type, filename, sb.toString(), start, end, annos);
                 }
             }
         }
     }
 
     private void addNewAnnotation(Map<String, List<MySpanAnnotation>> mySpanAnnotations, String type, String filename, String searchstr, int hitStart, int hitEnd, Collection<BratAnnotation> annos) {
-        int nextID = nextID(annos);
+        int nextID = nextID(annos) + mySpanAnnotations.size();
         //Brat/Spanannoation kann ich nicht sebst erzeugen, weil sie protected im opennlp sind...
         List<MySpanAnnotation> list = mySpanAnnotations.get(filename);
         if (list == null) {
             list = new ArrayList<>();
         }
-        list.add(new MySpanAnnotation("T" + nextID++, type,
+        list.add(new MySpanAnnotation("T" + nextID, type,
                 new Span(hitStart, hitEnd, type), searchstr));
         mySpanAnnotations.put(filename, list);
     }
@@ -178,7 +175,7 @@ public class EvaluationSaveAction extends AbstractAction {
         return new MyBratNameSampleStreamFactory()
                 .create(new String[]{
                         "-bratDataDir", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid
-                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + "annotation.conf"
+                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid + "\\annotation.conf"
                         //,"-recursive", "false"
                         //,"-sentenceDetectorModel", ""
                         //,"-tokenizerModel", ""

@@ -14,7 +14,7 @@ public class ConfigFileCreator {
     public static void createAnnotationConf(String userid, List<String> types) throws BratException {
         String str;
         try {
-            str = IOUtils.toString(ConfigFileCreator.class.getResourceAsStream("/src/main/resources/annotation.conf"), "UTF-8");
+            str = IOUtils.toString(ConfigFileCreator.class.getResourceAsStream("/annotation.conf"), "UTF-8");
         } catch (IOException e) {
             throw new BratException("IOException loading Entitytypes", e);
         }

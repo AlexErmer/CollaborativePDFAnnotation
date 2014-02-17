@@ -1,5 +1,7 @@
 package de.uni.passau.fim.mics.ermera.model;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -147,7 +149,7 @@ public class PageBean implements Comparable<PageBean>, Serializable {
                 } else if (block.isNewParagraph()) {
                     sb.append(System.lineSeparator());
                 }
-                sb.append(block.getText());
+                sb.append(StringEscapeUtils.unescapeHtml(block.getText()));
                 if (block.isHeadline()) {
                     sb.append(System.lineSeparator());
                 }

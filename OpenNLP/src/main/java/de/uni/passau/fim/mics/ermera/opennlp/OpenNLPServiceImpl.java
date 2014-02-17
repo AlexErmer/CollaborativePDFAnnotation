@@ -25,7 +25,7 @@ public class OpenNLPServiceImpl implements OpenNLPService {
         return StreamFactoryRegistry.getFactory(NameSample.class, "brat")
                 .create(new String[]{
                         "-bratDataDir", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid
-                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + "annotation.conf"
+                        , "-annotationConfig", PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid + "\\annotation.conf"
                         //,"-recursive", "false"
                         //,"-sentenceDetectorModel", ""
                         //,"-tokenizerModel", ""
@@ -57,8 +57,10 @@ public class OpenNLPServiceImpl implements OpenNLPService {
 
     /**
      * This model uses a {@code TokenNameFinderModel} to find entities in the given documents.
-     * The documents are encoded in a {@code Map<String, String>}. The key of the map is the document identifier and the value is the complete text of the document. <br />
-     * It returns a {@code Map<String, NameFinderResult>}. The key is again the document identifier and the value is an object which contains the tokens and the found entities.
+     * The documents are encoded in a {@code Map} with its key and value typed as @{code String}.
+     * The key of the map is the document identifier and the value is the complete text of the document. <br />
+     * It returns a {@code Map} which key is typed @{code String} and its value typed as @{code NameFinderResult}.
+     * The key is again the document identifier and the value is an object which contains the tokens and the found entities.
      *
      * @param model        The model which should be used.
      * @param documentStrs The Map of documents in which should be searched
@@ -83,18 +85,30 @@ public class OpenNLPServiceImpl implements OpenNLPService {
         Tokenizer tokenizer = new TokenizerME(tokenizerModel);
 
         Map<String, NameFinderResult> results = new HashMap<>();
-        List<String> tokens;
         for (Map.Entry<String, String> docStr : documentStrs.entrySet()) {
-            tokens = new ArrayList<>();
 
-            String[] sentences = sentenceDetector.sentDetect(docStr.getValue());
-            for (String sentence : sentences) {
-                tokens.addAll(Arrays.asList(tokenizer.tokenize(sentence)));
+            final String docName = docStr.getKey();
+            final String docText = docStr.getValue();
+
+            Span[] sentencePositions = sentenceDetector.sentPosDetect(docText);
+            String[] sentenceTexts = sentenceDetector.sentDetect(docText);
+
+            List<NameFinderResult.Sentence> sentenceList = new ArrayList<>();
+            for (int i = 0; i < sentencePositions.length; i++) {
+
+                final Span[] tokenPositions = tokenizer.tokenizePos(sentenceTexts[i]);
+                final String[] tokenTexts = tokenizer.tokenize(sentenceTexts[i]);
+
+                Span[] findings = nameFinderME.find(tokenTexts);
+                if (findings.length > 0) {
+                    List<NameFinderResult.Token> tokenList = new ArrayList<>();
+                    for (int j = 0; j < tokenPositions.length; j++) {
+                        tokenList.add(new NameFinderResult.Token(tokenPositions[j], tokenTexts[j]));
+                    }
+                    sentenceList.add(new NameFinderResult.Sentence(sentencePositions[i], sentenceTexts[i], tokenList, findings));
+                }
             }
-            String[] tokensTmp = tokens.toArray(new String[tokens.size()]);
-
-            Span[] nameSpans = nameFinderME.find(tokensTmp);
-            results.put(docStr.getKey(), new NameFinderResult(tokensTmp, nameSpans));
+            results.put(docName, new NameFinderResult(docName, docText, sentenceList));
         }
         return results;
     }

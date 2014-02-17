@@ -23,8 +23,9 @@ public enum Views {
     EXPORT("export", ExportAction.class, null),
     MODELCREATE("modelCreate", ModelCreateAction.class, null),
     MODELUSE("modelUse", ModelUseAction.class, null),
-    NLP("nlp", NLPAction.class, null),
-    EVALUATION("evaluation", EvaluationAction.class, EvaluationSaveAction.class);
+    NLP("nlp", null, NLPAction.class),
+    EVALUATION("evaluation", EvaluationAction.class, EvaluationSaveAction.class),
+    EVALUATIONGROUPED("evaluationGrouped", EvaluationGroupedAction.class, EvaluationSaveAction.class);
 
     private String viewName;
     private Class get;

@@ -61,10 +61,23 @@ public class DispatcherServlet extends HttpServlet {
     private Action retrieveAction(HttpServletRequest request) {
         LOGGER.info("Routing: " + request.getMethod() + request.getPathInfo());
         Action action = null;
+
+        final String viewName = request.getPathInfo().substring(1).toUpperCase();
+        final Views view = Views.valueOf(viewName);
+        if (view == null) {
+            LOGGER.error("View not found!");
+            return null;
+        }
+        final Class actionClass = view.getAction(request.getMethod());
+        if (actionClass == null) {
+            LOGGER.error("Method for Action not defined!");
+            return null;
+        }
+
         try {
-            action = (Action) (Views.valueOf(request.getPathInfo()).getAction(request.getMethod())).newInstance();
+            action = (Action) actionClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            LOGGER.error("View not found", e);
+            LOGGER.error("Action could not be instanciated", e);
         }
         return action;
     }

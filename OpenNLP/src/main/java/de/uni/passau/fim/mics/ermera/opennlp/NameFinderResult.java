@@ -2,20 +2,113 @@ package de.uni.passau.fim.mics.ermera.opennlp;
 
 import opennlp.tools.util.Span;
 
+import java.util.List;
+
 public class NameFinderResult {
-    private String[] tokens;
-    private Span[] nameSpans;
+    private String documentName;
+    private String documentText;
+    private List<Sentence> sentences;
 
-    public NameFinderResult(String[] tokens, Span[] nameSpans) {
-        this.tokens = tokens.clone();
-        this.nameSpans = nameSpans.clone();
+
+    public NameFinderResult(String documentName, String documentText, List<Sentence> sentences) {
+        this.documentName = documentName;
+        this.documentText = documentText;
+        this.sentences = sentences;
     }
 
-    public String[] getTokens() {
-        return tokens;
+    public String getDocumentName() {
+        return documentName;
     }
 
-    public Span[] getNameSpans() {
-        return nameSpans;
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
+    }
+
+    public String getDocumentText() {
+        return documentText;
+    }
+
+    public void setDocumentText(String documentText) {
+        this.documentText = documentText;
+    }
+
+    public List<Sentence> getSentences() {
+        return sentences;
+    }
+
+    public void setSentences(List<Sentence> sentences) {
+        this.sentences = sentences;
+    }
+
+    public static class Sentence {
+        private Span position;
+        private String text;
+        private List<Token> tokens;
+        private Span[] findings;
+
+        public Sentence(Span position, String text, List<Token> tokens, Span[] findings) {
+            this.position = position;
+            this.text = text;
+            this.tokens = tokens;
+            this.findings = findings;
+        }
+
+        public Span getPosition() {
+            return position;
+        }
+
+        public void setPosition(Span position) {
+            this.position = position;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public List<Token> getTokens() {
+            return tokens;
+        }
+
+        public void setTokens(List<Token> tokens) {
+            this.tokens = tokens;
+        }
+
+        public Span[] getFindings() {
+            return findings;
+        }
+
+        public void setFindings(Span[] findings) {
+            this.findings = findings;
+        }
+    }
+
+    public static class Token {
+        private Span position;
+        private String text;
+
+        public Token(Span position, String text) {
+            this.position = position;
+            this.text = text;
+        }
+
+        public Span getPosition() {
+            return position;
+        }
+
+        public void setPosition(Span position) {
+            this.position = position;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
     }
 }
