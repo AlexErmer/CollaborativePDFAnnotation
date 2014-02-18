@@ -59,28 +59,17 @@ public class EvaluationSaveAction extends AbstractAction {
                 String sentenceNumber = idSplits[2];
                 String findingNumber = idSplits[3];
                 NameFinderResult.Sentence sentence = resultMap.get(filename).getSentences().get(Integer.valueOf(sentenceNumber));
-                Span finding = sentence.getFindings()[Integer.valueOf(findingNumber)];
+                NameFinderResult.Finding finding = sentence.getFindingsList().get(Integer.valueOf(findingNumber));
 
-                int start = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getStart()).getPosition().getStart();
-                int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getEnd()).getPosition().getEnd();
-
-                StringBuilder sb = new StringBuilder();
-                boolean first = true;
-                for (int i = finding.getStart(); i <= finding.getEnd(); i++) {
-                    if (first) {
-                        first = false;
-                    } else {
-                        sb.append(" ");
-                    }
-                    sb.append(sentence.getTokens().get(i).getText());
-                }
+                int start = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getStart()).getPosition().getStart();
+                int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd()).getPosition().getEnd();
 
                 BratDocument bratdoc = bratDocumentMap.get(filename);
                 Collection<BratAnnotation> annos = bratdoc.getAnnotations();
 
                 //scan if this annotation already exists; if not, add this new one
                 if (!checkAnnotationAlreadyExists(type, start, end, annos)) { //TODO: Collection.contains()  verwenden?!
-                    addNewAnnotation(mySpanAnnotations, type, filename, sb.toString(), start, end, annos);
+                    addNewAnnotation(mySpanAnnotations, type, filename, finding.getText(), start, end, annos);
                 }
             }
         }

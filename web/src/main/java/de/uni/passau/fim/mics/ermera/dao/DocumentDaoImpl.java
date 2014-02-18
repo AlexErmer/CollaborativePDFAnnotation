@@ -153,7 +153,6 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public void storeAnnotationFile(String userid, String name, String content) throws IOException {
-        //TODO: versionierung!! anderenfalls werden die annotationfiles ggf. korrupt
         OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid + "\\" + name + ".ann", true); // APPEND!
         fos.write(content.getBytes());
         fos.close();
@@ -168,7 +167,7 @@ public class DocumentDaoImpl implements DocumentDao {
     @Override
     public void deleteAnnotationFile(String userid, String id) throws DocumentDaoException {
         File annoFile = new File(PropertyReader.DATA_PATH + PropertyReader.BRATFOLDER + userid + "\\" + id + ".ann");
-        if (annoFile.exists() && annoFile.delete()) {
+        if (annoFile.exists() && !annoFile.delete()) {
             throw new DocumentDaoException("Error while deleting annotationFile");
         }
     }

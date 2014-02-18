@@ -105,11 +105,31 @@ public class OpenNLPServiceImpl implements OpenNLPService {
                     for (int j = 0; j < tokenPositions.length; j++) {
                         tokenList.add(new NameFinderResult.Token(tokenPositions[j], tokenTexts[j]));
                     }
-                    sentenceList.add(new NameFinderResult.Sentence(sentencePositions[i], sentenceTexts[i], tokenList, findings));
+                    List<NameFinderResult.Finding> findingsList = new ArrayList<>();
+                    for (Span finding : findings) {
+                        String text = extractFindingText(finding, tokenList);
+                        findingsList.add(new NameFinderResult.Finding(finding, text));
+                    }
+
+                    sentenceList.add(new NameFinderResult.Sentence(sentencePositions[i], sentenceTexts[i], tokenList, findingsList));
                 }
             }
             results.put(docName, new NameFinderResult(docName, docText, sentenceList));
         }
         return results;
+    }
+
+    private String extractFindingText(Span finding, List<NameFinderResult.Token> tokenList) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (int i = finding.getStart(); i < finding.getEnd(); i++) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(" ");
+            }
+            sb.append(tokenList.get(i).getText());
+        }
+        return sb.toString();
     }
 }

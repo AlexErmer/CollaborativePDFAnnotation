@@ -1,7 +1,8 @@
 <%--@elvariable id="item" type="java.util.Map"--%>
+<%--@elvariable id="sentence" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Sentence"--%>
+<%--@elvariable id="finding" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Finding"--%>
 <%--@elvariable id="nameSpan" type="opennlp.tools.util.Span"--%>
 <%--@elvariable id="span" type="opennlp.tools.util.Span"--%>
-<%--@elvariable id="sentence" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Sentence"--%>
 
 <%--@elvariable id="index" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%--@elvariable id="namespanCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
@@ -17,7 +18,7 @@
 <p class="text-info">Die nachfolgenden Ergebnisse können nun bestätigt und als neue Annotationen gespeichert werden.
     Im Anschluss daran können neue Modelle mit den erweiterten Annotationen erstellt werden.</p>
 
-<p><a href="/pages/evaluationgrouped" class="btn btn-default" role="button"><span
+<p><a href="/pages/evaluationGrouped" class="btn btn-default" role="button"><span
         class="glyphicon glyphicon-compressed"></span> Gruppierte Ansicht</a></p>
 
 <form action="/pages/evaluation" method="post">
@@ -38,19 +39,17 @@
         <tbody>
         <c:forEach items="${evaluationBean.resultMap}" var="item">
             <c:forEach items="${item.value.sentences}" var="sentence" varStatus="sentenceCounter">
-                <c:forEach items="${sentence.findings}" var="nameSpan" varStatus="namespanCounter">
+                <c:forEach items="${sentence.findingsList}" var="finding" varStatus="namespanCounter">
                     <tr>
                         <td>${item.key}</td>
                         <td>
-                            <c:forEach begin="0" end="${nameSpan.start-1}" varStatus="index">
+                            <c:forEach begin="0" end="${finding.span.start-1}" varStatus="index">
                                 ${sentence.tokens[index.index].text}
                             </c:forEach>
                             <b>
-                                <c:forEach begin="${nameSpan.start}" end="${nameSpan.end}" varStatus="index">
-                                    ${sentence.tokens[index.index].text}
-                                </c:forEach>
+                                ${finding.text}
                             </b>
-                            <c:forEach begin="${nameSpan.end+1}" end="${fn:length(sentence.tokens)}" varStatus="index">
+                            <c:forEach begin="${finding.span.end+1}" end="${fn:length(sentence.tokens)}" varStatus="index">
                                 ${sentence.tokens[index.index].text}
                             </c:forEach>
 

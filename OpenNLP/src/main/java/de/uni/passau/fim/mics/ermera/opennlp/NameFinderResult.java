@@ -44,13 +44,13 @@ public class NameFinderResult {
         private Span position;
         private String text;
         private List<Token> tokens;
-        private Span[] findings;
+        private List<NameFinderResult.Finding> findingsList;
 
-        public Sentence(Span position, String text, List<Token> tokens, Span[] findings) {
+        public Sentence(Span position, String text, List<Token> tokens, List<Finding> findingsList) {
             this.position = position;
             this.text = text;
             this.tokens = tokens;
-            this.findings = findings;
+            this.findingsList = findingsList;
         }
 
         public Span getPosition() {
@@ -77,12 +77,38 @@ public class NameFinderResult {
             this.tokens = tokens;
         }
 
-        public Span[] getFindings() {
-            return findings;
+        public List<Finding> getFindingsList() {
+            return findingsList;
         }
 
-        public void setFindings(Span[] findings) {
-            this.findings = findings;
+        public void setFindingsList(List<Finding> findingsList) {
+            this.findingsList = findingsList;
+        }
+    }
+
+    public static class Finding {
+        private Span span;
+        private String text;
+
+        public Finding(Span span, String text) {
+            this.span = span;
+            this.text = text;
+        }
+
+        public Span getSpan() {
+            return span;
+        }
+
+        public void setSpan(Span span) {
+            this.span = span;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
         }
     }
 
