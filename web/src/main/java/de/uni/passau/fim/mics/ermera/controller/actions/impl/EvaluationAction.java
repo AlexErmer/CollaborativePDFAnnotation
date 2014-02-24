@@ -8,18 +8,18 @@ import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.List;
 
 public class EvaluationAction extends AbstractAction {
 
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         @SuppressWarnings("unchecked")
-        Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) session.getAttribute("resultMap");
+        List<NameFinderResult> resultList = (List<NameFinderResult>) session.getAttribute("resultList");
         //TODO: filter exisiting annotations?!
 
         EvaluationBean evaluationBean = new EvaluationBean();
-        evaluationBean.setResultMap(resultMap);
+        evaluationBean.setResultList(resultList);
         request.setAttribute("evaluationBean", evaluationBean);
 
         return Views.EVALUATION.toString();

@@ -1,9 +1,9 @@
-<%--@elvariable id="item" type="java.util.Map"--%>
-<%--@elvariable id="listItem" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderGroupedResultListItem"--%>
-
-<%--@elvariable id="namespan" type="opennlp.tools.util.Span"--%>
+<%--@elvariable id="item" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderGroupedResultListItem"--%>
+<%--@elvariable id="listItem" type="de.uni.passau.fim.mics.ermera.opennlp.SingleNameFinderResult"--%>
+<%--@elvariable id="sentence" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Sentence"--%>
+<%--@elvariable id="finding" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Finding"--%>
+<%--@elvariable id="itemCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%--@elvariable id="index" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
-<%--@elvariable id="namespanCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
 
@@ -18,6 +18,7 @@
         class="glyphicon glyphicon-list"></span> Listen Ansicht</a></p>
 
 <form action="/pages/evaluationGrouped" method="post">
+    <input type="hidden" name="grouped" value="true"/>
     <table class="table table-striped table-hover">
         <thead>
         <tr>
@@ -34,21 +35,33 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${evaluationBean.groupedResultMap}" var="item">
+        <c:forEach items="${evaluationBean.groupedResultList}" var="item" varStatus="itemCounter">
             <tr>
-                <td>${item.key}</td>
-                <td>${item.value.size()}</td>
+                <td>${item.findingText}</td>
+                <td>${item.list.size()}</td>
                 <td>
                     <ul>
-                        <c:forEach items="${item.value}" var="listItem">
-                            <li>${listItem.sentence.text}</li>
+                        <c:forEach items="${item.list}" var="listItem">
+                            <li>
+                                <c:forEach begin="0" end="${listItem.finding.span.start-1}" varStatus="index">
+                                    ${listItem.sentence.tokens[index.index].text}
+                                </c:forEach>
+                                <b>
+                                    ${listItem.finding.text}
+                                </b>
+                                <c:forEach begin="${listItem.finding.span.end+1}"
+                                           end="${fn:length(listItem.sentence.tokens)}"
+                                           varStatus="index">
+                                    ${listItem.sentence.tokens[index.index].text}
+                                </c:forEach>
+                            </li>
                         </c:forEach>
                     </ul>
                 </td>
                 <td>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="ok" value="nsc__${item.key}__"/>
+                            <input type="checkbox" name="ok" value="nsc__${itemCounter.index}"/>
                             OK!
                         </label>
                     </div>

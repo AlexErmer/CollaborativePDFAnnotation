@@ -4,30 +4,29 @@ import de.uni.passau.fim.mics.ermera.opennlp.NameFinderGroupedResultListItem;
 import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 
 import java.util.List;
-import java.util.Map;
 
 public class EvaluationBean {
     private static final int contextRange = 7;
-    private Map<String, NameFinderResult> resultMap;
-    private Map<String, List<NameFinderGroupedResultListItem>> groupedResultMap;
+    private List<NameFinderResult> resultList;
+    private List<NameFinderGroupedResultListItem> groupedResultList;
 
-    public Map<String, NameFinderResult> getResultMap() {
-        return resultMap;
+    public List<NameFinderResult> getResultList() {
+        return resultList;
     }
 
-    public void setResultMap(Map<String, NameFinderResult> resultMap) {
-        this.resultMap = resultMap;
+    public void setResultList(List<NameFinderResult> resultList) {
+        this.resultList = resultList;
     }
 
     public int getContextRange() {
         return contextRange;
     }
 
-    public Map<String, List<NameFinderGroupedResultListItem>> getGroupedResultMap() {
-        return groupedResultMap;
+    public List<NameFinderGroupedResultListItem> getGroupedResultList() {
+        return groupedResultList;
     }
 
-    public void setGroupedResultMap(Map<String, List<NameFinderGroupedResultListItem>> groupedResultMap) {
-        this.groupedResultMap = groupedResultMap;
+    public void setGroupedResultList(List<NameFinderGroupedResultListItem> groupedResultList) {
+        this.groupedResultList = groupedResultList;
     }
 }

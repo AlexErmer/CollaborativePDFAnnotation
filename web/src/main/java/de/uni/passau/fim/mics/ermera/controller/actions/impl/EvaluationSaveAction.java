@@ -7,8 +7,11 @@ import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
+import de.uni.passau.fim.mics.ermera.model.EvaluationBean;
 import de.uni.passau.fim.mics.ermera.opennlp.MySpanAnnotation;
+import de.uni.passau.fim.mics.ermera.opennlp.NameFinderGroupedResultListItem;
 import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
+import de.uni.passau.fim.mics.ermera.opennlp.SingleNameFinderResult;
 import de.uni.passau.fim.mics.ermera.opennlp.overrides.MyBratNameSampleStream;
 import de.uni.passau.fim.mics.ermera.opennlp.overrides.MyBratNameSampleStreamFactory;
 import opennlp.tools.formats.brat.BratAnnotation;
@@ -27,21 +30,65 @@ public class EvaluationSaveAction extends AbstractAction {
 
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        // resultmap contains all finding from previous nlp action
+        // resultlist contains all finding from previous nlp action
         @SuppressWarnings("unchecked")
-        Map<String, NameFinderResult> resultMap = (Map<String, NameFinderResult>) session.getAttribute("resultMap");
+        List<NameFinderResult> resultList = (List<NameFinderResult>) session.getAttribute("resultList");
 
         // list of spans for later saving
         Map<String, List<MySpanAnnotation>> mySpanAnnotations = new HashMap<>();
 
-        loopFindings(request, resultMap, mySpanAnnotations);
+        if ("true".equals(request.getParameter("grouped"))) {
+            loopGroupedFindings(request, resultList, mySpanAnnotations);
+        } else {
+            loopFindings(request, resultList, mySpanAnnotations);
+
+        }
 
         saveNewAnnotations(mySpanAnnotations);
         return Views.HOMEPAGE.toString();
     }
 
+    private void loopGroupedFindings(HttpServletRequest request, List<NameFinderResult> resultList, Map<String, List<MySpanAnnotation>> mySpanAnnotations) throws ActionException {
+        //load bratannotations in a map
+        Map<String, BratDocument> bratDocumentMap = createBratDocumentMap(userid);
 
-    private void loopFindings(HttpServletRequest request, Map<String, NameFinderResult> resultMap, Map<String, List<MySpanAnnotation>> mySpanAnnotations) throws ActionException {
+        //TODO: entitiytyp muss aus dem model kommen?!
+        String type = "Person";
+
+        EvaluationBean evaluationBean = (EvaluationBean) session.getAttribute("evaluationBean");
+
+
+        // loop all SELECTED findings
+        String[] ids = request.getParameterValues("ok");
+        if (ids != null) {
+            for (String id : ids) {
+                // get NameFinderResult from id (format: nsc__findingIndex)
+                String[] idSplits = id.split("__");
+                int findingNumber = Integer.valueOf(idSplits[1]);
+                NameFinderGroupedResultListItem nameFinderGroupedResultListItem = evaluationBean.getGroupedResultList().get(findingNumber);
+
+                for (SingleNameFinderResult single : nameFinderGroupedResultListItem.getList()) {
+
+                    NameFinderResult.Sentence sentence = single.getSentence();
+                    NameFinderResult.Finding finding = single.getFinding();
+
+                    int start = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getStart()).getPosition().getStart();
+                    int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd() - 1).getPosition().getEnd();
+
+                    BratDocument bratdoc = bratDocumentMap.get(single.getDocumentName());
+                    Collection<BratAnnotation> annos = bratdoc.getAnnotations();
+
+                    //scan if this annotation already exists; if not, add this new one
+                    if (!checkAnnotationAlreadyExists(type, start, end, annos)) { //TODO: Collection.contains()  verwenden?!
+                        addNewAnnotation(mySpanAnnotations, type, single.getDocumentName(), finding.getText(), start, end, annos);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void loopFindings(HttpServletRequest request, List<NameFinderResult> resultList, Map<String, List<MySpanAnnotation>> mySpanAnnotations) throws ActionException {
         //load bratannotations in a map
         Map<String, BratDocument> bratDocumentMap = createBratDocumentMap(userid);
 
@@ -53,30 +100,31 @@ public class EvaluationSaveAction extends AbstractAction {
         String[] ids = request.getParameterValues("ok");
         if (ids != null) {
             for (String id : ids) {
-                // get NameFinderResult from id (format: nsc__filename__sentenceIndex__findingIndex)
+                // get NameFinderResult from id (format: nsc__listIndex__sentenceIndex__findingIndex)
                 String[] idSplits = id.split("__");
-                String filename = idSplits[1];
+                int index = Integer.parseInt(idSplits[1]);
                 String sentenceNumber = idSplits[2];
                 String findingNumber = idSplits[3];
-                NameFinderResult.Sentence sentence = resultMap.get(filename).getSentences().get(Integer.valueOf(sentenceNumber));
+
+                NameFinderResult.Sentence sentence = resultList.get(index).getSentences().get(Integer.valueOf(sentenceNumber));
                 NameFinderResult.Finding finding = sentence.getFindingsList().get(Integer.valueOf(findingNumber));
 
                 int start = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getStart()).getPosition().getStart();
-                int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd()).getPosition().getEnd();
+                int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd() - 1).getPosition().getEnd();
 
-                BratDocument bratdoc = bratDocumentMap.get(filename);
+                BratDocument bratdoc = bratDocumentMap.get(resultList.get(index).getDocumentName());
                 Collection<BratAnnotation> annos = bratdoc.getAnnotations();
 
                 //scan if this annotation already exists; if not, add this new one
                 if (!checkAnnotationAlreadyExists(type, start, end, annos)) { //TODO: Collection.contains()  verwenden?!
-                    addNewAnnotation(mySpanAnnotations, type, filename, finding.getText(), start, end, annos);
+                    addNewAnnotation(mySpanAnnotations, type, resultList.get(index).getDocumentName(), finding.getText(), start, end, annos);
                 }
             }
         }
     }
 
     private void addNewAnnotation(Map<String, List<MySpanAnnotation>> mySpanAnnotations, String type, String filename, String searchstr, int hitStart, int hitEnd, Collection<BratAnnotation> annos) {
-        int nextID = nextID(annos) + mySpanAnnotations.size();
+        int nextID = nextID(annos) + (mySpanAnnotations.get(filename) != null ? mySpanAnnotations.get(filename).size() : 0 );
         //Brat/Spanannoation kann ich nicht sebst erzeugen, weil sie protected im opennlp sind...
         List<MySpanAnnotation> list = mySpanAnnotations.get(filename);
         if (list == null) {

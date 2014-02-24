@@ -1,37 +1,39 @@
 package de.uni.passau.fim.mics.ermera.opennlp;
 
-public class NameFinderGroupedResultListItem {
-    private String document;
-    private NameFinderResult.Sentence sentence;
-    private NameFinderResult.Finding finding;
+import java.util.List;
 
-    public NameFinderGroupedResultListItem(String document, NameFinderResult.Sentence sentence, NameFinderResult.Finding finding) {
-        this.document = document;
-        this.sentence = sentence;
-        this.finding = finding;
+public class NameFinderGroupedResultListItem implements Comparable {
+    private String findingText;
+    private List<SingleNameFinderResult> list;
+
+    public NameFinderGroupedResultListItem(String findingText, List<SingleNameFinderResult> list) {
+        this.findingText = findingText;
+        this.list = list;
     }
 
-    public String getDocument() {
-        return document;
+    public String getFindingText() {
+        return findingText;
     }
 
-    public void setDocument(String document) {
-        this.document = document;
+    public void setFindingText(String findingText) {
+        this.findingText = findingText;
     }
 
-    public NameFinderResult.Sentence getSentence() {
-        return sentence;
+    public List<SingleNameFinderResult> getList() {
+        return list;
     }
 
-    public void setSentence(NameFinderResult.Sentence sentence) {
-        this.sentence = sentence;
+    public void setList(List<SingleNameFinderResult> list) {
+        this.list = list;
     }
 
-    public NameFinderResult.Finding getFinding() {
-        return finding;
-    }
+    @Override
+    public int compareTo(Object o) {
+        int size = this.getList().size();
+        int otherSize = ((NameFinderGroupedResultListItem) o).getList().size();
 
-    public void setFinding(NameFinderResult.Finding finding) {
-        this.finding = finding;
+        if (size == otherSize) return 0;
+        else if (size < otherSize) return 1;
+        else return -1;
     }
 }

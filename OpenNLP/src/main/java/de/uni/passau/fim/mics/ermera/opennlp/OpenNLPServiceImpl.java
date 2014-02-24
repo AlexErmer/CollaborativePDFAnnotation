@@ -16,7 +16,10 @@ import opennlp.tools.util.Span;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class OpenNLPServiceImpl implements OpenNLPService {
 
@@ -67,7 +70,7 @@ public class OpenNLPServiceImpl implements OpenNLPService {
      * @return a map which contains the found entities for each document.
      */
     @Override
-    public Map<String, NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
+    public List<NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
         NameFinderME nameFinderME = new NameFinderME(model);
 
         // split strings into sentences and tokens
@@ -84,7 +87,7 @@ public class OpenNLPServiceImpl implements OpenNLPService {
         SentenceDetector sentenceDetector = new SentenceDetectorME(sentenceModel);
         Tokenizer tokenizer = new TokenizerME(tokenizerModel);
 
-        Map<String, NameFinderResult> results = new HashMap<>();
+        List<NameFinderResult> results = new ArrayList<>();
         for (Map.Entry<String, String> docStr : documentStrs.entrySet()) {
 
             final String docName = docStr.getKey();
@@ -114,7 +117,7 @@ public class OpenNLPServiceImpl implements OpenNLPService {
                     sentenceList.add(new NameFinderResult.Sentence(sentencePositions[i], sentenceTexts[i], tokenList, findingsList));
                 }
             }
-            results.put(docName, new NameFinderResult(docName, docText, sentenceList));
+            results.add(new NameFinderResult(docName, docText, sentenceList));
         }
         return results;
     }

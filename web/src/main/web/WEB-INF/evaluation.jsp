@@ -1,12 +1,11 @@
-<%--@elvariable id="item" type="java.util.Map"--%>
+<%--@elvariable id="item" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult"--%>
 <%--@elvariable id="sentence" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Sentence"--%>
 <%--@elvariable id="finding" type="de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult.Finding"--%>
-<%--@elvariable id="nameSpan" type="opennlp.tools.util.Span"--%>
-<%--@elvariable id="span" type="opennlp.tools.util.Span"--%>
 
-<%--@elvariable id="index" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%--@elvariable id="namespanCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%--@elvariable id="sentenceCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
+<%--@elvariable id="itemCounter" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
+<%--@elvariable id="index" type="javax.servlet.jsp.jstl.core.LoopTagStatus"--%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
@@ -37,11 +36,11 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach items="${evaluationBean.resultMap}" var="item">
-            <c:forEach items="${item.value.sentences}" var="sentence" varStatus="sentenceCounter">
+        <c:forEach items="${evaluationBean.resultList}" var="item" varStatus="itemCounter">
+            <c:forEach items="${item.sentences}" var="sentence" varStatus="sentenceCounter">
                 <c:forEach items="${sentence.findingsList}" var="finding" varStatus="namespanCounter">
                     <tr>
-                        <td>${item.key}</td>
+                        <td>${item.documentName}</td>
                         <td>
                             <c:forEach begin="0" end="${finding.span.start-1}" varStatus="index">
                                 ${sentence.tokens[index.index].text}
@@ -52,13 +51,12 @@
                             <c:forEach begin="${finding.span.end+1}" end="${fn:length(sentence.tokens)}" varStatus="index">
                                 ${sentence.tokens[index.index].text}
                             </c:forEach>
-
                         </td>
                         <td>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="ok"
-                                           value="nsc__${item.key}__${sentenceCounter.index}__${namespanCounter.index}"/> OK!
+                                           value="nsc__${itemCounter.index}__${sentenceCounter.index}__${namespanCounter.index}"/> OK!
                                 </label>
                             </div>
                         </td>

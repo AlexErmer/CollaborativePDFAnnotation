@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class NLPAction extends AbstractAction {
@@ -49,13 +50,13 @@ public class NLPAction extends AbstractAction {
             return null;
         }
 
-        Map<String, NameFinderResult> map;
+        List<NameFinderResult> list;
         try {
-            map = useModel(userid, modelname, files);
+            list = useModel(userid, modelname, files);
         } catch (NLPException e) {
             throw new ActionException("Fehler beim Anwenden des NLP Modells", e);
         }
-        session.setAttribute("resultMap", map);
+        session.setAttribute("resultList", list);
         return Views.EVALUATION.toString();
     }
 
@@ -89,7 +90,7 @@ public class NLPAction extends AbstractAction {
         }
     }
 
-    private Map<String, NameFinderResult> useModel(String userid, String modelname, String[] files) throws NLPException {
+    private List<NameFinderResult> useModel(String userid, String modelname, String[] files) throws NLPException {
         OpenNLPService nlpService = new OpenNLPServiceImpl();
 
         // model holen
