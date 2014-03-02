@@ -8,12 +8,15 @@
 <jsp:useBean id="documentBean" scope="session" class="de.uni.passau.fim.mics.ermera.model.DocumentBean"/>
 
 <h1>PDF Extraction Demo - Extract - Korrektur</h1>
+
 <p class="text-info">Hier kann die automatische Textextraktion korrigiert werden.
     Links ist das PDF abgebildet, rechts der extrahierte Text.
-     Änderungen werden sofort gespeichert.
+    Änderungen werden sofort gespeichert.
 </p>
 <c:if test="${requestScope.hasAnnotationWarning}">
-<div class="alert alert-warning"><strong>ACHTUNG</strong> Es bestehen bereits Annotationen zu diesem Dokument! Wenn der extrahierte Text verändert wird, gehen diese Informationen verloren!</div>
+    <div class="alert alert-warning"><strong>ACHTUNG</strong> Es bestehen bereits Annotationen zu diesem Dokument! Wenn
+        der extrahierte Text verändert wird, gehen diese Informationen verloren!
+    </div>
 </c:if>
 
 <c:choose>
@@ -92,8 +95,9 @@
                         </div>
                     </div>
                 </c:if>
+
                 <div class="block-text">
-                        ${block.text}
+                    ${block.text}
                 </div>
             </div>
         </c:forEach>
@@ -235,11 +239,18 @@
 <div style="clear:both"></div>
 
 <form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group clearer">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-        <a class="btn btn-default col-sm-3" href="/pages/extract" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
-        <a class="btn btn-primary pull-right" href="/pages/annotate?fileid=${documentBean.id}">annotate in brat <span class="glyphicon glyphicon-chevron-right"></span></a>
-    </div>
+    <footer class="navbar navbar-fixed-bottom">
+        <div class="container">
+            <div class="well well-sm form-group">
+                <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                        class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+                <a class="btn btn-default col-sm-3" href="/pages/extract" role="button"><span
+                        class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
+                <a class="btn btn-primary pull-right" href="/pages/annotate?fileid=${documentBean.id}">annotate in brat
+                    <span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+        </div>
+    </footer>
 </form>
 
 <jsp:include page="common/footer.jsp"/>

@@ -6,6 +6,7 @@
 <jsp:useBean id="indexBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.IndexBean"/>
 
 <h1>PDF Extraction Demo - Model anwenden</h1>
+
 <p class="text-info">Wählen Sie das Model und die PDF-Dateien aus, auf die es anwendet werden soll.
     Die Ergebnisse werden auf der folgenden Seite präsentiert, auf der sie evaluiert werden.</p>
 
@@ -46,17 +47,15 @@
         </tbody>
     </table>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" name="use">use Model</button>
-    </div>
-</form>
-
-
-<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span
-                class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-    </div>
+    <footer class="navbar navbar-fixed-bottom">
+        <div class="container">
+            <div class="well well-sm form-group">
+                <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                        class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="use">use Model</button>
+            </div>
+        </div>
+    </footer>
 </form>
 
 <jsp:include page="common/footer.jsp"/>

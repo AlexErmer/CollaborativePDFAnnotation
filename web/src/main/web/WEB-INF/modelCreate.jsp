@@ -1,11 +1,15 @@
 <%--@elvariable id="fileId" type="java.util.List"--%>
+<%--@elvariable id="type" type="java.Lang.String"--%>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
 
 <jsp:useBean id="indexBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.IndexBean"/>
 
+
 <h1>PDF Extraction Demo - Model erstellen</h1>
-<p class="text-info">Wählen Sie die PDF-Dateien aus, deren Annotationen des ebenfalls festgelegten Types in ein neues
+
+<p class="text-info">Wählen Sie die PDF-Dateien aus, deren Annotationen des ebenfalls festgelegten Types in ein
+    neues
     Model fließen sollen.</p>
 
 <form action="/pages/nlp" method="post">
@@ -49,17 +53,15 @@
         </c:forEach>
         </tbody>
     </table>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" name="create">create Model</button>
-    </div>
-</form>
-
-
-<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span
-                class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-    </div>
+    <footer class="navbar navbar-fixed-bottom">
+        <div class="container">
+            <div class="well well-sm form-group">
+                <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                        class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="create">create Model</button>
+            </div>
+        </div>
+    </footer>
 </form>
 
 <jsp:include page="common/footer.jsp"/>

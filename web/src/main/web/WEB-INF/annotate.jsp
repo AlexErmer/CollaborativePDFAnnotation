@@ -9,6 +9,7 @@
 <c:if test="${indexBean.selectedFile == null}">
     <p class="text-info">Wählen Sie die PDF-Datei, für die Annotationen erfasst werden sollen. Sie werden zur
         brat-Oberfläche weitergeleitet.</p>
+
     <form action="/pages/nlp" method="post">
         <table class="table table-hover table-striped">
             <thead>
@@ -42,12 +43,17 @@
 </c:if>
 
 <form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span
-                class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-        <a class="btn btn-primary col-sm-2 pull-right" href="/pages/modelCreate" role="button">Modell erstellen <span
-                class="glyphicon glyphicon-chevron-right"></span></a>
-    </div>
+    <footer class="navbar navbar-fixed-bottom">
+        <div class="container">
+            <div class="well well-sm form-group">
+                <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                        class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+                <a class="btn btn-primary col-sm-2 pull-right" href="/pages/modelCreate" role="button">Modell erstellen <span
+                        class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+        </div>
+    </footer>
 </form>
+
 
 <jsp:include page="common/footer.jsp"/>

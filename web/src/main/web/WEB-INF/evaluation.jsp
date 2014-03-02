@@ -48,7 +48,8 @@
                             <b>
                                 ${finding.text}
                             </b>
-                            <c:forEach begin="${finding.span.end+1}" end="${fn:length(sentence.tokens)}" varStatus="index">
+                            <c:forEach begin="${finding.span.end+1}" end="${fn:length(sentence.tokens)}"
+                                       varStatus="index">
                                 ${sentence.tokens[index.index].text}
                             </c:forEach>
                         </td>
@@ -56,7 +57,8 @@
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="ok"
-                                           value="nsc__${itemCounter.index}__${sentenceCounter.index}__${namespanCounter.index}"/> OK!
+                                           value="nsc__${itemCounter.index}__${sentenceCounter.index}__${namespanCounter.index}"/>
+                                    OK!
                                 </label>
                             </div>
                         </td>
@@ -66,14 +68,16 @@
         </c:forEach>
         </tbody>
     </table>
-    <button type="submit" class="btn btn-primary" name="submit">Submit</button>
-</form>
 
-<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span
-                class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-    </div>
+    <footer class="navbar navbar-fixed-bottom">
+        <div class="container">
+            <div class="well well-sm form-group">
+                <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                        class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="submit">Submit</button>
+            </div>
+        </div>
+    </footer>
 </form>
 
 <jsp:include page="common/footer.jsp"/>

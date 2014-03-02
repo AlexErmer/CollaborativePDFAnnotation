@@ -28,7 +28,8 @@
                 <tr>
                     <td>${item}</td>
                     <td>
-                        <a class="btn btn-default col-sm-2" title="löschen" href="/pages/config?delete=${item}"  role="button">
+                        <a class="btn btn-default col-sm-2" title="löschen" href="/pages/config?delete=${item}"
+                           role="button">
                             <span class="glyphicon glyphicon-trash"></span> löschen
                         </a>
                     </td>
@@ -39,10 +40,15 @@
     </div>
 </form>
 
-<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+<footer class="navbar navbar-fixed-bottom">
+    <div class="container">
+        <div class="well well-sm form-group">
+            <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                    class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+            <a class="btn btn-primary col-sm-2 pull-right" href="/pages/upload" role="button">PDFs hochladen<span
+                    class="glyphicon glyphicon-chevron-right"></span></a>
+        </div>
     </div>
-</form>
+</footer>
 
 <jsp:include page="common/footer.jsp"/>

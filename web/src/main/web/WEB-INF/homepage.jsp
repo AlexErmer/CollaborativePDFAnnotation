@@ -7,12 +7,12 @@
 
 <form class="form-horizontal" role="form" action="/">
     <div class="well well-sm form-group">
-        <a class="btn btn-primary col-sm-2" href="/pages/upload" role="button">PDF hochladen</a>
-        <p class="help-block col-sm-10">Laden Sie weitere PDF Dateien auf die Plattform um ihre Modelle zu verbessern.</p>
-    </div>
-    <div class="well well-sm form-group">
         <a class="btn btn-primary col-sm-2" href="/pages/config" role="button">Entitätstypen festlegen</a>
         <p class="help-block col-sm-10">Legen Sie ihre Entitätstypen fest.</p>
+    </div>
+    <div class="well well-sm form-group">
+        <a class="btn btn-primary col-sm-2" href="/pages/upload" role="button">PDF hochladen</a>
+        <p class="help-block col-sm-10">Laden Sie weitere PDF Dateien auf die Plattform um ihre Modelle zu verbessern.</p>
     </div>
     <div class="well well-sm form-group">
         <a class="btn btn-primary col-sm-2" href="/pages/extract" role="button">Text-Extraktion</a>

@@ -5,6 +5,7 @@
 <jsp:useBean id="indexBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.IndexBean"/>
 
 <h1>PDF Extraction Demo - Extract - Auswahl</h1>
+
 <p class="text-info">Wählen Sie die PDF-Datei, bei der die automatische Text-Extraktion korrigiert werden soll.</p>
 
 <form action="/pages/nlp" method="post">
@@ -28,11 +29,15 @@
     </table>
 </form>
 
-
-<form class="form-horizontal" style="margin-top: 20px;" role="form" action="/">
-    <div class="well well-sm form-group">
-        <a class="btn btn-default col-sm-2" href="/" role="button"><span class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+<footer class="navbar navbar-fixed-bottom">
+    <div class="container">
+        <div class="well well-sm form-group">
+            <a class="btn btn-default col-sm-2" href="/" role="button"><span
+                    class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+            <a class="btn btn-primary col-sm-2 pull-right" href="/pages/annotate" role="button">Annotieren<span
+                    class="glyphicon glyphicon-chevron-right"></span></a>
+        </div>
     </div>
-</form>
+</footer>
 
 <jsp:include page="common/footer.jsp"/>
