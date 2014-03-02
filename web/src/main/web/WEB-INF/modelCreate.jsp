@@ -16,7 +16,11 @@
 
     <div class="form-group">
         <label for="entitiytype">Entitättyp</label>
-        <input type="text" id="entitiytype" class="form-control" name="entitiytype" placeholder="Enter entitiytype"/>
+        <select id="entitiytype" name="entitiytype">
+            <c:forEach items="${indexBean.typeList}" var="type">
+                <option value="${type}">${type}</option>
+            </c:forEach>
+        </select>
     </div>
 
     <table class="table table-hover table-striped">

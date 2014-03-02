@@ -70,8 +70,8 @@ public class OpenNLPServiceImpl implements OpenNLPService {
      * @return a map which contains the found entities for each document.
      */
     @Override
-    public List<NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
-        NameFinderME nameFinderME = new NameFinderME(model);
+    public List<NameFinderResult> find(ModelEntity model, Map<String, String> documentStrs) throws NLPException {
+        NameFinderME nameFinderME = new NameFinderME(model.getModel());
 
         // split strings into sentences and tokens
         InputStream sentIn = OpenNLPServiceImpl.class.getResourceAsStream("/en-sent.bin");
@@ -111,7 +111,7 @@ public class OpenNLPServiceImpl implements OpenNLPService {
                     List<NameFinderResult.Finding> findingsList = new ArrayList<>();
                     for (Span finding : findings) {
                         String text = extractFindingText(finding, tokenList);
-                        findingsList.add(new NameFinderResult.Finding(finding, text));
+                        findingsList.add(new NameFinderResult.Finding(finding, text, model.getEntitytype()));
                     }
 
                     sentenceList.add(new NameFinderResult.Sentence(sentencePositions[i], sentenceTexts[i], tokenList, findingsList));

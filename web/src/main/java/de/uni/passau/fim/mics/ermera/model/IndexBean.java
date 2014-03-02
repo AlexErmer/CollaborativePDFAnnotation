@@ -6,6 +6,7 @@ public class IndexBean {
     private String selectedFile;
     private List<String> fileIds;
     private List<String> models;
+    private List<String> typeList;
 
     public String getSelectedFile() {
         return selectedFile;
@@ -29,5 +30,13 @@ public class IndexBean {
 
     public void setModels(List<String> models) {
         this.models = models;
+    }
+
+    public List<String> getTypeList() {
+        return typeList;
+    }
+
+    public void setTypeList(List<String> typeList) {
+        this.typeList = typeList;
     }
 }

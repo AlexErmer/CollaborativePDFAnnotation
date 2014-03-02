@@ -89,10 +89,12 @@ public class NameFinderResult {
     public static class Finding {
         private Span span;
         private String text;
+        private String type;
 
-        public Finding(Span span, String text) {
+        public Finding(Span span, String text, String type) {
             this.span = span;
             this.text = text;
+            this.type = type;
         }
 
         public Span getSpan() {
@@ -109,6 +111,14 @@ public class NameFinderResult {
 
         public void setText(String text) {
             this.text = text;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
     }
 

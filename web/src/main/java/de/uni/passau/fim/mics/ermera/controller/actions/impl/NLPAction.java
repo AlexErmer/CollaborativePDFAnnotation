@@ -8,10 +8,7 @@ import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
-import de.uni.passau.fim.mics.ermera.opennlp.NLPException;
-import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
-import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPService;
-import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPServiceImpl;
+import de.uni.passau.fim.mics.ermera.opennlp.*;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.log4j.Logger;
 
@@ -73,9 +70,11 @@ public class NLPAction extends AbstractAction {
         }
 
         createModel(userid, modelname, entitiytype, files);
+        mu.addMessage(MessageTypes.SUCCESS, "model created");
         return Views.HOMEPAGE.toString();
     }
 
+    @SuppressWarnings({"UnusedParameters"})
     private void createModel(String userid, String modelname, String entitiytype, String[] files) throws ActionException {
         try {
             //TODO: select documents which should form a new model
@@ -84,7 +83,7 @@ public class NLPAction extends AbstractAction {
 
             // store model
             DocumentDao documentDao = new DocumentDaoImpl();
-            documentDao.storeModel(userid, modelname, model);
+            documentDao.storeModel(userid, modelname, model, entitiytype);
         } catch (IOException e) {
             throw new ActionException("Fehler beim erzeugen des Models", e);
         }
@@ -95,12 +94,15 @@ public class NLPAction extends AbstractAction {
 
         // model holen
         DocumentDao documentDao = new DocumentDaoImpl();
-        TokenNameFinderModel model = null;
+        ModelEntity model = null;
         try {
             model = documentDao.loadModel(userid, modelname);
         } catch (IOException e) {
             LOGGER.error("IO error loading the model", e);
             mu.addMessage(MessageTypes.ERROR, "Error loading the model: " + e.getMessage());
+        }
+        if (model == null) {
+            throw new NLPException("Unexpected! Model must not be null!");
         }
 
         //get files as texts

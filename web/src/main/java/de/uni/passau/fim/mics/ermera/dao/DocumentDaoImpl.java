@@ -9,6 +9,7 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
+import de.uni.passau.fim.mics.ermera.opennlp.ModelEntity;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.log4j.Logger;
 
@@ -17,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: statisch machen?!
 public class DocumentDaoImpl implements DocumentDao {
     private static final Logger LOGGER = Logger.getLogger(DocumentDaoImpl.class);
 
@@ -114,12 +114,17 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public TokenNameFinderModel loadModel(String userid, String name) throws IOException {
-        InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + name);
+    public ModelEntity loadModel(String userid, String name) throws IOException {
+        String[] split = name.split("_");
+        String entitytype = split[0];
+        String modelName = split[1];
+
+        String modelFileName = PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + modelName + "_" + entitytype;
+        InputStream fis = new FileInputStream(modelFileName);
         TokenNameFinderModel model = new TokenNameFinderModel(fis);
         fis.close();
 
-        return model;
+        return new ModelEntity(model, entitytype);
     }
 
     @Override
@@ -140,8 +145,9 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public void storeModel(String userid, String name, TokenNameFinderModel model) throws IOException {
-        try (OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + name))) {
+    public void storeModel(String userid, String name, TokenNameFinderModel model, String entitiytype) throws IOException {
+        String modelFileName = PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + name + "_" + entitiytype;
+        try (OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFileName))) {
             model.serialize(modelOut);
         }
     }
@@ -204,9 +210,12 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public void saveTypeList(String userid, List<String> types) throws DocumentDaoException {
-        try {
+        // save typelist as json in users path
+        try (OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + ENTITYLISTNAME))) {
+            String json = new Gson().toJson(types);
+            modelOut.write(json.getBytes());
             ConfigFileCreator.createAnnotationConf(userid, types);
-        } catch (BratException e) {
+        } catch (IOException | BratException e) {
             throw new DocumentDaoException("IOException saving Entitytypes", e);
         }
     }

@@ -28,6 +28,7 @@ public class EvaluationGroupedAction extends AbstractAction {
         evaluationBean.setGroupedResultList(groupedResultList);
         request.setAttribute("evaluationBean", evaluationBean);
 
+        // put in session, for later saving!
         session.setAttribute("evaluationBean", evaluationBean);
 
         return Views.EVALUATIONGROUPED.toString();

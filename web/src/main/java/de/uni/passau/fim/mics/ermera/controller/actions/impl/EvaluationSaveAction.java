@@ -41,7 +41,6 @@ public class EvaluationSaveAction extends AbstractAction {
             loopGroupedFindings(request, resultList, mySpanAnnotations);
         } else {
             loopFindings(request, resultList, mySpanAnnotations);
-
         }
 
         saveNewAnnotations(mySpanAnnotations);
@@ -52,11 +51,7 @@ public class EvaluationSaveAction extends AbstractAction {
         //load bratannotations in a map
         Map<String, BratDocument> bratDocumentMap = createBratDocumentMap(userid);
 
-        //TODO: entitiytyp muss aus dem model kommen?!
-        String type = "Person";
-
         EvaluationBean evaluationBean = (EvaluationBean) session.getAttribute("evaluationBean");
-
 
         // loop all SELECTED findings
         String[] ids = request.getParameterValues("ok");
@@ -79,22 +74,17 @@ public class EvaluationSaveAction extends AbstractAction {
                     Collection<BratAnnotation> annos = bratdoc.getAnnotations();
 
                     //scan if this annotation already exists; if not, add this new one
-                    if (!checkAnnotationAlreadyExists(type, start, end, annos)) { //TODO: Collection.contains()  verwenden?!
-                        addNewAnnotation(mySpanAnnotations, type, single.getDocumentName(), finding.getText(), start, end, annos);
+                    if (!checkAnnotationAlreadyExists(finding.getType(), start, end, annos)) {
+                        addNewAnnotation(mySpanAnnotations, finding.getType(), single.getDocumentName(), finding.getText(), start, end, annos);
                     }
                 }
             }
         }
     }
 
-
     private void loopFindings(HttpServletRequest request, List<NameFinderResult> resultList, Map<String, List<MySpanAnnotation>> mySpanAnnotations) throws ActionException {
         //load bratannotations in a map
         Map<String, BratDocument> bratDocumentMap = createBratDocumentMap(userid);
-
-        //TODO: entitiytyp muss aus dem model kommen?!
-        String type = "Person";
-
 
         // loop all SELECTED findings
         String[] ids = request.getParameterValues("ok");
@@ -116,15 +106,15 @@ public class EvaluationSaveAction extends AbstractAction {
                 Collection<BratAnnotation> annos = bratdoc.getAnnotations();
 
                 //scan if this annotation already exists; if not, add this new one
-                if (!checkAnnotationAlreadyExists(type, start, end, annos)) { //TODO: Collection.contains()  verwenden?!
-                    addNewAnnotation(mySpanAnnotations, type, resultList.get(index).getDocumentName(), finding.getText(), start, end, annos);
+                if (!checkAnnotationAlreadyExists(finding.getType(), start, end, annos)) {
+                    addNewAnnotation(mySpanAnnotations, finding.getType(), resultList.get(index).getDocumentName(), finding.getText(), start, end, annos);
                 }
             }
         }
     }
 
     private void addNewAnnotation(Map<String, List<MySpanAnnotation>> mySpanAnnotations, String type, String filename, String searchstr, int hitStart, int hitEnd, Collection<BratAnnotation> annos) {
-        int nextID = nextID(annos) + (mySpanAnnotations.get(filename) != null ? mySpanAnnotations.get(filename).size() : 0 );
+        int nextID = nextID(annos) + (mySpanAnnotations.get(filename) != null ? mySpanAnnotations.get(filename).size() : 0);
         //Brat/Spanannoation kann ich nicht sebst erzeugen, weil sie protected im opennlp sind...
         List<MySpanAnnotation> list = mySpanAnnotations.get(filename);
         if (list == null) {
@@ -136,6 +126,7 @@ public class EvaluationSaveAction extends AbstractAction {
     }
 
     private boolean checkAnnotationAlreadyExists(String type, int hitStart, int hitEnd, Collection<BratAnnotation> annos) {
+        //IDEA: kann man hier nicht Collection.contains()  verwenden?!
         for (BratAnnotation anno : annos) {
             SpanAnnotation bspan = (SpanAnnotation) anno;
             if (type.equals(bspan.getSpan().getType())
