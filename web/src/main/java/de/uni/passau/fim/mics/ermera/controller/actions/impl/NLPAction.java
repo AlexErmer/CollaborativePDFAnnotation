@@ -8,7 +8,10 @@ import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
-import de.uni.passau.fim.mics.ermera.opennlp.*;
+import de.uni.passau.fim.mics.ermera.opennlp.NLPException;
+import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
+import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPService;
+import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPServiceImpl;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.log4j.Logger;
 
@@ -59,31 +62,26 @@ public class NLPAction extends AbstractAction {
 
     private String handleCreateModel(HttpServletRequest request, String userid, String[] files) throws ActionException {
         String modelname = request.getParameter("modelname");
-        String entitiytype = request.getParameter("entitiytype");
         if (modelname == null) {
             mu.addMessage(MessageTypes.ERROR, "no modelname entered");
             return null;
         }
-        if (entitiytype == null) {
-            mu.addMessage(MessageTypes.ERROR, "no entitiytype entered");
-            return null;
-        }
 
-        createModel(userid, modelname, entitiytype, files);
+        createModel(userid, modelname, files);
         mu.addMessage(MessageTypes.SUCCESS, "model created");
         return Views.HOMEPAGE.toString();
     }
 
     @SuppressWarnings({"UnusedParameters"})
-    private void createModel(String userid, String modelname, String entitiytype, String[] files) throws ActionException {
+    private void createModel(String userid, String modelname, String[] files) throws ActionException {
         try {
             //TODO: select documents which should form a new model
             OpenNLPService nlpService = new OpenNLPServiceImpl();
-            TokenNameFinderModel model = nlpService.train(userid, entitiytype);
+            TokenNameFinderModel model = nlpService.train(userid);
 
             // store model
             DocumentDao documentDao = new DocumentDaoImpl();
-            documentDao.storeModel(userid, modelname, model, entitiytype);
+            documentDao.storeModel(userid, modelname, model);
         } catch (IOException e) {
             throw new ActionException("Fehler beim erzeugen des Models", e);
         }
@@ -94,7 +92,7 @@ public class NLPAction extends AbstractAction {
 
         // model holen
         DocumentDao documentDao = new DocumentDaoImpl();
-        ModelEntity model = null;
+        TokenNameFinderModel model = null;
         try {
             model = documentDao.loadModel(userid, modelname);
         } catch (IOException e) {

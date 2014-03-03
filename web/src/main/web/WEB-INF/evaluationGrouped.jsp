@@ -24,6 +24,7 @@
         <tr>
             <th>entity</th>
             <th>amount</th>
+            <th>text</th>
             <th>findings</th>
             <th>
                 <div class="checkbox">
@@ -37,8 +38,9 @@
         <tbody>
         <c:forEach items="${evaluationBean.groupedResultList}" var="item" varStatus="itemCounter">
             <tr>
-                <td>${item.findingText}</td>
+                <td>${item.finding.type}</td>
                 <td>${item.list.size()}</td>
+                <td>${item.finding.text}</td>
                 <td>
                     <ul>
                         <c:forEach items="${item.list}" var="listItem">

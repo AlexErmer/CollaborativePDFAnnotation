@@ -71,11 +71,13 @@ public class EvaluationSaveAction extends AbstractAction {
                     int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd() - 1).getPosition().getEnd();
 
                     BratDocument bratdoc = bratDocumentMap.get(single.getDocumentName());
-                    Collection<BratAnnotation> annos = bratdoc.getAnnotations();
+                    if (bratdoc != null) {
+                        Collection<BratAnnotation> annos = bratdoc.getAnnotations();
 
-                    //scan if this annotation already exists; if not, add this new one
-                    if (!checkAnnotationAlreadyExists(finding.getType(), start, end, annos)) {
-                        addNewAnnotation(mySpanAnnotations, finding.getType(), single.getDocumentName(), finding.getText(), start, end, annos);
+                        //scan if this annotation already exists; if not, add this new one
+                        if (!checkAnnotationAlreadyExists(finding.getType(), start, end, annos)) {
+                            addNewAnnotation(mySpanAnnotations, finding.getType(), single.getDocumentName(), finding.getText(), start, end, annos);
+                        }
                     }
                 }
             }
@@ -103,11 +105,13 @@ public class EvaluationSaveAction extends AbstractAction {
                 int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd() - 1).getPosition().getEnd();
 
                 BratDocument bratdoc = bratDocumentMap.get(resultList.get(index).getDocumentName());
-                Collection<BratAnnotation> annos = bratdoc.getAnnotations();
+                if (bratdoc != null) {
+                    Collection<BratAnnotation> annos = bratdoc.getAnnotations();
 
-                //scan if this annotation already exists; if not, add this new one
-                if (!checkAnnotationAlreadyExists(finding.getType(), start, end, annos)) {
-                    addNewAnnotation(mySpanAnnotations, finding.getType(), resultList.get(index).getDocumentName(), finding.getText(), start, end, annos);
+                    //scan if this annotation already exists; if not, add this new one
+                    if (!checkAnnotationAlreadyExists(finding.getType(), start, end, annos)) {
+                        addNewAnnotation(mySpanAnnotations, finding.getType(), resultList.get(index).getDocumentName(), finding.getText(), start, end, annos);
+                    }
                 }
             }
         }

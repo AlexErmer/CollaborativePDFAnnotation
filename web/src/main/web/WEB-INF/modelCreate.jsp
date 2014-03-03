@@ -9,22 +9,12 @@
 <h1>PDF Extraction Demo - Model erstellen</h1>
 
 <p class="text-info">Wählen Sie die PDF-Dateien aus, deren Annotationen des ebenfalls festgelegten Types in ein
-    neues
-    Model fließen sollen.</p>
+    neues Model fließen sollen.</p>
 
 <form action="/pages/nlp" method="post">
     <div class="form-group">
         <label for="modelname">Modelname</label>
         <input type="text" id="modelname" class="form-control" name="modelname" placeholder="Enter modelname"/>
-    </div>
-
-    <div class="form-group">
-        <label for="entitiytype">Entitättyp</label>
-        <select id="entitiytype" name="entitiytype">
-            <c:forEach items="${indexBean.typeList}" var="type">
-                <option value="${type}">${type}</option>
-            </c:forEach>
-        </select>
     </div>
 
     <table class="table table-hover table-striped">

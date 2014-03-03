@@ -40,7 +40,7 @@ public class EvaluationGroupedAction extends AbstractAction {
         for (NameFinderResult result : resultList) {
             for (NameFinderResult.Sentence sentence : result.getSentences()) {
                 for (NameFinderResult.Finding finding : sentence.getFindingsList()) {
-                    addGroupedEntry(result.getDocumentName(), nameFinderGroupedResultList, finding.getText(), sentence, finding);
+                    addGroupedEntry(result.getDocumentName(), nameFinderGroupedResultList, sentence, finding);
                 }
             }
         }
@@ -48,10 +48,10 @@ public class EvaluationGroupedAction extends AbstractAction {
         return nameFinderGroupedResultList;
     }
 
-    private void addGroupedEntry(String documentName, List<NameFinderGroupedResultListItem> list, String text, NameFinderResult.Sentence sentence, NameFinderResult.Finding finding) {
+    private void addGroupedEntry(String documentName, List<NameFinderGroupedResultListItem> list, NameFinderResult.Sentence sentence, NameFinderResult.Finding finding) {
         // search for equal findingstring:
         for (NameFinderGroupedResultListItem nameFinderGroupedResultListItem : list) {
-            if (nameFinderGroupedResultListItem.getFindingText().equals(text)) {
+            if (nameFinderGroupedResultListItem.getFinding().getText().equals(finding.getText())) {
                 // if found add this result to the found entry
                 nameFinderGroupedResultListItem.getList().add(new SingleNameFinderResult(documentName, sentence, finding));
                 return;
@@ -61,6 +61,6 @@ public class EvaluationGroupedAction extends AbstractAction {
         // if none found, add a new entry to grouped result list
         List<SingleNameFinderResult> newList = new ArrayList<>();
         newList.add(new SingleNameFinderResult(documentName, sentence, finding));
-        list.add(new NameFinderGroupedResultListItem(text, newList));
+        list.add(new NameFinderGroupedResultListItem(finding, newList));
     }
 }

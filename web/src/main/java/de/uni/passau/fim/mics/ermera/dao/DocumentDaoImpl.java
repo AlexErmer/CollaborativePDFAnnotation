@@ -9,7 +9,6 @@ import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
-import de.uni.passau.fim.mics.ermera.opennlp.ModelEntity;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.log4j.Logger;
 
@@ -114,17 +113,13 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public ModelEntity loadModel(String userid, String name) throws IOException {
-        String[] split = name.split("_");
-        String entitytype = split[0];
-        String modelName = split[1];
-
-        String modelFileName = PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + modelName + "_" + entitytype;
+    public TokenNameFinderModel loadModel(String userid, String name) throws IOException {
+        String modelFileName = PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + name;
         InputStream fis = new FileInputStream(modelFileName);
         TokenNameFinderModel model = new TokenNameFinderModel(fis);
         fis.close();
 
-        return new ModelEntity(model, entitytype);
+        return model;
     }
 
     @Override
@@ -145,8 +140,8 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public void storeModel(String userid, String name, TokenNameFinderModel model, String entitiytype) throws IOException {
-        String modelFileName = PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + name + "_" + entitiytype;
+    public void storeModel(String userid, String name, TokenNameFinderModel model) throws IOException {
+        String modelFileName = PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.MODELFOLDER + MODELPREFIX + name;
         try (OutputStream modelOut = new BufferedOutputStream(new FileOutputStream(modelFileName))) {
             model.serialize(modelOut);
         }

@@ -26,6 +26,7 @@
         <tr>
             <th>document</th>
             <th>entity</th>
+            <th>finding</th>
             <th>
                 <div class="checkbox">
                     <label>
@@ -41,6 +42,7 @@
                 <c:forEach items="${sentence.findingsList}" var="finding" varStatus="namespanCounter">
                     <tr>
                         <td>${item.documentName}</td>
+                        <td>${finding.span.type}</td>
                         <td>
                             <c:forEach begin="0" end="${finding.span.start-1}" varStatus="index">
                                 ${sentence.tokens[index.index].text}

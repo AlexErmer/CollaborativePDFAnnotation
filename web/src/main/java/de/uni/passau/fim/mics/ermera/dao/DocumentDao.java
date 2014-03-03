@@ -2,7 +2,6 @@ package de.uni.passau.fim.mics.ermera.dao;
 
 import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.model.DocumentBean;
-import de.uni.passau.fim.mics.ermera.opennlp.ModelEntity;
 import opennlp.tools.namefind.TokenNameFinderModel;
 
 import java.io.File;
@@ -18,9 +17,9 @@ public interface DocumentDao {
     DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException;
     void storeDocumentBean(String userid, DocumentBean documentBean) throws DocumentDaoException;
 
-    ModelEntity loadModel(String userid, String name) throws IOException;
+    TokenNameFinderModel loadModel(String userid, String name) throws IOException;
     List<String> loadAllModels(String userid);
-    void storeModel(String userid, String name, TokenNameFinderModel tokenNameFinderModel, String entitiytype) throws IOException;
+    void storeModel(String userid, String name, TokenNameFinderModel tokenNameFinderModel) throws IOException;
 
     //TODO: nach brat auslagern?!
     String loadBratFile(String userid, String name) throws IOException;

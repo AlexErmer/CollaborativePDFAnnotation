@@ -37,20 +37,19 @@ public class OpenNLPServiceImpl implements OpenNLPService {
     }
 
     /**
-     * This method trains and returns a new {@code TokenNameFinderModel} for the entity given by {@code entityName}.
+     * This method trains and returns a new {@code TokenNameFinderModel}.
      *
      * @param userid     Id of the user which creates the model.
-     * @param entityName the name of the entities for which the model is generated
      * @return the newly generated {@code TokenNameFinderModel}
      * @throws IOException exception for not being able to read files.
      */
     @Override
-    public TokenNameFinderModel train(String userid, String entityName) throws IOException {
+    public TokenNameFinderModel train(String userid) throws IOException {
         ObjectStream<NameSample> sampleStream = getStream(userid);
         TokenNameFinderModel model;
 
         try {
-            model = NameFinderME.train("en", entityName, sampleStream, Collections.<String, Object>emptyMap());
+            model = NameFinderME.train("en", null, sampleStream, Collections.<String, Object>emptyMap());
         } finally {
             sampleStream.close();
         }
@@ -70,8 +69,8 @@ public class OpenNLPServiceImpl implements OpenNLPService {
      * @return a map which contains the found entities for each document.
      */
     @Override
-    public List<NameFinderResult> find(ModelEntity model, Map<String, String> documentStrs) throws NLPException {
-        NameFinderME nameFinderME = new NameFinderME(model.getModel());
+    public List<NameFinderResult> find(TokenNameFinderModel model, Map<String, String> documentStrs) throws NLPException {
+        NameFinderME nameFinderME = new NameFinderME(model);
 
         // split strings into sentences and tokens
         InputStream sentIn = OpenNLPServiceImpl.class.getResourceAsStream("/en-sent.bin");
@@ -111,11 +110,12 @@ public class OpenNLPServiceImpl implements OpenNLPService {
                     List<NameFinderResult.Finding> findingsList = new ArrayList<>();
                     for (Span finding : findings) {
                         String text = extractFindingText(finding, tokenList);
-                        findingsList.add(new NameFinderResult.Finding(finding, text, model.getEntitytype()));
+                        findingsList.add(new NameFinderResult.Finding(finding, text, finding.getType()));
                     }
 
                     sentenceList.add(new NameFinderResult.Sentence(sentencePositions[i], sentenceTexts[i], tokenList, findingsList));
                 }
+                nameFinderME.clearAdaptiveData();
             }
             results.add(new NameFinderResult(docName, docText, sentenceList));
         }
