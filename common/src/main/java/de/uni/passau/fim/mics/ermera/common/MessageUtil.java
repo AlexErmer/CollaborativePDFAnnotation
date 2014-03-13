@@ -18,7 +18,7 @@ public class MessageUtil {
         return ret;
     }
 
-    public class Message {
+    public static class Message {
         private MessageTypes type;
         private String msg;
 

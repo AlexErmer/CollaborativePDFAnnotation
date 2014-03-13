@@ -24,9 +24,13 @@ public class ExportAction extends AbstractAction {
         DocumentDao documentDao = new DocumentDaoImpl();
         DocumentBean documentBean;
 
-        Exporters exporterType = Exporters.valueOf(request.getParameter("type").toUpperCase());
-        if (exporterType == null) {
-            mu.addMessage(MessageTypes.ERROR, "Exportertype not found");
+        String type = request.getParameter("type").toUpperCase();
+        Exporters exporterType;
+        try {
+            exporterType = Exporters.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            mu.addMessage(MessageTypes.ERROR, "Exportertype \"" + type + "\" not found");
+            LOGGER.error("Exportertype \"" + type + "\"  not found");
             return null;
         }
 

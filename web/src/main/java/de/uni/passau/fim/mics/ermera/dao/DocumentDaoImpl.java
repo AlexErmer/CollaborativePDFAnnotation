@@ -85,6 +85,7 @@ public class DocumentDaoImpl implements DocumentDao {
             InputStream fis = new FileInputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGEFOLDER + DOCUMENTPREFIX + id);
             ObjectInputStream in = new ObjectInputStream(fis);
             documentBean = (DocumentBean) in.readObject();
+            in.close();
             fis.close();
         } catch (IOException | ClassNotFoundException e) {
             throw new DocumentDaoException("failed to load documentBean", e);
@@ -103,6 +104,7 @@ public class DocumentDaoImpl implements DocumentDao {
             OutputStream fos = new FileOutputStream(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGEFOLDER + DOCUMENTPREFIX + documentBean.getId());
             ObjectOutputStream out = new ObjectOutputStream(fos);
             out.writeObject(documentBean);
+            out.close();
             fos.close();
         } catch (IOException e) {
             LOGGER.error("IO Error: Could not save DocumentBean", e);

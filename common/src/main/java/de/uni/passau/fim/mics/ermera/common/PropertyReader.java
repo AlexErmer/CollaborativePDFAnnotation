@@ -1,8 +1,10 @@
 package de.uni.passau.fim.mics.ermera.common;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyReader {
@@ -24,10 +26,15 @@ public class PropertyReader {
 
     static {
         Properties p = new Properties();
+        InputStream resourceAsStream = null;
         try {
-            p.load(PropertyReader.class.getResourceAsStream("/config.conf"));
+            resourceAsStream = PropertyReader.class.getResourceAsStream("/config.conf");
+            p.load(resourceAsStream);
         } catch (IOException e) {
             LOGGER.error("Propertyreader could not load Config!", e);
+        }
+        finally {
+            IOUtils.closeQuietly(resourceAsStream);
         }
 
         APPLICATION_URI = p.getProperty("APPLICATION_URI");

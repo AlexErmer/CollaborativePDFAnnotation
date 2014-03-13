@@ -25,7 +25,9 @@ public class BratExporter implements Exporter {
 
             // create seperate annotation file
             File annFile = new File(path + "/" + documentBean.getId() + ".ann");
-            annFile.createNewFile();
+            if (!annFile.createNewFile()) {
+                throw new ExportException("Annotationfile could not have been saved");
+            }
 
             // check config files and create them if necessary
             copyConfigFile("annotation.conf", path);
@@ -50,6 +52,7 @@ public class BratExporter implements Exporter {
             InputStream source = BratExporter.class.getResourceAsStream("/" + name);
             File dest = new File(path + name);
             copyFileUsingStream(source, dest);
+            source.close();
         }
     }
 

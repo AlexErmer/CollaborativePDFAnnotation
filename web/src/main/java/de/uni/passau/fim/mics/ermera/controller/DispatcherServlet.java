@@ -1,5 +1,7 @@
 package de.uni.passau.fim.mics.ermera.controller;
 
+import de.uni.passau.fim.mics.ermera.common.MessageTypes;
+import de.uni.passau.fim.mics.ermera.common.MessageUtil;
 import de.uni.passau.fim.mics.ermera.controller.actions.Action;
 import org.apache.log4j.Logger;
 
@@ -62,9 +64,13 @@ public class DispatcherServlet extends HttpServlet {
         LOGGER.info("Routing: " + request.getMethod() + request.getPathInfo());
         Action action = null;
 
-        final String viewName = request.getPathInfo().substring(1).toUpperCase();
-        final Views view = Views.valueOf(viewName);
-        if (view == null) {
+        String viewName = request.getPathInfo().substring(1).toUpperCase();
+        Views view;
+        try {
+            view = Views.valueOf(viewName);
+        } catch (IllegalArgumentException e) {
+            MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
+            mu.addMessage(MessageTypes.ERROR, "View \"" + viewName + "\" not found!");
             LOGGER.error("View not found!");
             return null;
         }
