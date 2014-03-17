@@ -47,12 +47,16 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     @Override
-    public void storePDF(String userid, String id, InputStream filecontent) throws DocumentDaoException {
+    public void storePDF(String userid, String filename, InputStream filecontent) throws DocumentDaoException {
         OutputStream outputStream = null;
         try {
+            // clean filename from everything except letters and numbers
+            String cleanedFilename = filename.replaceAll("\\s", "_");
+            cleanedFilename = cleanedFilename.replaceAll("[^a-zA-Z0-9_\\[\\.pdf\\]]+", "");
+
             // write the inputStream to a FileOutputStream
             outputStream =
-                    new FileOutputStream(new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOADFOLDER + id));
+                    new FileOutputStream(new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOADFOLDER + cleanedFilename));
 
             int read;
             byte[] bytes = new byte[1024];

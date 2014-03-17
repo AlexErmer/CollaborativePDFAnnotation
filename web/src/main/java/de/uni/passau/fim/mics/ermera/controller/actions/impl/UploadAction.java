@@ -36,37 +36,35 @@ public class UploadAction extends AbstractAction {
                 String filename = getFilename(filePart);
                 if ("".equals(filename)) {
                     mu.addMessage(MessageTypes.ERROR, "Keine Datei zum hochladen ausgewählt");
-                    return Views.UPLOAD.toString();
+                    continue;
                 }
                 if (!"application/pdf".equals(filePart.getContentType())) {
                     mu.addMessage(MessageTypes.ERROR, "Bitte wählen Sie eine PDF Datei");
-                    return Views.UPLOAD.toString();
+                    continue;
                 }
 
                 InputStream filecontent;
                 try {
                     filecontent = filePart.getInputStream();
                 } catch (IOException e) {
-                    throw new ActionException("Fehler beim Lesen der hochgeladenen Datei", e);
+                    mu.addMessage(MessageTypes.ERROR, "Fehler beim Lesen der hochgeladenen Datei");
+                    LOGGER.error("Fehler beim Lesen der hochgeladenen Datei", e);
+                    continue;
                 }
 
-                // create id
-                String id = filename.replaceAll("\\s", "");
-
                 // store pdf
-                storePDF(filecontent, id);
-
+                storePDF(filecontent, filename);
             }
         }
         return Views.UPLOAD.toString();
     }
 
-    private void storePDF(InputStream filecontent, String id) {
+    private void storePDF(InputStream filecontent, String filename) {
         try {
             DocumentDao documentDao = new DocumentDaoImpl();
-            documentDao.storePDF(userid, id, filecontent);
+            documentDao.storePDF(userid, filename, filecontent);
 
-            mu.addMessage(MessageTypes.SUCCESS, "Datei " + id + " erfolgreich hochgeladen.");
+            mu.addMessage(MessageTypes.SUCCESS, "Datei " + filename + " erfolgreich hochgeladen.");
         } catch (DocumentDaoException e) {
             LOGGER.error("Error while handling FileStreams", e);
             mu.addMessage(MessageTypes.ERROR, "Error while handling FileStreams: " + e.getMessage());

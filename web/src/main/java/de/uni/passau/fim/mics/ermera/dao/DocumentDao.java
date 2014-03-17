@@ -12,7 +12,7 @@ import java.util.List;
 public interface DocumentDao {
     List<String> loadPDFFiles(String userid);
     File loadPDF(String userid, String id);
-    void storePDF(String userid, String id, InputStream file) throws DocumentDaoException;
+    void storePDF(String userid, String filename, InputStream file) throws DocumentDaoException;
 
     DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException;
     void storeDocumentBean(String userid, DocumentBean documentBean) throws DocumentDaoException;
