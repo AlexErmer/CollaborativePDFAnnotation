@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.Map;
 
 public class ExtractAction extends AbstractAction {
     private static final Logger LOGGER = Logger.getLogger(ExtractAction.class);
@@ -27,13 +28,25 @@ public class ExtractAction extends AbstractAction {
         DocumentBean documentBean = null;
 
         boolean isUploadMode = getParameter(request, "upload") == null;
-        String type = getParameter(request, "type");
+        String all = getParameter(request, "all");
         String id = getParameter(request, "id");
-        if (type == null || id == null) {
+        String type = getParameter(request, "type");
+        Extractors extractorType = null;
+        if (type != null) {
+            extractorType = Extractors.valueOf(type.toUpperCase());
+        }
+
+        if (all != null) {
+            Map<String, Boolean> stringBooleanMap = documentDao.loadPDFFiles(userid);
+            for (Map.Entry<String, Boolean> entry : stringBooleanMap.entrySet()) {
+                if (!entry.getValue()) {
+                    extractPDFFile(documentDao, isUploadMode, entry.getKey(), extractorType);
+                }
+            }
+
+        } else if (type == null || id == null) {
             return showExtractlist(request, documentDao);
         } else {
-            Extractors extractorType = Extractors.valueOf(type.toUpperCase());
-
             // get document model from dao
             try {
                 documentBean = documentDao.loadDocumentBean(userid, id);
@@ -47,33 +60,40 @@ public class ExtractAction extends AbstractAction {
 
             // if no model found, extract it from real file
             if (documentBean == null) {
-                File file = documentDao.loadPDF(userid, id);
-
-                try {
-                    Extractor extractor = extractorType.getInstance();
-                    documentBean = extractor.extract(id, file);
-                    if (isUploadMode) {
-                        // dont show this message after uploading a new file.. there cant be documentbean...
-                        mu.addMessage(MessageTypes.SUCCESS, "everything ok, created a new one from scratch");
-                    }
-                } catch (ExtractException e) {
-                    LOGGER.error("ExtractException", e);
-                    mu.addMessage(MessageTypes.ERROR, e.getMessage());
-                    return "extract";
-                }
-
-                // finished everything.. store bean
-                try {
-                    documentDao.storeDocumentBean(userid, documentBean);
-                } catch (DocumentDaoException e) {
-                    LOGGER.error("Error while saving documentBean", e);
-                    mu.addMessage(MessageTypes.ERROR, "Error while saving documentBean: " + e.getMessage());
-                }
+                documentBean = extractPDFFile(documentDao, isUploadMode, id, extractorType);
             }
-
-            session.setAttribute("documentBean", documentBean);
-            return Views.DISPLAY.toString();
+            if (documentBean != null) {
+                session.setAttribute("documentBean", documentBean);
+                return Views.DISPLAY.toString();
+            }
         }
+        return "extract";
+    }
+
+    private DocumentBean extractPDFFile(DocumentDao documentDao, boolean uploadMode, String id, Extractors extractorType) {
+        File file = documentDao.loadPDF(userid, id);
+        DocumentBean documentBean = null;
+
+        try {
+            Extractor extractor = extractorType.getInstance();
+            documentBean = extractor.extract(id, file);
+            if (uploadMode) {
+                // dont show this message after uploading a new file.. there cant be documentbean...
+                mu.addMessage(MessageTypes.SUCCESS, "everything ok, created a new one from scratch");
+            }
+        } catch (ExtractException e) {
+            LOGGER.error("ExtractException", e);
+            mu.addMessage(MessageTypes.ERROR, e.getMessage());
+        }
+
+        // finished everything.. store bean
+        try {
+            documentDao.storeDocumentBean(userid, documentBean);
+        } catch (DocumentDaoException e) {
+            LOGGER.error("Error while saving documentBean", e);
+            mu.addMessage(MessageTypes.ERROR, "Error while saving documentBean: " + e.getMessage());
+        }
+        return documentBean;
     }
 
     private String getParameter(HttpServletRequest request, String parameterName) {

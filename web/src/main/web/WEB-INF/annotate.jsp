@@ -22,9 +22,16 @@
             <c:forEach items="${indexBean.fileIds}" var="fileId">
                 <tr>
                     <td>
-                        ${fileId}
+                        ${fileId.key}
                     </td>
-                    <td><a class="btn btn-primary" href="/pages/annotate?fileid=${fileId}">annotate</a></td>
+                    <td>
+                        <c:if test="${fileId.value}">
+                            <a class="btn btn-primary" href="/pages/annotate?fileid=${fileId.key}">annotate</a>
+                        </c:if>
+                        <c:if test="${!fileId.value}">
+                            no documentBean
+                        </c:if>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>

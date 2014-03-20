@@ -16,6 +16,8 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DocumentDaoImpl implements DocumentDao {
     private static final Logger LOGGER = Logger.getLogger(DocumentDaoImpl.class);
@@ -25,20 +27,21 @@ public class DocumentDaoImpl implements DocumentDao {
     private static final String ENTITYLISTNAME = "entityList.json";
 
     @Override
-    public List<String> loadPDFFiles(String userid) {
-        List<String> ret = new ArrayList<>();
+    public Map<String, Boolean> loadPDFFiles(String userid) {
+        Map<String, Boolean> map = new TreeMap<>();
 
         File dir = new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.UPLOADFOLDER);
         File[] files = dir.listFiles();
         if (files != null) {
             for (File f : files) {
                 if (!f.isDirectory()) {
-                    ret.add(f.getName());
+                    String name = f.getName();
+                    File file = new File(PropertyReader.DATA_PATH + userid + "\\" + PropertyReader.STORAGEFOLDER + DOCUMENTPREFIX + name);
+                    map.put(name, file.exists() && !file.isDirectory());
                 }
             }
         }
-
-        return ret;
+        return map;
     }
 
     @Override
@@ -80,7 +83,6 @@ public class DocumentDaoImpl implements DocumentDao {
             }
         }
     }
-
 
     @Override
     public DocumentBean loadDocumentBean(String userid, String id) throws DocumentDaoException {

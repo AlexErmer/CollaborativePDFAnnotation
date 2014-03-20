@@ -1,10 +1,11 @@
 package de.uni.passau.fim.mics.ermera.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class IndexBean {
     private String selectedFile;
-    private List<String> fileIds;
+    private Map<String, Boolean> fileIds;
     private List<String> models;
     private List<String> typeList;
 
@@ -16,11 +17,11 @@ public class IndexBean {
         this.selectedFile = selectedFile;
     }
 
-    public List<String> getFileIds() {
+    public Map<String, Boolean> getFileIds() {
         return fileIds;
     }
 
-    public void setFileIds(List<String> fileIds) {
+    public void setFileIds(Map<String, Boolean> fileIds) {
         this.fileIds = fileIds;
     }
 

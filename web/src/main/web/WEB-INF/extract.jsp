@@ -20,13 +20,20 @@
         <c:forEach items="${indexBean.fileIds}" var="fileId">
             <tr>
                 <td>
-                    ${fileId}
+                    ${fileId.key}
                 </td>
-                <td><a class="btn btn-primary" href="/pages/extract?type=knowminer&amp;id=${fileId}">extract</a></td>
+                <td>
+                    <c:if test="${!fileId.value}">
+                        <span class="glyphicon glyphicon glyphicon-flash"></span>
+                    </c:if>
+                    <a class="btn btn-primary" href="/pages/extract?type=knowminer&amp;id=${fileId.key}">extract</a>
+                </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
+    <a class="btn btn-default col-sm-2" href="/pages/extract?type=knowminer&amp;all=true" role="button"><span
+        class="glyphicon glyphicon-flash"></span> alle generieren</a>
 </form>
 
 <footer class="navbar navbar-fixed-bottom">

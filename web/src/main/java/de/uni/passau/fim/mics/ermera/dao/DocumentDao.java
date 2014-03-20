@@ -8,9 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public interface DocumentDao {
-    List<String> loadPDFFiles(String userid);
+    Map<String, Boolean> loadPDFFiles(String userid);
     File loadPDF(String userid, String id);
     void storePDF(String userid, String filename, InputStream file) throws DocumentDaoException;
 
