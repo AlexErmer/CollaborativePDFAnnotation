@@ -9,6 +9,7 @@ import java.util.List;
 
 public class PageBean implements Comparable<PageBean>, Serializable {
     private static final int NOT_SORTED = -10;
+    private static final long serialVersionUID = -8440771047061751365L;
 
     private int number;
     private int width;

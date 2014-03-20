@@ -3,6 +3,7 @@ package de.uni.passau.fim.mics.ermera.model;
 import java.io.Serializable;
 
 public class BlockBean implements Comparable<BlockBean>, Serializable {
+    private static final long serialVersionUID = 79449852366373586L;
     private String id;
     private int left;
     private int top;
