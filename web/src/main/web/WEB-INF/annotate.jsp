@@ -55,7 +55,11 @@
             <div class="well well-sm form-group">
                 <a class="btn btn-default col-sm-2" href="/" role="button"><span
                         class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+
                 <a class="btn btn-primary col-sm-2 pull-right" href="/pages/modelCreate" role="button">Modell erstellen <span
+                        class="glyphicon glyphicon-chevron-right"></span></a>
+
+                <a class="btn btn-default col-sm-2 pull-right" href="/pages/export?type=brat&all=true" role="button">alle nach brat exportieren <span
                         class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
         </div>

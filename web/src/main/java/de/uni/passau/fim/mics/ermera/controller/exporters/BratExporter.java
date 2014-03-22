@@ -25,7 +25,7 @@ public class BratExporter implements Exporter {
 
             // create seperate annotation file
             File annFile = new File(path + "/" + documentBean.getId() + ".ann");
-            if (!annFile.createNewFile()) {
+            if (!annFile.exists() && !annFile.createNewFile()) {
                 throw new ExportException("Annotationfile could not have been saved");
             }
 
