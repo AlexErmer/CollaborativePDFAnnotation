@@ -55,12 +55,22 @@
             <div class="well well-sm form-group">
                 <a class="btn btn-default col-sm-2" href="/" role="button"><span
                         class="glyphicon glyphicon-chevron-left"></span> zurück</a>
+                <c:if test="${indexBean.selectedFile != null}">
+                    <a class="btn btn-default col-sm-2" href="/pages/annotate" role="button"><span
+                            class="glyphicon glyphicon-chevron-left"></span> zurück zur Übersicht</a>
+                </c:if>
+                <c:if test="${not empty requestScope.nextDocumentbeanID}">
+                    <a class="btn btn-default pull-right" href="/pages/annotate?fileid=${requestScope.nextDocumentbeanID}">nächstes
+                        Dokument
+                        <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </c:if>
 
                 <a class="btn btn-primary col-sm-2 pull-right" href="/pages/modelCreate" role="button">Modell erstellen <span
                         class="glyphicon glyphicon-chevron-right"></span></a>
-
-                <a class="btn btn-default col-sm-2 pull-right" href="/pages/export?type=brat&all=true" role="button">alle nach brat exportieren <span
-                        class="glyphicon glyphicon-chevron-right"></span></a>
+                <c:if test="${indexBean.selectedFile == null}">
+                    <a class="btn btn-default col-sm-2 pull-right" href="/pages/export?type=brat&all=true" role="button">alle nach brat exportieren <span
+                            class="glyphicon glyphicon-chevron-right"></span></a>
+                </c:if>
             </div>
         </div>
     </footer>

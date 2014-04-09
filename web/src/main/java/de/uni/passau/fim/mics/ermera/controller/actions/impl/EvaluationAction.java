@@ -16,7 +16,6 @@ public class EvaluationAction extends AbstractAction {
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         @SuppressWarnings("unchecked")
         List<NameFinderResult> resultList = (List<NameFinderResult>) session.getAttribute("resultList");
-        //TODO: filter exisiting annotations?!
 
         EvaluationBean evaluationBean = new EvaluationBean();
         evaluationBean.setResultList(resultList);

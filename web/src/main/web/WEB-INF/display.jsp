@@ -117,7 +117,7 @@
                      class="text ${block.headline?' headline':''} ${block.newParagraph?' newParagraph':''}">
                     <div class="options ui-widget-header ui-corner-all">
                         <div class="option">
-                            <button class="btn btn-sm btn-info" title="ist &Uuml;berschrift?"
+                            <button class="btn btn-sm btn-info" title="ist Überschrift?"
                                     onclick="toggleHeadline($('#t_${block.id}'))">
                                 <span class="ui-icon ui-icon-star"></span>
                             </button>
@@ -246,6 +246,11 @@
                         class="glyphicon glyphicon-chevron-left"></span> zurück</a>
                 <a class="btn btn-default col-sm-3" href="/pages/extract" role="button"><span
                         class="glyphicon glyphicon-chevron-left"></span> zurück zur Extraktionsauswahl</a>
+                <c:if test="${not empty requestScope.nextDocumentbeanID}">
+                    <a class="btn btn-default pull-right" href="/pages/extract?type=knowminer&id=${requestScope.nextDocumentbeanID}">nächstes
+                        Dokument
+                        <span class="glyphicon glyphicon-chevron-right"></span></a>
+                </c:if>
                 <a class="btn btn-primary pull-right" href="/pages/annotate?fileid=${documentBean.id}">annotate in brat
                     <span class="glyphicon glyphicon-chevron-right"></span></a>
             </div>

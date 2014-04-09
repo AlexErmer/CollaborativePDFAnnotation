@@ -35,7 +35,7 @@
                 <td>
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="files" value="${fileId}"/> ${fileId}
+                            <input type="checkbox" name="files" value="${fileId.key}"/> ${fileId.key}
                         </label>
                     </div>
                 </td>

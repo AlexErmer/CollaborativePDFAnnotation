@@ -63,7 +63,6 @@ public class EvaluationSaveAction extends AbstractAction {
                 NameFinderGroupedResultListItem nameFinderGroupedResultListItem = evaluationBean.getGroupedResultList().get(findingNumber);
 
                 for (SingleNameFinderResult single : nameFinderGroupedResultListItem.getList()) {
-
                     NameFinderResult.Sentence sentence = single.getSentence();
                     NameFinderResult.Finding finding = single.getFinding();
 
@@ -129,7 +128,7 @@ public class EvaluationSaveAction extends AbstractAction {
         mySpanAnnotations.put(filename, list);
     }
 
-    private boolean checkAnnotationAlreadyExists(String type, int hitStart, int hitEnd, Collection<BratAnnotation> annos) {
+    public boolean checkAnnotationAlreadyExists(String type, int hitStart, int hitEnd, Collection<BratAnnotation> annos) {
         //IDEA: kann man hier nicht Collection.contains()  verwenden?!
         for (BratAnnotation anno : annos) {
             SpanAnnotation bspan = (SpanAnnotation) anno;
@@ -142,7 +141,7 @@ public class EvaluationSaveAction extends AbstractAction {
         return false;
     }
 
-    private Map<String, BratDocument> createBratDocumentMap(String userid) throws ActionException {
+    public Map<String, BratDocument> createBratDocumentMap(String userid) throws ActionException {
         Map<String, BratDocument> bratDocumentMap = new HashMap<>();
         try {
             MyBratNameSampleStream stream = (MyBratNameSampleStream) getStream(userid);

@@ -20,7 +20,6 @@ public class EvaluationGroupedAction extends AbstractAction {
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         @SuppressWarnings("unchecked")
         List<NameFinderResult> resultList = (List<NameFinderResult>) session.getAttribute("resultList");
-        //TODO: filter exisiting annotations?!
 
         List<NameFinderGroupedResultListItem> groupedResultList = convertResultList(resultList);
 

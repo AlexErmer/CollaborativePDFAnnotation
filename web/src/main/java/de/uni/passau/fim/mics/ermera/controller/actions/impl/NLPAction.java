@@ -12,6 +12,8 @@ import de.uni.passau.fim.mics.ermera.opennlp.NLPException;
 import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPService;
 import de.uni.passau.fim.mics.ermera.opennlp.OpenNLPServiceImpl;
+import opennlp.tools.formats.brat.BratAnnotation;
+import opennlp.tools.formats.brat.BratDocument;
 import opennlp.tools.namefind.TokenNameFinderModel;
 import org.apache.log4j.Logger;
 
@@ -19,9 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NLPAction extends AbstractAction {
     private static final Logger LOGGER = Logger.getLogger(NLPAction.class);
@@ -39,7 +39,7 @@ public class NLPAction extends AbstractAction {
         } else if (request.getParameter("use") != null) {
             return handleUseModel(request, session, userid, files);
         } else {
-           return Views.HOMEPAGE.toString();
+            return Views.HOMEPAGE.toString();
         }
     }
 
@@ -56,8 +56,55 @@ public class NLPAction extends AbstractAction {
         } catch (NLPException e) {
             throw new ActionException("Fehler beim Anwenden des NLP Modells", e);
         }
+        list = filterExistingAnnotations(list);
         session.setAttribute("resultList", list);
         return Views.EVALUATION.toString();
+    }
+
+    // filter existing annotations from resultList
+    private List<NameFinderResult> filterExistingAnnotations(List<NameFinderResult> resultList) {
+        List<NameFinderResult> filteredResultListlteredResultList = new ArrayList<>();
+
+        //TODO: refactor! cant use other action here!!
+        EvaluationSaveAction saveAction = new EvaluationSaveAction();
+        Map<String, BratDocument> bratDocumentMap = null;
+        try {
+            bratDocumentMap = saveAction.createBratDocumentMap(userid);
+        } catch (ActionException e) {
+        }
+
+        for (NameFinderResult nfr : resultList) {
+            BratDocument bratdoc = bratDocumentMap.get(nfr.getDocumentName());
+            if (bratdoc != null) {
+
+                Collection<BratAnnotation> annos = bratdoc.getAnnotations();
+                List<NameFinderResult.Sentence> sentences = new ArrayList<>();
+                for (NameFinderResult.Sentence sentence : nfr.getSentences()) {
+                    List<NameFinderResult.Finding> findings = new ArrayList<>();
+                    for (NameFinderResult.Finding finding : sentence.getFindingsList()) {
+                        int start = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getStart()).getPosition().getStart();
+                        int end = sentence.getPosition().getStart() + sentence.getTokens().get(finding.getSpan().getEnd() - 1).getPosition().getEnd();
+
+                        boolean b = saveAction.checkAnnotationAlreadyExists(finding.getType(), start, end, annos);
+                        if (!b) {
+                            //filteredResultListlteredResultList.add(nfr);
+                            findings.add(new NameFinderResult.Finding(finding));
+                        }
+                    }
+                    if (findings.size() > 0) {
+                        NameFinderResult.Sentence sentenceClone = new NameFinderResult.Sentence(sentence);
+                        sentenceClone.setFindingsList(findings);
+                        sentences.add(sentenceClone);
+                    }
+                }
+                if (sentences.size() > 0) {
+                    NameFinderResult clonedNFR = new NameFinderResult(nfr);
+                    clonedNFR.setSentences(sentences);
+                    filteredResultListlteredResultList.add(clonedNFR);
+                }
+            }
+        }
+        return filteredResultListlteredResultList;
     }
 
     private String handleCreateModel(HttpServletRequest request, String userid, String[] files) throws ActionException {

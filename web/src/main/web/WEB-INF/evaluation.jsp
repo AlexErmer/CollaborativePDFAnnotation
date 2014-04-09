@@ -24,45 +24,45 @@
     <table class="table table-striped table-hover">
         <thead>
         <tr>
-            <th>document</th>
-            <th>entity</th>
-            <th>finding</th>
-            <th>
+            <th class="col-md-2">
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" name="selectAll" class="selectAll"/> <b>action</b>
                     </label>
                 </div>
             </th>
+            <th class="col-md-2">entity</th>
+            <th class="col-md-8">finding</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${evaluationBean.resultList}" var="item" varStatus="itemCounter">
+            <tr class="success">
+                <td colspan="3">
+                    Document: <c:out value="${item.documentName}"/>
+                </td>
+            </tr>
+
             <c:forEach items="${item.sentences}" var="sentence" varStatus="sentenceCounter">
+                <tr class="info">
+                    <td colspan="3">
+                        Context: <c:out value="${sentence.text}"/>
+                    </td>
+                </tr>
+
                 <c:forEach items="${sentence.findingsList}" var="finding" varStatus="namespanCounter">
                     <tr>
-                        <td>${item.documentName}</td>
-                        <td>${finding.span.type}</td>
-                        <td>
-                            <c:forEach begin="0" end="${finding.span.start-1}" varStatus="index">
-                                ${sentence.tokens[index.index].text}
-                            </c:forEach>
-                            <b>
-                                ${finding.text}
-                            </b>
-                            <c:forEach begin="${finding.span.end+1}" end="${fn:length(sentence.tokens)}"
-                                       varStatus="index">
-                                ${sentence.tokens[index.index].text}
-                            </c:forEach>
-                        </td>
                         <td>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="ok"
                                            value="nsc__${itemCounter.index}__${sentenceCounter.index}__${namespanCounter.index}"/>
-                                    OK!
                                 </label>
                             </div>
+                        </td>
+                        <td><c:out value="${finding.span.type}"/></td>
+                        <td>
+                        <b><c:out value="${finding.text}"/></b>
                         </td>
                     </tr>
                 </c:forEach>

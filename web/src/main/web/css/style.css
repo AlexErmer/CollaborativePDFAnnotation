@@ -221,3 +221,11 @@ span.newParagraphIcon {
 div.newParagraph span.newParagraphIcon {
     display: block;
 }
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 400px;
+}

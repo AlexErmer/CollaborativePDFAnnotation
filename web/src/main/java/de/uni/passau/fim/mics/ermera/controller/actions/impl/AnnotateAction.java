@@ -9,6 +9,7 @@ import de.uni.passau.fim.mics.ermera.model.IndexBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class AnnotateAction extends AbstractAction {
 
@@ -20,6 +21,20 @@ public class AnnotateAction extends AbstractAction {
         String fileId = request.getParameter("fileid");
         if (fileId != null) {
             indexBean.setSelectedFile(fileId);
+        }
+
+
+        // get next documentbeanID
+        boolean getNext = false;
+        Map<String, Boolean> map = documentDao.loadPDFFiles(userid);
+        for (Map.Entry<String, Boolean> entry : map.entrySet()) {
+            if (getNext) {
+                request.setAttribute("nextDocumentbeanID", entry.getKey());
+                break;
+            }
+            if (entry.getKey().equals(fileId)) {
+                getNext = true;
+            }
         }
 
         indexBean.setFileIds(documentDao.loadPDFFiles(userid));

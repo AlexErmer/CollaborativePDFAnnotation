@@ -2,6 +2,7 @@ package de.uni.passau.fim.mics.ermera.opennlp;
 
 import opennlp.tools.util.Span;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NameFinderResult {
@@ -9,6 +10,15 @@ public class NameFinderResult {
     private String documentText;
     private List<Sentence> sentences;
 
+    public NameFinderResult(NameFinderResult nameFinderResult) {
+        documentName = nameFinderResult.getDocumentName();
+        documentText = nameFinderResult.getDocumentText();
+
+        sentences = new ArrayList<>();
+        for (Sentence sentence : nameFinderResult.getSentences()) {
+            sentences.add(new Sentence(sentence));
+        }
+    }
 
     public NameFinderResult(String documentName, String documentText, List<Sentence> sentences) {
         this.documentName = documentName;
@@ -40,11 +50,24 @@ public class NameFinderResult {
         this.sentences = sentences;
     }
 
-    public static class Sentence {
+    public static class Sentence implements Cloneable {
         private Span position;
         private String text;
         private List<Token> tokens;
-        private List<NameFinderResult.Finding> findingsList;
+        private List<Finding> findingsList;
+
+        public Sentence(Sentence sentence) {
+           position = sentence.getPosition();
+            text = sentence.getText();
+            tokens = new ArrayList<>();
+         for (Token token : sentence.getTokens()) {
+            tokens.add(new Token(token));
+        }
+            findingsList = new ArrayList<>();
+        for (Finding finding : sentence.getFindingsList()) {
+            findingsList.add(new Finding(finding));
+        }
+        }
 
         public Sentence(Span position, String text, List<Token> tokens, List<Finding> findingsList) {
             this.position = position;
@@ -86,10 +109,16 @@ public class NameFinderResult {
         }
     }
 
-    public static class Finding {
+    public static class Finding implements Cloneable {
         private Span span;
         private String text;
         private String type;
+
+        public Finding(Finding finding) {
+            span = new Span(finding.getSpan(), 0);
+            text = finding.getText();
+            type = finding.getType();
+        }
 
         public Finding(Span span, String text, String type) {
             this.span = span;
@@ -122,9 +151,14 @@ public class NameFinderResult {
         }
     }
 
-    public static class Token {
+    public static class Token implements Cloneable {
         private Span position;
         private String text;
+
+        public Token(Token token) {
+            position = token.getPosition();
+            text = token.getText();
+        }
 
         public Token(Span position, String text) {
             this.position = position;

@@ -10,6 +10,7 @@ import de.uni.passau.fim.mics.ermera.model.DocumentBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 public class DisplayAction extends AbstractAction {
 
@@ -23,6 +24,20 @@ public class DisplayAction extends AbstractAction {
         }
 
         request.setAttribute("hasAnnotationWarning", documentDao.hasAnnotations(userid, documentBean.getId()));
+
+        // get next documentbeanID
+        boolean getNext = false;
+        Map<String, Boolean> map = documentDao.loadPDFFiles(userid);
+        for (Map.Entry<String, Boolean> entry : map.entrySet()) {
+            if (getNext) {
+                request.setAttribute("nextDocumentbeanID", entry.getKey());
+                break;
+            }
+            if (entry.getKey().equals(documentBean.getId())) {
+                getNext = true;
+            }
+        }
+
         return Views.DISPLAY.toString();
     }
 }

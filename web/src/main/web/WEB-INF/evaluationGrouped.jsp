@@ -45,11 +45,13 @@
                     <ul>
                         <c:forEach items="${item.list}" var="listItem">
                             <li>
-                                <c:forEach begin="0" end="${listItem.finding.span.start-1}" varStatus="index">
-                                    ${listItem.sentence.tokens[index.index].text}
-                                </c:forEach>
+                                <c:if test="${listItem.finding.span.start-1 > 0}">
+                                    <c:forEach begin="0" end="${listItem.finding.span.start-1}" varStatus="index">
+                                        ${listItem.sentence.tokens[index.index].text}
+                                    </c:forEach>
+                                </c:if>
                                 <b>
-                                    ${listItem.finding.text}
+                                        ${listItem.finding.text}
                                 </b>
                                 <c:forEach begin="${listItem.finding.span.end+1}"
                                            end="${fn:length(listItem.sentence.tokens)}"

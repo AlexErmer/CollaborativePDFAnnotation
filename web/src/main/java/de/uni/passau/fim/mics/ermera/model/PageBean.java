@@ -153,6 +153,8 @@ public class PageBean implements Comparable<PageBean>, Serializable {
                 sb.append(StringEscapeUtils.unescapeHtml(block.getText()));
                 if (block.isHeadline()) {
                     sb.append(System.lineSeparator());
+                } else  {
+                    sb.append(" ");
                 }
             }
         }
