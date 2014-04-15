@@ -114,8 +114,18 @@ public class NLPAction extends AbstractAction {
             return null;
         }
 
+        long zstVorher;
+        long zstNachher;
+        long diff;
+
+        zstVorher = System.currentTimeMillis();
+
         createModel(userid, modelname, files);
-        mu.addMessage(MessageTypes.SUCCESS, "model created");
+
+        zstNachher = System.currentTimeMillis();
+        diff = (zstNachher - zstVorher) / 1000;
+
+        mu.addMessage(MessageTypes.SUCCESS, "model " + modelname + " created in " + diff + " seconds");
         return Views.HOMEPAGE.toString();
     }
 
