@@ -26,7 +26,7 @@
                     </td>
                     <td>
                         <c:if test="${fileId.value}">
-                            <a class="btn btn-primary" href="/pages/annotate?fileid=${fileId.key}">annotate</a>
+                            <a class="btn btn-primary" href="/pages/annotate?fileid=${fileId.key}">annotieren</a>
                         </c:if>
                         <c:if test="${!fileId.value}">
                             no documentBean

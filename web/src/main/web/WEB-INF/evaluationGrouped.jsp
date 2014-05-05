@@ -80,7 +80,7 @@
             <div class="well well-sm form-group">
                 <a class="btn btn-default col-sm-2" href="/" role="button"><span
                         class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="submit">Submit</button>
+                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="submit">Speichern</button>
             </div>
         </div>
     </footer>

@@ -52,7 +52,7 @@
             <div class="well well-sm form-group">
                 <a class="btn btn-default col-sm-2" href="/" role="button"><span
                         class="glyphicon glyphicon-chevron-left"></span> zurück</a>
-                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="use">use Model</button>
+                <button type="submit" class="btn btn-primary col-sm-2 pull-right" name="use">Model anwenden</button>
             </div>
         </div>
     </footer>

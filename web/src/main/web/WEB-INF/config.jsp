@@ -28,9 +28,8 @@
                 <tr>
                     <td>${item}</td>
                     <td>
-                        <a class="btn btn-default col-sm-2" title="löschen" href="/pages/config?delete=${item}"
-                           role="button">
-                            <span class="glyphicon glyphicon-trash"></span> löschen
+                        <a class="btn btn-default" title="löschen" href="/pages/config?delete=${item}" role="button">
+                        <span class="glyphicon glyphicon-trash"></span> löschen
                         </a>
                     </td>
                 </tr>
