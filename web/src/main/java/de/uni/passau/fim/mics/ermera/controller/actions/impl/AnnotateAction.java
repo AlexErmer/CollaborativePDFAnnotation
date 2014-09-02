@@ -1,6 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
@@ -39,6 +39,6 @@ public class AnnotateAction extends AbstractAction {
 
         indexBean.setFileIds(documentDao.loadPDFFiles(userid));
         request.setAttribute("indexBean", indexBean);
-        return Views.ANNOTATE.toString();
+        return ViewNames.ANNOTATE;
     }
 }

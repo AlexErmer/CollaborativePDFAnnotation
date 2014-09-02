@@ -1,6 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.model.EvaluationBean;
@@ -21,6 +21,6 @@ public class EvaluationAction extends AbstractAction {
         evaluationBean.setResultList(resultList);
         request.setAttribute("evaluationBean", evaluationBean);
 
-        return Views.EVALUATION.toString();
+        return ViewNames.EVALUATION;
     }
 }

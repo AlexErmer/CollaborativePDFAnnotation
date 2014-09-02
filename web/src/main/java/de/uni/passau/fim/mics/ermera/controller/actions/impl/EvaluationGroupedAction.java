@@ -1,6 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.model.EvaluationBean;
@@ -30,7 +30,7 @@ public class EvaluationGroupedAction extends AbstractAction {
         // put in session, for later saving!
         session.setAttribute("evaluationBean", evaluationBean);
 
-        return Views.EVALUATIONGROUPED.toString();
+        return ViewNames.EVALUATIONGROUPED;
     }
 
     private List<NameFinderGroupedResultListItem> convertResultList(List<NameFinderResult> resultList) {

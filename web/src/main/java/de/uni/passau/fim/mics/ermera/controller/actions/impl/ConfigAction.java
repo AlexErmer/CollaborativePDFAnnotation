@@ -1,7 +1,7 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
@@ -37,7 +37,7 @@ public class ConfigAction extends AbstractAction {
         // provide current list to viewbean
         configBean.setTypes(typeList);
         request.setAttribute("configBean", configBean);
-        return Views.CONFIG.toString();
+        return ViewNames.CONFIG;
     }
 
     private void handleDeleteType(HttpServletRequest request, DocumentDao documentDao, List<String> typeList) {

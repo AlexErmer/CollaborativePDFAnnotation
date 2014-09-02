@@ -2,6 +2,7 @@ package de.uni.passau.fim.mics.ermera.oauth;
 
 import com.mendeley.oapi.schema.Profile;
 import org.scribe.model.Token;
+import org.scribe.model.Verifier;
 
 public interface MyOAuthService {
     /**
@@ -29,6 +30,8 @@ public interface MyOAuthService {
      */
     String getAuthorizationUrl(Token requestToken);
 
+
+    Token getAccessToken(Token requestToken, Verifier verifier);
 
     /**
      * Retrieve a dummy Profile for offline usage

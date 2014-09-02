@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <jsp:include page="common/header.jsp"/>
 <jsp:useBean id="loginBean" scope="request" class="de.uni.passau.fim.mics.ermera.model.LoginBean"/>
 

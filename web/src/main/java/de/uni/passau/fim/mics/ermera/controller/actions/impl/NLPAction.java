@@ -1,7 +1,7 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
@@ -39,7 +39,7 @@ public class NLPAction extends AbstractAction {
         } else if (request.getParameter("use") != null) {
             return handleUseModel(request, session, userid, files);
         } else {
-            return Views.HOMEPAGE.toString();
+            return ViewNames.HOMEPAGE;
         }
     }
 
@@ -58,7 +58,7 @@ public class NLPAction extends AbstractAction {
         }
         list = filterExistingAnnotations(list);
         session.setAttribute("resultList", list);
-        return Views.EVALUATION.toString();
+        return ViewNames.EVALUATION;
     }
 
     // filter existing annotations from resultList
@@ -71,6 +71,8 @@ public class NLPAction extends AbstractAction {
         try {
             bratDocumentMap = saveAction.createBratDocumentMap(userid);
         } catch (ActionException e) {
+            // nothing to do
+            LOGGER.debug("ActionException occured", e);
         }
 
         for (NameFinderResult nfr : resultList) {
@@ -91,13 +93,13 @@ public class NLPAction extends AbstractAction {
                             findings.add(new NameFinderResult.Finding(finding));
                         }
                     }
-                    if (findings.size() > 0) {
+                    if (!findings.isEmpty()) {
                         NameFinderResult.Sentence sentenceClone = new NameFinderResult.Sentence(sentence);
                         sentenceClone.setFindingsList(findings);
                         sentences.add(sentenceClone);
                     }
                 }
-                if (sentences.size() > 0) {
+                if (!sentences.isEmpty()) {
                     NameFinderResult clonedNFR = new NameFinderResult(nfr);
                     clonedNFR.setSentences(sentences);
                     filteredResultListlteredResultList.add(clonedNFR);
@@ -126,7 +128,7 @@ public class NLPAction extends AbstractAction {
         diff = (zstNachher - zstVorher) / 1000;
 
         mu.addMessage(MessageTypes.SUCCESS, "model " + modelname + " created in " + diff + " seconds");
-        return Views.HOMEPAGE.toString();
+        return ViewNames.HOMEPAGE;
     }
 
     @SuppressWarnings({"UnusedParameters"})

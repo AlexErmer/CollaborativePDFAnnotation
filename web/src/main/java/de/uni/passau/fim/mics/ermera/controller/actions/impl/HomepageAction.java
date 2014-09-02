@@ -1,6 +1,6 @@
 package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 
@@ -11,6 +11,6 @@ public class HomepageAction extends AbstractAction {
 
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
-        return Views.HOMEPAGE.toString();
+        return ViewNames.HOMEPAGE;
     }
 }

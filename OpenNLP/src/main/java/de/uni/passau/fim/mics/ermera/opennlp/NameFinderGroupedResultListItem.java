@@ -32,8 +32,14 @@ public class NameFinderGroupedResultListItem implements Comparable {
         int size = this.getList().size();
         int otherSize = ((NameFinderGroupedResultListItem) o).getList().size();
 
-        if (size == otherSize) return 0;
-        else if (size < otherSize) return 1;
-        else return -1;
+        if (size == otherSize) {
+            return 0;
+        }
+        else if (size < otherSize) {
+            return 1;
+        }
+        else {
+            return -1;
+        }
     }
 }

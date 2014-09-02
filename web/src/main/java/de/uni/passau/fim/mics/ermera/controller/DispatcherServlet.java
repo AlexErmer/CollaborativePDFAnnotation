@@ -18,6 +18,7 @@ import java.io.IOException;
 @MultipartConfig(maxFileSize = 10485760L) // 10MB.
 public class DispatcherServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(DispatcherServlet.class);
+    private static final long serialVersionUID = -8088670666848511098L;
 
     public static final String LAST_VALID_VIEW = "lastValidView";
 

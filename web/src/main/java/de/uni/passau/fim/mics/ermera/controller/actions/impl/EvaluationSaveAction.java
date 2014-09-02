@@ -2,7 +2,7 @@ package de.uni.passau.fim.mics.ermera.controller.actions.impl;
 
 import de.uni.passau.fim.mics.ermera.common.MessageTypes;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
-import de.uni.passau.fim.mics.ermera.controller.Views;
+import de.uni.passau.fim.mics.ermera.controller.ViewNames;
 import de.uni.passau.fim.mics.ermera.controller.actions.AbstractAction;
 import de.uni.passau.fim.mics.ermera.controller.actions.ActionException;
 import de.uni.passau.fim.mics.ermera.dao.DocumentDao;
@@ -44,7 +44,7 @@ public class EvaluationSaveAction extends AbstractAction {
         }
 
         saveNewAnnotations(mySpanAnnotations);
-        return Views.HOMEPAGE.toString();
+        return ViewNames.HOMEPAGE;
     }
 
     private void loopGroupedFindings(HttpServletRequest request, List<NameFinderResult> resultList, Map<String, List<MySpanAnnotation>> mySpanAnnotations) throws ActionException {
