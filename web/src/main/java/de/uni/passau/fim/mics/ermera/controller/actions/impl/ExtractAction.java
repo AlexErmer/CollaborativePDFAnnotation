@@ -25,7 +25,6 @@ public class ExtractAction extends AbstractAction {
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         DocumentDao documentDao = new DocumentDaoImpl();
-        DocumentBean documentBean = null;
 
         boolean isUploadMode = getParameter(request, "upload") == null;
         String all = getParameter(request, "all");
@@ -37,26 +36,11 @@ public class ExtractAction extends AbstractAction {
         }
 
         if (all != null) {
-            Map<String, Boolean> stringBooleanMap = documentDao.loadPDFFiles(userid);
-            for (Map.Entry<String, Boolean> entry : stringBooleanMap.entrySet()) {
-                if (!entry.getValue()) {
-                    extractPDFFile(documentDao, isUploadMode, entry.getKey(), extractorType);
-                }
-            }
-
+            extractAll(documentDao, isUploadMode, extractorType);
         } else if (type == null || id == null) {
             return showExtractlist(request, documentDao);
         } else {
-            // get document model from dao
-            try {
-                documentBean = documentDao.loadDocumentBean(userid, id);
-            } catch (DocumentDaoException e) {
-                if (isUploadMode) {
-                    // dont show this message after uploading a new file.. there cant be documentbean...
-                    LOGGER.error("error while loading documentBean", e);
-                    mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
-                }
-            }
+            DocumentBean documentBean = getDocumentBean(documentDao, isUploadMode, id);
 
             // if no model found, extract it from real file
             if (documentBean == null) {
@@ -68,6 +52,30 @@ public class ExtractAction extends AbstractAction {
             }
         }
         return "extract";
+    }
+
+    private DocumentBean getDocumentBean(DocumentDao documentDao, boolean uploadMode, String id) {
+        DocumentBean documentBean = null;
+        // get document model from dao
+        try {
+            documentBean = documentDao.loadDocumentBean(userid, id);
+        } catch (DocumentDaoException e) {
+            if (uploadMode) {
+                // dont show this message after uploading a new file.. there cant be documentbean...
+                LOGGER.error("error while loading documentBean", e);
+                mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+            }
+        }
+        return documentBean;
+    }
+
+    private void extractAll(DocumentDao documentDao, boolean uploadMode, Extractors extractorType) {
+        Map<String, Boolean> stringBooleanMap = documentDao.loadPDFFiles(userid);
+        for (Map.Entry<String, Boolean> entry : stringBooleanMap.entrySet()) {
+            if (!entry.getValue()) {
+                extractPDFFile(documentDao, uploadMode, entry.getKey(), extractorType);
+            }
+        }
     }
 
     private DocumentBean extractPDFFile(DocumentDao documentDao, boolean uploadMode, String id, Extractors extractorType) {

@@ -10,6 +10,8 @@ import java.io.OutputStream;
 import java.util.List;
 
 public class ConfigFileCreator {
+    private ConfigFileCreator() {
+    }
 
     public static void createAnnotationConf(String userid, List<String> types) throws BratException {
         String str;

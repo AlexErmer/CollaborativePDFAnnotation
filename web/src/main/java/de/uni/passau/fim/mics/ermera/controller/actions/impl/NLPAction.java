@@ -89,7 +89,6 @@ public class NLPAction extends AbstractAction {
 
                         boolean b = saveAction.checkAnnotationAlreadyExists(finding.getType(), start, end, annos);
                         if (!b) {
-                            //filteredResultListlteredResultList.add(nfr);
                             findings.add(new NameFinderResult.Finding(finding));
                         }
                     }

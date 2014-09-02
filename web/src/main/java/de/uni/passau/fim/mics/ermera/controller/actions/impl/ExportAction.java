@@ -22,7 +22,6 @@ public class ExportAction extends AbstractAction {
     @Override
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         DocumentDao documentDao = new DocumentDaoImpl();
-        DocumentBean documentBean;
 
         String all = request.getParameter("all");
         String id = request.getParameter("id");
@@ -33,53 +32,62 @@ public class ExportAction extends AbstractAction {
             exporterType = Exporters.valueOf(type);
         } catch (IllegalArgumentException e) {
             mu.addMessage(MessageTypes.ERROR, "Exportertype \"" + type + "\" not found");
-            LOGGER.error("Exportertype \"" + type + "\"  not found");
+            LOGGER.error("Exportertype \"" + type + "\"  not found", e);
             return null;
         }
         Exporter exporter = exporterType.getInstance();
 
         if (all != null) {
-            Map<String, Boolean> stringBooleanMap = documentDao.loadPDFFiles(userid);
-            for (Map.Entry<String, Boolean> entry : stringBooleanMap.entrySet()) {
-                if (entry.getValue()) {
-                    try {
-                        documentBean = documentDao.loadDocumentBean(userid, entry.getKey());
-                        exporter.export(userid, documentBean);
-                    } catch (DocumentDaoException e) {
-                        LOGGER.error("error while loading documentBean", e);
-                        mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
-                    } catch (ExportException e) {
-                        LOGGER.error("ExportException", e);
-                        mu.addMessage(MessageTypes.ERROR, e.getMessage());
-                    }
-                }
-            }
-            return null;
+            return exportAll(documentDao, exporter);
         } else if (id != null) {
-            // get document model from dao
-            try {
-                documentBean = documentDao.loadDocumentBean(userid, id);
-            } catch (DocumentDaoException e) {
-                LOGGER.error("error while loading documentBean", e);
-                mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
-                return null;
-            }
-
-            try {
-                if (exporter.export(userid, documentBean)) {
-                    return exporter.getRedirectURL(userid, documentBean.getId());
-                }
-            } catch (ExportException e) {
-                LOGGER.error("ExportException", e);
-                mu.addMessage(MessageTypes.ERROR, e.getMessage());
-            }
-
-            // redirect to homepage in errorcase
-            return null;
+            return exportSingle(documentDao, id, exporter);
         } else {
             mu.addMessage(MessageTypes.ERROR, "ID must not be null");
             return null;
         }
 
+    }
+
+    private String exportSingle(DocumentDao documentDao, String id, Exporter exporter) {
+        DocumentBean documentBean;// get document model from dao
+        try {
+            documentBean = documentDao.loadDocumentBean(userid, id);
+        } catch (DocumentDaoException e) {
+            LOGGER.error("error while loading documentBean", e);
+            mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+            return null;
+        }
+
+        try {
+            if (exporter.export(userid, documentBean)) {
+                return exporter.getRedirectURL(userid, documentBean.getId());
+            }
+        } catch (ExportException e) {
+            LOGGER.error("ExportException", e);
+            mu.addMessage(MessageTypes.ERROR, e.getMessage());
+        }
+
+        // redirect to homepage in errorcase
+        return null;
+    }
+
+    private String exportAll(DocumentDao documentDao, Exporter exporter) {
+        DocumentBean documentBean;
+        Map<String, Boolean> stringBooleanMap = documentDao.loadPDFFiles(userid);
+        for (Map.Entry<String, Boolean> entry : stringBooleanMap.entrySet()) {
+            if (entry.getValue()) {
+                try {
+                    documentBean = documentDao.loadDocumentBean(userid, entry.getKey());
+                    exporter.export(userid, documentBean);
+                } catch (DocumentDaoException e) {
+                    LOGGER.error("error while loading documentBean", e);
+                    mu.addMessage(MessageTypes.ERROR, "error while loading documentBean: " + e.getMessage());
+                } catch (ExportException e) {
+                    LOGGER.error("ExportException", e);
+                    mu.addMessage(MessageTypes.ERROR, e.getMessage());
+                }
+            }
+        }
+        return null;
     }
 }

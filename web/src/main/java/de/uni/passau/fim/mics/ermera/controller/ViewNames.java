@@ -20,4 +20,7 @@ public class ViewNames {
     public static final String NLP = "nlp";
     public static final String EVALUATION = "evaluation";
     public static final String EVALUATIONGROUPED = "evaluationGrouped";
+
+    private ViewNames() {
+    }
 }

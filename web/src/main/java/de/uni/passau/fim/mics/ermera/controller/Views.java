@@ -38,9 +38,9 @@ public enum Views {
     }
 
     public Class getAction(String method) {
-        if (method.equals("GET")) {
+        if ("GET".equals(method)) {
             return this.get;
-        } else if (method.equals("POST")) {
+        } else if ("POST".equals(method)) {
             return this.post;
         }
         return null;

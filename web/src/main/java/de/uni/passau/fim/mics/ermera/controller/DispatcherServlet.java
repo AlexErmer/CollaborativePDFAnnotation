@@ -72,7 +72,7 @@ public class DispatcherServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
             MessageUtil mu = (MessageUtil) request.getSession().getAttribute(MessageUtil.NAME);
             mu.addMessage(MessageTypes.ERROR, "View \"" + viewName + "\" not found!");
-            LOGGER.error("View not found!");
+            LOGGER.error("View not found!", e);
             return null;
         }
         final Class actionClass = view.getAction(request.getMethod());

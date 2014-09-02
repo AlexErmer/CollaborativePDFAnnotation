@@ -7,8 +7,6 @@ import org.scribe.model.*;
  * extends {@code OAuth20ServiceImpl} in order to be able to use mendeley oauth2 by using bodyparameters instead of querystring parameters.
  */
 public class MendeleyOAuth20ServiceImpl extends OAuth20ServiceImpl {
-    private static final String VERSION = "2.0";
-
     private final DefaultApi20 api;
     private final OAuthConfig config;
 
@@ -34,7 +32,9 @@ public class MendeleyOAuth20ServiceImpl extends OAuth20ServiceImpl {
         request.addBodyParameter(OAuthConstants.CODE, verifier.getValue());
         request.addBodyParameter(OAuthConstants.REDIRECT_URI, config.getCallback());
         request.addBodyParameter("grant_type", "authorization_code");
-        if (config.hasScope()) request.addQuerystringParameter(OAuthConstants.SCOPE, config.getScope());
+        if (config.hasScope()) {
+            request.addQuerystringParameter(OAuthConstants.SCOPE, config.getScope());
+        }
         Response response = request.send();
         return api.getAccessTokenExtractor().extract(response.getBody());
     }

@@ -32,8 +32,7 @@ public class PropertyReader {
             p.load(resourceAsStream);
         } catch (IOException e) {
             LOGGER.error("Propertyreader could not load Config!", e);
-        }
-        finally {
+        } finally {
             IOUtils.closeQuietly(resourceAsStream);
         }
 

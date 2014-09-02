@@ -6,7 +6,7 @@ import de.uni.passau.fim.mics.ermera.opennlp.NameFinderResult;
 import java.util.List;
 
 public class EvaluationBean {
-    private static final int contextRange = 7;
+    private static final int CONTEXTRANGE = 7;
     private List<NameFinderResult> resultList;
     private List<NameFinderGroupedResultListItem> groupedResultList;
 
@@ -19,7 +19,7 @@ public class EvaluationBean {
     }
 
     public int getContextRange() {
-        return contextRange;
+        return CONTEXTRANGE;
     }
 
     public List<NameFinderGroupedResultListItem> getGroupedResultList() {
