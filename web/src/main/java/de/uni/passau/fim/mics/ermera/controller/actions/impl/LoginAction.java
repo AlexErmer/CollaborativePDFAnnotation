@@ -11,7 +11,6 @@ import de.uni.passau.fim.mics.ermera.dao.DocumentDaoImpl;
 import de.uni.passau.fim.mics.ermera.model.LoginBean;
 import de.uni.passau.fim.mics.ermera.oauth.MendeleyOAuthServiceImpl;
 import de.uni.passau.fim.mics.ermera.oauth.MyOAuthService;
-import org.scribe.model.Token;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,6 @@ public class LoginAction extends AbstractAction {
     public String executeConcrete(HttpServletRequest request, HttpServletResponse response) throws ActionException {
         DocumentDao documentDao = new DocumentDaoImpl();
 
-        Token requestToken;
         MyOAuthService oAuthService = new MendeleyOAuthServiceImpl();
 
         if (PropertyReader.OFFLINELOGIN) {
@@ -35,20 +33,13 @@ public class LoginAction extends AbstractAction {
 
         String authcode = request.getParameter("code");
         if (authcode == null) {
-            requestToken = null; //oAuthService.getRequestToken();
-            session.setAttribute("requestToken", requestToken);
-
             LoginBean loginBean = new LoginBean();
-            loginBean.setMendeleyLink(oAuthService.getAuthorizationUrl(requestToken));
+            loginBean.setMendeleyLink(oAuthService.getAuthorizationUrl());
             request.setAttribute("loginBean", loginBean);
-
 
             return ViewNames.LOGIN;
         } else {
-            requestToken = (Token) session.getAttribute("requestToken");
-            request.removeAttribute("requestToken");
-
-            Profile profile = oAuthService.getProfile(requestToken, authcode);
+            Profile profile = oAuthService.getProfile(authcode);
             session.setAttribute("profile", profile);
 
             documentDao.createUserFolders(profile.getMain().getProfileId(), mu);

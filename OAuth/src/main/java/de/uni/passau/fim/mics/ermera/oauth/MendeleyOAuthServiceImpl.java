@@ -6,7 +6,6 @@ import com.mendeley.oapi.schema.User;
 import de.uni.passau.fim.mics.ermera.common.PropertyReader;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.builder.api.MendeleyApi20;
-import org.scribe.extractors.TokenExtractor20Impl;
 import org.scribe.model.*;
 import org.scribe.oauth.OAuthService;
 
@@ -27,18 +26,9 @@ public class MendeleyOAuthServiceImpl implements MyOAuthService {
     }
 
     @Override
-    public Profile getProfile(Token requestToken, String authcode) {
+    public Profile getProfile(String authcode) {
         Verifier verifier = new Verifier(authcode);
         Token accessToken = service.getAccessToken(null, verifier);
-
-/*        OAuthRequest request = new OAuthRequest(Verb.POST, "https://api-oauth2.mendeley.com/oauth/token");
-        request.addBodyParameter(OAuthConstants.CLIENT_ID, PropertyReader.MENDELEY_API_KEY);
-        request.addBodyParameter(OAuthConstants.CLIENT_SECRET, PropertyReader.MENDELEY_SECRET_KEY);
-        request.addBodyParameter(OAuthConstants.CODE, verifier.getValue());
-        request.addBodyParameter(OAuthConstants.REDIRECT_URI, "http://localhost:8080/pages/login");
-        request.addBodyParameter("grant_type", "authorization_code");
-        Response response = request.send();
-        Token extract = new TokenExtractor20Impl().extract(response.getBody());*/
 
         OAuthRequest oAuthRequest = new OAuthRequest(Verb.GET, "https://api-oauth2.mendeley.com/oapi/profiles/info/me");
         service.signRequest(accessToken, oAuthRequest);
@@ -54,23 +44,13 @@ public class MendeleyOAuthServiceImpl implements MyOAuthService {
     }
 
     @Override
-    public Token getRequestToken() {
-        return service.getRequestToken();
-    }
-
-    @Override
-    public String getAuthorizationUrl(Token requestToken) {
-        return service.getAuthorizationUrl(requestToken);
-    }
-
-    @Override
-    public Token getAccessToken(Token requestToken, Verifier verifier) {
-        return service.getAccessToken(requestToken, verifier);
+    public String getAuthorizationUrl() {
+        return service.getAuthorizationUrl(null);
     }
 
     @Override
     public Profile getDummyProfile() {
-        final String dummyUserName = "dummyUser3";
+        final String dummyUserName = "dummyUser";
 
         User user = new User();
         user.setUserId(dummyUserName);
